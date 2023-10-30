@@ -9,6 +9,14 @@ class Writer(html5_polyglot.Writer):
     supported = ('html', 'xhtml')
     """Formats this writer supports."""
 
+    settings_spec = html5_polyglot.Writer.settings_spec + (
+        'LectureDoc2 Specific Options',
+        'Configuration options used when generating LectureDoc2 lecture notes.',
+        (('Specifies the path to LectureDoc2.',
+          ['--ld-path'],
+          {'metavar': '<URL>', 'default':'ld'}),))
+           
+
     config_section = 'ld_html writer'
     config_section_dependencies = ('writers', 'html writers',
                                    'html5_polyglot writer')
@@ -52,8 +60,9 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.theme_files_copied = None
         """
         # overwrite HTML meta tag default
-        self.stylesheet.insert(0,self.ld_stylesheet_normalize % {'ld_path' : 'ld'})
-        self.stylesheet.append(self.ld_stylesheet_template % {'ld_path': 'ld'})
+        ld_path = self.document.settings.ld_path
+        self.stylesheet.insert(0,self.ld_stylesheet_normalize % {'ld_path' : ld_path})
+        self.stylesheet.append(self.ld_stylesheet_template % {'ld_path': ld_path})
         self.meta = ['<meta name="viewport" '
                          'content="width=device-width, initial-scale=1.0, user-scalable=no" />\n']
         self.meta.append('<meta http-equiv="Content-Type" '
