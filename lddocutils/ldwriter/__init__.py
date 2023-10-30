@@ -4,6 +4,12 @@ from docutils.writers import html5_polyglot
 
 from sys import stderr
 
+"""
+
+This Writer is heavily inspired by the rst2s5:
+https://github.com/docutils/docutils/blob/master/docutils/docutils/writers/s5_html/__init__.py
+"""
+
 class Writer(html5_polyglot.Writer):
 
     supported = ('html', 'xhtml')
