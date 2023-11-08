@@ -6,9 +6,11 @@
 <meta name="version" content="LD2 0.1" />
 <meta content="Michael Eichberg" name="author" />
 <meta content="Released under the terms of the `2-Clause BSD license`." name="license" />
+<meta content="lecturedoc2-tutorial" name="id" />
+<meta content="1920x1200" name="slide-dimensions" />
 <title>LectureDoc^2 Tutorial</title>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js?config=TeX-AMS_CHTML"></script>
-<link rel="stylesheet" href="../ld/normalize.css" type="text/css" />
+<script type="text/javascript" src="../LectureDoc2/ext/mathjax/es5/tex-chtml.js?config=TeX-AMS_CHTML"></script>
+<link rel="stylesheet" href="../LectureDoc2/normalize.css" type="text/css" />
 <style type="text/css">
 
 /* Minimal style sheet for the HTML output of Docutils.                    */
@@ -606,46 +608,48 @@ a { text-decoration: none; }
 /*   a.citation-reference */
 
 </style>
-    <script src="../ld/ld-help.js" type="text/javascript"></script>
-    <script src="../ld/ld-core.js" type="text/javascript"></script>    
-    <link rel="stylesheet" href="../ld/ld.css" type="text/css" />
-    <link rel="stylesheet" href="../ld/default.css" type="text/css" />
+    <script src="../LectureDoc2/ld-animations.js" type="text/javascript"></script>
+    <script src="../LectureDoc2/ld-help.js" type="text/javascript"></script>
+    <script src="../LectureDoc2/ld-core.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../LectureDoc2/ld.css" type="text/css" />
+    <link rel="stylesheet" href="../LectureDoc2/default.css" type="text/css" />
 </head>
 <body>
 <div class="ld-slide" id="slide0">
 <h1 class="title"><span class="math">\(LectureDoc^2\)</span> Tutorial</h1>
 
-<p>LectureDoc is an authoring system for creating lecture notes. LectureDoc enables you to write a single HTML or reStructuredText document that contains the slides, additional annotations and also exercises.</p>
+<p>LectureDoc is an authoring system for creating lecture slides/notes/exercises. LectureDoc enables you to write a single (HTML or) reStructuredText document that contains the slides, additional annotations and also exercises.</p>
 <p><em>Dr. Michael Eichberg</em></p>
 </div>
 <div class="ld-slide" id="basics">
 <h2>Basics</h2>
 <p>A basic slide consists of a (section) header and some reStructuredText content.</p>
-<aside class="admonition admonition-example">
+<aside class="admonition footnotesize">
 <p class="admonition-title">Example</p>
-<pre class="literal-block">First Slide
------------------
-
-A basic slide...</pre>
+<pre class="code rst black margin-above literal-block"><code><span class="generic heading">Basics</span>
+<span class="generic heading">-----------</span>
+<span class="whitespace">
+</span>A basic slide consists of a (section) header<span class="whitespace">
+</span>and some reStructuredText content.</code></pre>
 </aside>
 </div><div class="ld-slide" id="embedding-formulae">
 <h2>Embedding Formulae</h2>
-<p>You can embed math equations in your slides using reStructuredText's default directives (<span class="docutils literal">.. math::</span>) and roles (<span class="docutils literal"><span class="pre">:math:`...`</span></span>).</p>
-<aside class="admonition smaller">
+<p>Embed math equations using reStructuredText's default directive (<span class="docutils literal">.. math::</span>) and role (<span class="docutils literal"><span class="pre">:math:`...`</span></span>).</p>
+<aside class="admonition footnotesize">
 <p class="admonition-title">Example</p>
 <div class="two-columns docutils container">
 <div class="column docutils container">
 <p>The following code:</p>
 <blockquote>
-<pre class="literal-block">Computation in :math:`GF(2)`:
+<pre class="code rst black literal-block"><code>Computation in <span class="name attribute">:math:</span><span class="name variable">`GF(2)`</span>:<span class="whitespace">
 
-.. math::
+</span><span class="punctuation">..</span> <span class="operator word">math</span><span class="punctuation">::</span><span class="whitespace">
 
-  \begin{matrix}
-  1 + 1 &amp; = 1 - 1 &amp; = 0 \\
-  1 + 0 &amp; = 1 - 0 &amp; = 1 \\
-  0 + 1 &amp; = 0 - 1 &amp; = 1
-  \end{matrix}</pre>
+</span>  \begin{matrix}<span class="whitespace">
+</span>  1 + 1 &amp; = 1 - 1 &amp; = 0 \\<span class="whitespace">
+</span>  1 + 0 &amp; = 1 - 0 &amp; = 1 \\<span class="whitespace">
+</span>  0 + 1 &amp; = 0 - 1 &amp; = 1<span class="whitespace">
+</span>  \end{matrix}</code></pre>
 </blockquote>
 </div>
 <div class="column docutils container">
@@ -668,10 +672,10 @@ A basic slide...</pre>
 </div><div class="ld-slide" id="section-1">
 <h2></h2>
 <p>A slide without an explicit title can be created by explicitly creating an empty title:</p>
-<aside class="admonition admonition-example">
+<aside class="admonition footnotesize">
 <p class="admonition-title">Example</p>
-<pre class="literal-block">\
---</pre>
+<pre class="code rst black margin-above literal-block"><code>\<span class="whitespace">
+</span>--</code></pre>
 <aside class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You have to add a space after the backslash (<span class="docutils literal">\</span>)!</p>
@@ -679,11 +683,158 @@ A basic slide...</pre>
 </aside>
 </div><div class="ld-slide" id="animation">
 <h2>Animation</h2>
-<p>Basic <em>appear</em> animations can be created using the (CSS) class <span class="docutils literal">incremental</span>.</p>
+<p>Basic <em>appear</em> animations can be created using the (CSS) class <span class="docutils literal">incremental</span>. <span class="incremental">You can also define a custom role to animate parts of a text.</span></p>
+<aside class="admonition incremental footnotesize">
+<p class="admonition-title">Example</p>
+<pre class="code rst black margin-above literal-block"><code><span class="generic heading">Animation</span>
+<span class="generic heading">----------</span>
+<span class="whitespace">
+</span>Basic <span class="generic emph">*appear*</span> animations can be created using the (CSS) class<span class="whitespace">
+</span><span class="literal string">``incremental``</span>. :incremental:`You can also define a custom<span class="whitespace">
+</span>role to animate parts of a text.`<span class="whitespace">
+
+</span><span class="punctuation">..</span> <span class="operator word">admonition</span><span class="punctuation">::</span> Example<span class="whitespace">
+</span>    <span class="name class">:class:</span> incremental<span class="whitespace">
+
+</span><span class="comment preproc">    ...</span></code></pre>
+</aside>
 </div><div class="ld-slide" id="slide-dimensions">
 <h2>Slide Dimensions</h2>
 <p>The slide dimensions can be controlled by specifying the corresponding meta information.
 If not specified, the default dimension is set to <span class="math">\(1920 \times 1200\)</span>; i.e., a ratio of 16:10.</p>
+<aside class="admonition footnotesize">
+<p class="admonition-title">Example</p>
+<p>In HTML documents add at the following meta tag:</p>
+<pre class="code html black literal-block"><code><span class="punctuation">&lt;</span><span class="name tag">meta</span> <span class="name attribute">name</span><span class="operator">=</span><span class="literal string">&quot;slide-dimensions&quot;</span> <span class="name attribute">content</span><span class="operator">=</span><span class="literal string">&quot;1600x1200&quot;</span><span class="punctuation">&gt;</span></code></pre>
+<p>In reStructuredText documents add at the beginning:</p>
+<pre class="code rst black literal-block"><code><span class="punctuation">..</span> <span class="operator word">meta</span><span class="punctuation">::</span><span class="whitespace">
+</span>    <span class="name class">:slide-dimensions:</span> 1600x1200</code></pre>
+</aside>
+</div><div class="ld-slide" id="adding-supplemental-information">
+<h2>Adding Supplemental Information</h2>
+<p>Adding information that should not be on the slides, but provide additional information, can be added using an admonition in combination with the class <span class="docutils literal">supplemental</span>.</p>
+<aside class="admonition footnotesize">
+<p class="admonition-title">Example</p>
+<pre class="code rst black literal-block"><code><span class="punctuation">..</span> <span class="operator word">admonition</span><span class="punctuation">::</span> Formatting Slides<span class="whitespace">
+</span>    <span class="name class">:class:</span> supplemental<span class="whitespace">
+
+</span>    Creating heavily formatted slides is easily possible<span class="whitespace">
+</span>    using rst directives and roles which are mapped to<span class="whitespace">
+</span>    CSS classes.</code></pre>
+</aside>
+<aside class="admonition supplemental">
+<p class="admonition-title">Formatting Slides</p>
+<p>Creating heavily formatted slides is easily possible using rst directives and roles which are mapped to CSS classes.</p>
+</aside>
+</div><div class="ld-slide" id="creating-section-marker-slides">
+<h2>Creating Section Marker Slides</h2>
+<p>Creating a slide which marks the beginning of a new section can be done using the &quot;new-section&quot; class.</p>
+<aside class="admonition footnotesize">
+<p class="admonition-title">Example</p>
+<pre class="code rst black literal-block"><code><span class="punctuation">..</span> <span class="operator word">class</span><span class="punctuation">::</span> new-section<span class="whitespace">
+
+</span><span class="generic heading">&lt;Title of Section&gt;</span>
+<span class="generic heading">-------------------</span>
+<span class="whitespace">
+</span><span class="comment preproc">...
+
+</span><span class="generic heading">&lt;Title of next Slide&gt;</span>
+<span class="generic heading">----------------------</span></code></pre>
+</aside>
+</div><div class="ld-slide" id="adding-code">
+<h2>Adding Code</h2>
+<p>Adding code can be done using reStructuredText's code directive.</p>
+<aside class="admonition footnotesize">
+<p class="admonition-title">Example</p>
+<div class="two-columns docutils container">
+<div class="column docutils container">
+<p>The following code:</p>
+<blockquote>
+<pre class="code rst black literal-block"><code><span class="punctuation">..</span> <span class="operator word">code</span><span class="punctuation">::</span> python<span class="whitespace">
+</span>    <span class="name class">:class:</span> black<span class="whitespace">
+
+</span>    for i in range(0,10):<span class="whitespace">
+</span>        print(i)</code></pre>
+</blockquote>
+</div>
+<div class="column docutils container">
+<p>Will render like this:</p>
+<blockquote>
+<pre class="code python black literal-block"><code><span class="keyword">for</span> <span class="name">i</span> <span class="operator word">in</span> <span class="name builtin">range</span><span class="punctuation">(</span><span class="literal number integer">0</span><span class="punctuation">,</span><span class="literal number integer">10</span><span class="punctuation">):</span><span class="whitespace">
+</span>  <span class="name builtin">print</span><span class="punctuation">(</span><span class="name">i</span></code></pre>
+</blockquote>
+</div>
+</div>
+</aside>
+</div><div class="new-section ld-slide" id="advanced-formatting">
+<h2>Advanced Formatting</h2>
+</div><div class="ld-slide" id="formatting-defined-in-default-css">
+<h2>Formatting defined in <span class="docutils literal">default.css</span></h2>
+<p>LectureDoc2's <span class="docutils literal">default.css</span> has some predefined css classes that facilitate the creation of more advanced layouts. While these css classes are defined in the default.css file they are still not considered to be part of the LectureDoc2 core. You are free to adapt them to your needs.</p>
+</div><div class="ld-slide" id="additional-horizontal-lines">
+<h2>Additional horizontal lines</h2>
+<pre class="literal-block">.. container:: line-above
+
+    A container with a line-above.</pre>
+<p>Renders like this:</p>
+<div class="line-above docutils container">
+<p>A container with a line-above.</p>
+</div>
+</div><div class="ld-slide" id="adapting-colors">
+<h2>Adapting Colors</h2>
+<p>You can define custom roles for the standard colors: .. role</p>
+<pre class="literal-block">.. role:: red
+.. role:: green
+.. role:: blue
+.. role:: not-important</pre>
+<pre class="literal-block">:class: white-background</pre>
+<p>Code on white background. (Sometimes relevant in combination with syntax highlighting)</p>
+</div><div class="ld-slide" id="controlling-whitespace">
+<h2>Controlling Whitespace</h2>
+<pre class="literal-block">.. class:: more-space-between-list-items
+
+- This is a line
+- And this is a second line with ``more-space-between-list-items``</pre>
+<p>Renders like this:</p>
+<ul class="more-space-between-list-items simple">
+<li><p>This is a line</p></li>
+<li><p>And this is a second line with <span class="docutils literal"><span class="pre">more-space-between-list-items</span></span></p></li>
+</ul>
+<pre class="literal-block">.. container::
+
+    Test
+
+Test
+
+.. container:: margin-below
+
+    Test
+
+Test</pre>
+<p>Renders like this:</p>
+<blockquote>
+<div class="docutils container">
+<p>Test</p>
+</div>
+<p>Test</p>
+<div class="margin-below docutils container">
+<p>Test</p>
+</div>
+<p>Test</p>
+</blockquote>
+</div><div class="ld-slide" id="marking-up-text-that-is-in-a-foreign-language">
+<h2>Marking up Text that is in a foreign language</h2>
+<pre class="literal-block">.. role:: eng
+.. role:: ger</pre>
+<p>Language specific formatting:</p>
+<dl class="simple">
+<dt>::</dt>
+<dd></dd>
+</dl>
+</div><div class="ld-slide" id="other-text-formatting">
+<h2>Other Text Formatting</h2>
+<p>Marking up something as being outdated/obsolete.</p>
+<pre class="literal-block">.. role:: obsolete</pre>
 </div>
 </body>
 </html>
