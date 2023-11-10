@@ -120,6 +120,18 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         else:
             self.body.append(self.starttag(node, 'div', CLASS='ld-slide'))
 
+    def visit_subscript(self, node):
+        self.body.append(self.starttag(node, 'sub'))
+        
+    def depart_subscript(self, node):
+        self.body.append('</sub>')
+
+    def visit_superscript(self, node):
+        self.body.append(self.starttag(node, 'sup'))
+        
+    def depart_superscript(self, node):
+        self.body.append('</sup>')
+
 
     def depart_section(self, node):
         self.section_level -= 1
