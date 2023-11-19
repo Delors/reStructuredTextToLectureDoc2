@@ -40,7 +40,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     <script src="%(ld_path)s/ld-help.js" type="text/javascript"></script>
     <script src="%(ld_path)s/ld-core.js" type="text/javascript"></script>
     <link rel="stylesheet" href="%(ld_path)s/ld.css" type="text/css" />
-    <link rel="stylesheet" href="%(ld_path)s/default.css" type="text/css" />\n"""
+    <link rel="stylesheet" href="%(ld_path)s/themes/default/theme.css" type="text/css" />\n"""
 
     def __init__(self, *args):
         html5_polyglot.HTMLTranslator.__init__(self, *args)
