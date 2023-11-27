@@ -128,6 +128,26 @@ Basic *appear* animations can be created using the (CSS) class ``incremental``. 
 
             ...
 
+Advanced Animation
+-------------------
+
+In case of lists (`ol` or `ul`) it is sufficient to specify `incremental` in the class attribute of `ol` or `ul`; it is possible, but not necessary to specify the class attribute of every list element.
+
+.. admonition:: Example
+    :class: footnotesize 
+
+    .. class:: margin-above
+
+    .. code:: rst
+        :class: black 
+
+        ..class:: incremental
+
+        - this
+        - is
+        - a test
+
+
 Slide Dimensions
 ----------------
 
