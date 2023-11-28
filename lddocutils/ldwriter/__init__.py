@@ -6,7 +6,7 @@ from sys import stderr
 
 """
 
-This Writer is heavily inspired by the rst2s5:
+This Writer is heavily inspired by the rst2s5 writer:
 https://github.com/docutils/docutils/blob/master/docutils/docutils/writers/s5_html/__init__.py
 """
 
@@ -131,7 +131,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         
     def depart_superscript(self, node):
         self.body.append('</sup>')
-
 
     def depart_section(self, node):
         self.section_level -= 1
