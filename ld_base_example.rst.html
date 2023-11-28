@@ -9,8 +9,8 @@
 <meta content="lecturedoc2-tutorial" name="id" />
 <meta content="1920x1200" name="slide-dimensions" />
 <title>LectureDoc^2 Tutorial</title>
-<script type="text/javascript" src="../LectureDoc2/ext/mathjax/es5/tex-chtml.js?config=TeX-AMS_CHTML"></script>
-<link rel="stylesheet" href="../LectureDoc2/normalize.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js?config=TeX-AMS_CHTML"></script>
+<link rel="stylesheet" href="ld/normalize.css" type="text/css" />
 <style type="text/css">
 
 /* Minimal style sheet for the HTML output of Docutils.                    */
@@ -608,11 +608,11 @@ a { text-decoration: none; }
 /*   a.citation-reference */
 
 </style>
-    <script src="../LectureDoc2/ld-animations.js" type="text/javascript"></script>
-    <script src="../LectureDoc2/ld-help.js" type="text/javascript"></script>
-    <script src="../LectureDoc2/ld-core.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="../LectureDoc2/ld.css" type="text/css" />
-    <link rel="stylesheet" href="../LectureDoc2/default.css" type="text/css" />
+    <script src="ld/ld-animations.js" type="text/javascript"></script>
+    <script src="ld/ld-help.js" type="text/javascript"></script>
+    <script src="ld/ld-core.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="ld/ld.css" type="text/css" />
+    <link rel="stylesheet" href="ld/themes/DHBW/theme.css" type="text/css" />
 </head>
 <body>
 <div class="ld-slide" id="slide0">
@@ -698,6 +698,17 @@ a { text-decoration: none; }
 
 </span><span class="comment preproc">    ...</span></code></pre>
 </aside>
+</div><div class="ld-slide" id="advanced-animation">
+<h2>Advanced Animation</h2>
+<p>In case of lists (<cite>ol</cite> or <cite>ul</cite>) it is sufficient to specify <cite>incremental</cite> in the class attribute of <cite>ol</cite> or <cite>ul</cite>; it is possible, but not necessary to specify the class attribute of every list element.</p>
+<aside class="admonition footnotesize">
+<p class="admonition-title">Example</p>
+<pre class="code rst black margin-above literal-block"><code><span class="punctuation">..</span><span class="operator word">class</span><span class="punctuation">::</span> incremental<span class="whitespace">
+</span>
+<span class="literal number">-</span> this<span class="whitespace">
+</span><span class="literal number">-</span> is<span class="whitespace">
+</span><span class="literal number">-</span> a test</code></pre>
+</aside>
 </div><div class="ld-slide" id="slide-dimensions">
 <h2>Slide Dimensions</h2>
 <p>The slide dimensions can be controlled by specifying the corresponding meta information.
@@ -761,7 +772,7 @@ If not specified, the default dimension is set to <span class="math">\(1920 \tim
 <p>Will render like this:</p>
 <blockquote>
 <pre class="code python black literal-block"><code><span class="keyword">for</span> <span class="name">i</span> <span class="operator word">in</span> <span class="name builtin">range</span><span class="punctuation">(</span><span class="literal number integer">0</span><span class="punctuation">,</span><span class="literal number integer">10</span><span class="punctuation">):</span><span class="whitespace">
-</span>  <span class="name builtin">print</span><span class="punctuation">(</span><span class="name">i</span></code></pre>
+</span>  <span class="name builtin">print</span><span class="punctuation">(</span><span class="name">i</span><span class="punctuation">)</span></code></pre>
 </blockquote>
 </div>
 </div>
@@ -771,6 +782,7 @@ If not specified, the default dimension is set to <span class="math">\(1920 \tim
 </div><div class="ld-slide" id="formatting-defined-in-default-css">
 <h2>Formatting defined in <span class="docutils literal">default.css</span></h2>
 <p>LectureDoc2's <span class="docutils literal">default.css</span> has some predefined css classes that facilitate the creation of more advanced layouts. While these css classes are defined in the default.css file they are still not considered to be part of the LectureDoc2 core. You are free to adapt them to your needs.</p>
+<p>THE NEXT NEEDS TO BE DONE TODODODODODODODODODODODODODOD.......................</p>
 </div><div class="ld-slide" id="additional-horizontal-lines">
 <h2>Additional horizontal lines</h2>
 <pre class="literal-block">.. container:: line-above
@@ -788,7 +800,7 @@ If not specified, the default dimension is set to <span class="math">\(1920 \tim
 .. role:: blue
 .. role:: not-important</pre>
 <pre class="literal-block">:class: white-background</pre>
-<p>Code on white background. (Sometimes relevant in combination with syntax highlighting)</p>
+<p>Sometimes relevant in combination with syntax highlighting)</p>
 </div><div class="ld-slide" id="controlling-whitespace">
 <h2>Controlling Whitespace</h2>
 <pre class="literal-block">.. class:: more-space-between-list-items
@@ -835,6 +847,9 @@ Test</pre>
 <h2>Other Text Formatting</h2>
 <p>Marking up something as being outdated/obsolete.</p>
 <pre class="literal-block">.. role:: obsolete</pre>
+</div><div class="ld-slide" id="simple-multi-column-layouts">
+<h2>Simple Multi-column layouts</h2>
+<p>two-columns or three-columns ...</p>
 </div>
 </body>
 </html>
