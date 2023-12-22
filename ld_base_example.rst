@@ -7,7 +7,7 @@
 .. role:: red
 .. role:: green
 .. role:: blue
-.. role:: not-important
+.. role:: minor
 .. role:: obsolete
 .. role:: incremental
 
@@ -291,7 +291,7 @@ You can define custom roles for the standard colors: .. role
     .. role:: red
     .. role:: green
     .. role:: blue
-    .. role:: not-important
+    .. role:: minor
 
 
 ::
