@@ -98,8 +98,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         #                                 'footer': footer}
         # self.body_prefix.extend(layout)
         # self.body_prefix.append('<main>\n')
+        all_classes = node.document['classes']
+        all_classes.append('ld-slide')
         self.body_prefix.append(
-            self.starttag({'classes': ['ld-slide'], 'ids': ['slide0']}, 'div'))
+            self.starttag({'classes': all_classes, 'ids': ['slide0']}, 'div'))
         if not self.section_count:
             self.body.append('</div>\n')
         
