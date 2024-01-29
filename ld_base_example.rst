@@ -1,12 +1,14 @@
 .. meta::
     :author: Michael Eichberg
+    :description: LectureDoc2 Tutorial
     :license: Released under the terms of the `2-Clause BSD license`.
     :id: lecturedoc2-tutorial
     :slide-dimensions: 1920x1200
 
+
 .. role:: red
 .. role:: green
-.. role:: blue
+.. role:: the-blue
 .. role:: minor
 .. role:: obsolete
 .. role:: incremental
@@ -15,6 +17,8 @@
 =============================
 
 LectureDoc is an authoring system for creating lecture slides/notes/exercises. LectureDoc enables you to write a single (HTML or) reStructuredText document that contains the slides, additional annotations and also exercises.
+
+This tutorial is written in reStructuredText and can be used as a template for creating your own lecture slides.
 
 *Dr. Michael Eichberg*
 
@@ -25,12 +29,10 @@ Basics
 A basic slide consists of a (section) header and some reStructuredText content.
 
 .. admonition:: Example
-    :class: footnotesize
-
-    .. class:: margin-above
+    :class: footnotesize 
 
     .. code:: rst
-        :class: black
+        :class: black copy-to-clipboard
 
         Basics
         -----------
@@ -54,7 +56,7 @@ Embed math equations using reStructuredText's default directive (``.. math::``) 
             The following code:
 
                 .. code:: rst
-                  :class: black
+                  :class: black copy-to-clipboard
 
                   Computation in :math:`GF(2)`:
 
@@ -89,10 +91,8 @@ A slide without an explicit title can be created by explicitly creating an empty
 .. admonition:: Example
     :class: footnotesize
 
-    .. class:: margin-above
-
     .. code:: rst
-        :class: black
+        :class: black copy-to-clipboard
 
         \ 
         --
@@ -106,40 +106,36 @@ A slide without an explicit title can be created by explicitly creating an empty
 Animation
 ----------
 
-Basic *appear* animations can be created using the (CSS) class ``incremental``. :incremental:`You can also define a custom role to animate parts of a text.`
+Basic *appear* animations can be created using the (CSS) class ``incremental``. You can also define a corresponding custom role (``.. role:: incremental``) :incremental:`to animate parts of a text.`
 
 .. admonition:: Example
     :class: incremental footnotesize 
 
-    .. class:: margin-above
-
     .. code:: rst
-        :class: black 
+        :class: black copy-to-clipboard 
 
         Animation
         ----------
 
         Basic *appear* animations can be created using the (CSS) class 
-        ``incremental``. :incremental:`You can also define a custom 
-        role to animate parts of a text.`
+        ``incremental``. You can also define a corresponding custom role 
+        (``.. role:: incremental``) :incremental:`to animate parts of a text.`
 
         .. admonition:: Example
             :class: incremental
 
             ...
 
-Advanced Animation
+Animation of Lists
 -------------------
 
-In case of lists (`ol` or `ul`) it is sufficient to specify `incremental` in the class attribute of `ol` or `ul`; it is possible, but not necessary to specify the class attribute of every list element.
+In case of lists (`ol` or `ul`) it is sufficient to specify `incremental` in the class attribute of `ol` or `ul`; it is also possible, to only specify the class attribute for the required list elements.
 
 .. admonition:: Example
     :class: footnotesize 
 
-    .. class:: margin-above
-
     .. code:: rst
-        :class: black 
+        :class: black copy-to-clipboard
 
         ..class:: incremental
 
@@ -160,14 +156,14 @@ If not specified, the default dimension is set to :math:`1920 \times 1200`; i.e.
     In HTML documents add at the following meta tag:
 
     .. code:: html
-        :class: black 
+        :class: black copy-to-clipboard 
 
         <meta name="slide-dimensions" content="1600x1200">
 
     In reStructuredText documents add at the beginning:
 
     .. code:: rst
-        :class: black 
+        :class: black copy-to-clipboard
 
         .. meta::
             :slide-dimensions: 1600x1200
@@ -176,25 +172,27 @@ If not specified, the default dimension is set to :math:`1920 \times 1200`; i.e.
 Adding Supplemental Information
 ---------------------------------
 
-Adding information that should not be on the slides, but provide additional information, can be added using an admonition in combination with the class ``supplemental``.
+Adding information that should not be on the slides, but provide additional information, can be added using a container at the root level in combination with the class ``supplemental``.
 
 .. admonition:: Example 
     :class: footnotesize
 
     .. code:: rst
-        :class: black 
+        :class: black copy-to-clipboard
 
-        .. admonition:: Formatting Slides
-            :class: supplemental
+        .. container:: supplemental
+
+            **Formatting Slides**
 
             Creating heavily formatted slides is easily possible 
             using rst directives and roles which are mapped to 
             CSS classes.
 
-.. admonition:: Formatting Slides
-            :class: supplemental
+.. container:: supplemental
 
-            Creating heavily formatted slides is easily possible using rst directives and roles which are mapped to CSS classes.
+    **Formatting Slides**
+
+    Creating heavily formatted slides is easily possible using rst directives and roles which are mapped to CSS classes.
 
 
 Creating Section Marker Slides
@@ -206,7 +204,7 @@ Creating a slide which marks the beginning of a new section can be done using th
     :class: footnotesize
 
     .. code:: rst
-        :class: black 
+        :class: black copy-to-clipboard
 
         .. class:: new-section
 
@@ -234,10 +232,9 @@ Adding code can be done using reStructuredText's code directive.
             The following code:
 
                 .. code:: rst
-                    :class: black
+                    :class: black copy-to-clipboard
 
                     .. code:: python
-                        :class: black
 
                         for i in range(0,10):
                             print(i)
@@ -253,129 +250,7 @@ Adding code can be done using reStructuredText's code directive.
                     print(i)
 
 
-.. class:: new-section
-
 Advanced Formatting    
 ---------------------
 
-Formatting defined in ``default.css``
---------------------------------------
-
-LectureDoc2's ``default.css`` has some predefined css classes that facilitate the creation of more advanced layouts. While these css classes are defined in the default.css file they are still not considered to be part of the LectureDoc2 core. You are free to adapt them to your needs.
-
-
-THE NEXT NEEDS TO BE DONE TODODODODODODODODODODODODODOD.......................
-
-Additional horizontal lines
------------------------------
-
-::
-
-    .. container:: line-above
-    
-        A container with a line-above.
-
-Renders like this:
-
-.. container:: line-above
-    
-        A container with a line-above.
-
-Adapting Colors
------------------
-
-You can define custom roles for the standard colors: .. role
-
-::
-
-    .. role:: red
-    .. role:: green
-    .. role:: blue
-    .. role:: minor
-
-
-::
-
-    :class: white-background
-
-Sometimes relevant in combination with syntax highlighting)
-
-
-Controlling Whitespace
------------------------
-
-::
-
-    .. class:: more-space-between-list-items
-
-    - This is a line
-    - And this is a second line with ``more-space-between-list-items``
-
-
-Renders like this:
-
-.. class:: more-space-between-list-items
-
-- This is a line
-- And this is a second line with ``more-space-between-list-items``
-
-
-::
-
-    .. container:: 
-
-        Test
-
-    Test
-
-    .. container:: margin-below 
-
-        Test
-    
-    Test
-
-Renders like this:
-
-    .. container:: 
-
-        Test
-
-    Test
-
-    .. container:: margin-below 
-
-        Test
-    
-    Test
-
-
-Marking up Text that is in a foreign language
-------------------------------------------------
-
-::
-
-    .. role:: eng
-    .. role:: ger
-
-
-Language specific formatting:
-
-::
-    .. role:: ger-quote
-
-
-Other Text Formatting
-----------------------
-
-Marking up something as being outdated/obsolete.
-
-::
-
-    .. role:: obsolete
-
-
-
-Simple Multi-column layouts
-------------------------------
-
-two-columns or three-columns ...
+LectureDoc comes with a set of predefined CSS classes that can be used to format the slides. Some of these classes have explicit support by LectureDoc and will be rendered differently in the different views (continuous view vs. slide view) (e.g., stacked layouts or supplemental information). See the `LectureDoc2` Cheat Sheet for a comprehensive list of predefined CSS classes.
