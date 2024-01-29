@@ -499,13 +499,13 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Meta-Information
 
-   The following meta-information has special meaning for LectureDoc:
+   LectureDoc meta information:
 
    ``id`` A unique identifier for the slide set. Required to store the current state of the presentation.
 
-   ``slide-dimensions`` The dimensions of the slides. The default is "1920x1200".
+   ``slide-dimensions`` The dimensions of the slides (default: "1920x1200").
    
-   ``first-slide`` Determines the first slide that is shown when the presentation is started. Possible values: <Slide Number>, "last-viewed".
+   ``first-slide`` The first slide that is shown when the presentation is started (e.g., <Slide Number> or "last-viewed").
 
    .. rubric:: Example
    
@@ -579,5 +579,15 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       .. role:: raw-html(raw)
          :format: html
 
+.. container:: cheat-sheet-block
+
+   .. rubric:: Links
+
+   .. container:: smaller
+
+      `DocUtils (rst reStructuredText) <https://docutils.sourceforge.io/docs/index.html>`_
+
+      `Example Slide Sets <http://www.michael-eichberg.de/teaching.html>`_ 
+      
 
 
