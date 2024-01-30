@@ -37,7 +37,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Vertical Titles
 
-   Add the class ``vertical-title`` to a slide to get a vertical title.
+   Add the class ``vertical-title`` to a slide to get a vertical title. This will change the layout of the slide to a column-based layout. To get back to a row based layout add a container with the class ``width-100``.
 
    .. rubric:: Example
 
@@ -49,6 +49,10 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       <Slide Title>
       ----------------
 
+      .. container:: width-100
+
+         ...
+
 
 
 .. container:: cheat-sheet-block
@@ -57,7 +61,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       
    .. rubric:: Slide without Title
    
-   Create a slide without a title by setting the title to a single space character using a backslash and an explicit space :code:`\␣`.
+   For a slide without a title set the title to a single space character using a backslash and an explicit space :code:`\␣` and assign the class ``no-title`` to the slide.
 
    .. rubric:: Centered Content on Slide
    
@@ -68,7 +72,8 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
    .. code:: rst
       :class: smaller copy-to-clipboard
    
-      .. class:: center-child-elements
+      .. class:: center-child-elements 
+                 no-title
 
       \  
       ___
@@ -117,30 +122,6 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
 
 .. container:: cheat-sheet-block
-
-   .. rubric:: Explicit Footers
-
-   Use a container with the class ``footer-left`` or ``footer-right``.
-
-
-.. container:: cheat-sheet-block
-   
-   .. rubric:: Footnotes
-
-   Footnotes are defined using ``.. [#]``. The references uses ``[#]_``.
-
-   .. code:: rst
-      :class: smaller copy-to-clipboard
-
-      Test (c.f. [#]_)
-      -----------------
-
-      ...
-
-      .. [#] `test.org`
-
-
-.. container:: cheat-sheet-block
    
    .. rubric:: Table of Contents
 
@@ -157,6 +138,35 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
       - `Section 1 Title`_
       - `Subsection 1.1 Title`_
+
+
+
+.. container:: cheat-sheet-block
+   
+   .. rubric:: Footnotes
+
+   ``.. [#]`` and ``[#]_`` create footnotes.
+
+   .. code:: rst
+      :class: smaller copy-to-clipboard
+
+      Test\ [#]_
+      -----------------
+
+      ...
+
+      .. [#] `test.org`
+
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Explicit Footers
+
+   Use a container with the class ``footer-left`` or ``footer-right``.
+
+
+
+
 
 .. container:: cheat-sheet-block
 
@@ -195,52 +205,50 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
          public static void main(...)
 
 
-.. ANIMATIONS
+.. container:: cheat-sheet-block
+
+   .. rubric:: Fade-out Content
+
+   Use the class ``faded-to-white`` for the container with the content that should be faded out.
+   
+
 
 .. container:: cheat-sheet-block
 
-   .. rubric:: Slide Transitions
-
-   Available slide transitions:
-   ``transition-move-left``, ``transition-scale``, ``transition-fade``, ``transition-move-to-top``
-   
-   .. rubric:: Example
-
-   .. code:: rst
-      :class: smaller copy-to-clipboard
-
-      .. class:: transition-move-left
-
-      <Slide Title>
-      ----------------
-
-.. container:: cheat-sheet-block
-   
-   .. rubric:: Revealing Slide Content
-   
-   All elements with the class ``incremental`` are revealed incrementally.
+   .. rubric:: Boxes with Supplemental Information on the Slide
 
    .. rubric:: Example
 
    .. code:: rst
       :class: smaller copy-to-clipboard
 
-      .. class:: incremental
+      .. admonition:: TBD
+         :class: note 
 
-      - Item 1 - Part 1 
-        :incremental:`Item 1 - Part 2`
-      - Item 2 
+         Some text in a box.
 
-        - Item 2.1
-        
-          .. class:: incremental
-        - Item 2.2
+     
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Supplemental Information
+
+   Add a container with the class ``supplemental`` to add respective information. How this information is rendered depends on the chosen view.
+
+   .. rubric:: Example
+
+   .. code:: rst
+      :class: smaller copy-to-clipboard
+
+      .. container:: supplemental
+
+         Text
 
 .. container:: cheat-sheet-block
 
    .. rubric:: Text Alignment
 
-   Use ``text-align-center`` to center text.
+   Text alignment can be controlled with: ``text-align-left``, ``text-align-center`` and ``text-align-right``
 
 
 .. container:: cheat-sheet-block
@@ -254,13 +262,13 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Tables
 
-   The overall layout can be adapted using the following classes:
+   The layout can be adapted using:
    ``compact``, ``compact-cells``, ``no-table-borders``, ``no-inner-borders``, ``no-column-borders``
 
 
    .. rubric:: On-hover Highlighting
 
-   To make tables easier to present two highlighting modes are available:
+   To make tables easier to present, two highlighting modes are available:
 
    ``highlight-line-on-hover`` (always usable)
 
@@ -306,7 +314,9 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Decorations
 
-   ``line-above`` (Typically combined with some extra space above the element.)
+   ``line-above`` draws a horizontal lines.
+
+   ``box-shadow`` adds a shadow.
 
    .. rubric:: Example
    
@@ -318,8 +328,66 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       .. container:: margin-top-1em 
                      line-above
                      padding-top-1em
+                     box-shadow
 
          Text
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Font Styling
+
+   **"rem" based relative sizes**: 
+   
+   ``xxl``, ``huge``, ``large``, ``small``, ``footnotesize``, ``scriptsize``, ``tiny``
+
+   **"em" based relative sizes**: ``larger``, ``smaller``, ``much-smaller``
+
+   **Font weight**: ``bold``, ``light``, ``thin``
+
+   **Font family**: ``monospaced``, ``serif``
+
+   **Font style**: ``italic``
+
+.. ANIMATIONS
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Slide Transitions
+
+   Available slide transitions:
+   ``transition-move-left``, ``transition-scale``, ``transition-fade``, ``transition-move-to-top``
+   
+   .. rubric:: Example
+
+   .. code:: rst
+      :class: smaller copy-to-clipboard
+
+      .. class:: transition-move-left
+
+      <Slide Title>
+      ----------------
+
+.. container:: cheat-sheet-block
+   
+   .. rubric:: Revealing Slide Content
+   
+   All elements with the class ``incremental`` are revealed incrementally.
+
+   .. rubric:: Example
+
+   .. code:: rst
+      :class: smaller copy-to-clipboard
+
+      .. class:: incremental
+
+      - Item 1 - Part 1 
+        :incremental:`Item 1 - Part 2`
+      - Item 2 
+
+        - Item 2.1
+        
+          .. class:: incremental
+        - Item 2.2
 
 
 .. COMPLEX LAYOUTS
@@ -349,36 +417,6 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
    To enable unbalanced column widths add the class ``no-default-width`` to the root container. To remove the separator between two columns use the class ``no-separator`` on the left column.
    
 
-.. container:: cheat-sheet-block
-
-   .. rubric:: Boxes with Supplemental Information on the Slide
-
-   .. rubric:: Example
-
-   .. code:: rst
-      :class: smaller copy-to-clipboard
-
-      .. admonition:: TBD
-         :class: note 
-
-         Some text in a box.
-
-     
-
-.. container:: cheat-sheet-block
-
-   .. rubric:: Supplemental Information
-
-   Add a container with the class ``supplemental`` to add respective information. How this information is rendered depends on the chosen view.
-
-   .. rubric:: Example
-
-   .. code:: rst
-      :class: smaller copy-to-clipboard
-
-      .. container:: supplemental
-
-         Text
 
 
 .. container:: cheat-sheet-block
@@ -422,20 +460,18 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Semantic-based Text Markup
 
-   ``minor``: Text that is less important.
-   ``obsolete``: Statements that are obsolete.
-   ``ger``: Words in German (when the slides are in English).
-   ``eng``: Words in English (when the slides are in German).
+   ``minor``: for less important text.
+   ``obsolete``: for obsolete statements.
+   ``ger``: to markup German Words.
+   ``eng``: to markup English words.
    ``ger-quote``: Uses German quotation marks.
+
 
 .. container:: cheat-sheet-block
 
-   .. rubric:: Fade-out Content
+   .. rubric:: Box sizes
 
-   Use the class ``fade-to-white`` for the container with the content that should be faded out.
-   
-
-
+   Use ``width-100``\ % and ``width-75``\ % to control the width of a container.
 
 .. container:: cheat-sheet-block
 
@@ -445,7 +481,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    :minor:`DHBW Colors:` ``dhbw-red``, ``dhbw-gray``, ``dhbw-light-gray``
    
-   :minor:`DHBW Compatible Colors:` ``the-blue``, ``the-green``
+   :minor:`DHBW Compatible Colors:` ``the-blue``, ``the-green``, ``the-orange``
 
    :minor:`Other:` ``black``, ``shiny-green``, ``shiny-red``, ``dark-red``
 
@@ -466,21 +502,6 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       :dhbw-red:`Red Text.`
        
    
-.. container:: cheat-sheet-block
-
-   .. rubric:: Font Styling
-
-   **"rem" based relative sizes**: 
-   
-   ``xxl``, ``huge``, ``large``, ``small``, ``footnotesize``, ``scriptsize``, ``tiny``
-
-   **"em" based relative sizes**: ``larger``, ``smaller``, ``much-smaller``
-
-   **Font weight**: ``bold``, ``light``, ``thin``
-
-   **Font family**: ``monospaced``
-
-   .. class:: line-above
 
 
 
@@ -571,6 +592,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       .. role:: dhbw-light-gray
       .. role:: the-blue
       .. role:: the-green
+      .. role:: the-orange
       .. role:: shiny-green
       .. role:: shiny-red 
       .. role:: black
