@@ -93,7 +93,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Exercises and Solutions
 
-   Create a slide with exercises by adding the class ``integrated-exercise`` to the slide. Solutions can be added by adding a respective admonition or container with the class ``exercise-solution`` or a container with the class ``post-lecture-exercise-solution``.
+   Create a slide with exercises by adding the class ``integrated-exercise`` to the slide. Solutions can be added by using the custom directive ``protected-exercise-solution`` 
 
    .. rubric:: Example (Solution in supplemental information)
 
@@ -116,7 +116,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
       Calculate uvw...
 
-      .. container:: post-lecture-exercise-solution
+      .. protected-exercise-solution:: Solution
 
          The result is ...
 

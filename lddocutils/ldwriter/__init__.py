@@ -1,6 +1,6 @@
 
 from docutils import frontend, nodes, utils
-from docutils.nodes import TextElement, Inline
+from docutils.nodes import TextElement, Inline, container, title, rubric
 from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.directives import unchanged_required,  class_option
 from docutils.writers import html5_polyglot
@@ -34,37 +34,45 @@ class Writer(html5_polyglot.Writer):
         self.translator_class = LDTranslator
 
 """
-We are now going to support integrated exercise solutions in the following way:
+We are now going to support protected exercise solutions in the following way:
 
 .. exercise-solution:: "MTBF-Berechnung"
     :class: warning
     :name: MTBF-Berechnung
 
     100 MTTF + 10 MTR = 110 MTBF 
+
+    Helpful Links:
+
+        https://gist.github.com/mastbaum/2655700
+
+        https://docutils.sourceforge.io/docs/howto/rst-directives.html
 """
 
-class exercise_solution(Inline, TextElement):
-    '''This node class is a no-op -- just a fun way to define some parameters.
-    There are lots of base classes to choose from in `docutils.nodes`.
-    See examples in `docutils.nodes`
-    '''
+class protected_exercise_solution(container):
+    # Examples are in `docutils.nodes`
     pass
 
-class ExerciseSolution(Directive):
-    '''This `Directive` class tells the ReST parser what to do with the text it
-    encounters -- parse the input, perhaps, and return a list of node objects.
-    Here, usage of a single required argument is shown.
-    See examples in docutils.parsers.rst.directives.*
-    '''
+class ProtectedExerciseSolution(Directive):
+    # Examples are in docutils.parsers.rst.directives.*
+    
     required_arguments = 1
+    final_argument_whitespace = True
     optional_arguments = 0
     has_content = True
     option_spec = {'name': unchanged_required, 'class': class_option}
 
     def run(self):
-        print(self.content)
-        thenode = exercise_solution(text=self.arguments[0])
-        return [thenode]
+        self.assert_has_content()
+        # title_node = exercise_solution(text=self.arguments[0])       
+        text = '\n'.join(self.content)
+        node = protected_exercise_solution(rawsource=text)
+        node += rubric(text=self.arguments[0])
+        # Parse the directive contents.
+        self.state.nested_parse(self.content, self.content_offset,node)
+        nodes = [node]
+        print(nodes)
+        return nodes
 
 class LDTranslator(html5_polyglot.HTMLTranslator):
 
@@ -187,11 +195,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.body.append('</sup>')
 
 
-    def visit_exercise_solution(self, node):
-        self.body.append(self.starttag(node, 'div', CLASS='exercise-solution'))
+    def visit_protected_exercise_solution(self, node):
+        # TODO alot.... but also add user classes
+        self.body.append(self.starttag(node, 'div', CLASS='protected-exercise-solution'))
     
-    def depart_exercise_solution(self, node):
+    def depart_protected_exercise_solution(self, node):
         self.body.append('</div>')
 
 
-directives.register_directive('exercise-solution', ExerciseSolution)
+directives.register_directive('protected-exercise-solution', ProtectedExerciseSolution)
