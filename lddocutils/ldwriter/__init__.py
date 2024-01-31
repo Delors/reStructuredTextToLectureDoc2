@@ -1,5 +1,8 @@
 
 from docutils import frontend, nodes, utils
+from docutils.nodes import TextElement, Inline
+from docutils.parsers.rst import Directive, directives
+from docutils.parsers.rst.directives import unchanged_required,  class_option
 from docutils.writers import html5_polyglot
 
 from sys import stderr
@@ -30,6 +33,38 @@ class Writer(html5_polyglot.Writer):
         html5_polyglot.Writer.__init__(self)
         self.translator_class = LDTranslator
 
+"""
+We are now going to support integrated exercise solutions in the following way:
+
+.. exercise-solution:: "MTBF-Berechnung"
+    :class: warning
+    :name: MTBF-Berechnung
+
+    100 MTTF + 10 MTR = 110 MTBF 
+"""
+
+class exercise_solution(Inline, TextElement):
+    '''This node class is a no-op -- just a fun way to define some parameters.
+    There are lots of base classes to choose from in `docutils.nodes`.
+    See examples in `docutils.nodes`
+    '''
+    pass
+
+class ExerciseSolution(Directive):
+    '''This `Directive` class tells the ReST parser what to do with the text it
+    encounters -- parse the input, perhaps, and return a list of node objects.
+    Here, usage of a single required argument is shown.
+    See examples in docutils.parsers.rst.directives.*
+    '''
+    required_arguments = 1
+    optional_arguments = 0
+    has_content = True
+    option_spec = {'name': unchanged_required, 'class': class_option}
+
+    def run(self):
+        print(self.content)
+        thenode = exercise_solution(text=self.arguments[0])
+        return [thenode]
 
 class LDTranslator(html5_polyglot.HTMLTranslator):
 
@@ -110,6 +145,19 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                               + self.docinfo + self.body
                               + self.body_suffix[:-1])
 
+    def visit_title(self, node):
+        html5_polyglot.HTMLTranslator.visit_title(self, node)
+
+    def visit_subtitle(self, node):
+        if isinstance(node.parent, nodes.section):
+            level = self.section_level + self.initial_header_level - 1
+            if level == 1:
+                level = 2
+            tag = 'h%s' % level
+            self.body.append(self.starttag(node, tag, ''))
+            self.context.append('</%s>\n' % tag)
+        else:
+            html5_polyglot.HTMLTranslator.visit_subtitle(self, node)
 
     def visit_section(self, node):
         if not self.section_count:
@@ -121,6 +169,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             self.body.append(self.starttag(node, 'div', CLASS='section'))
         else:
             self.body.append(self.starttag(node, 'div', CLASS='ld-slide'))
+
+    def depart_section(self, node):
+        self.section_level -= 1
+        self.body.append('</div>')
 
     def visit_subscript(self, node):
         self.body.append(self.starttag(node, 'sub'))
@@ -134,21 +186,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_superscript(self, node):
         self.body.append('</sup>')
 
-    def depart_section(self, node):
-        self.section_level -= 1
+
+    def visit_exercise_solution(self, node):
+        self.body.append(self.starttag(node, 'div', CLASS='exercise-solution'))
+    
+    def depart_exercise_solution(self, node):
         self.body.append('</div>')
 
-    def visit_subtitle(self, node):
-        if isinstance(node.parent, nodes.section):
-            level = self.section_level + self.initial_header_level - 1
-            if level == 1:
-                level = 2
-            tag = 'h%s' % level
-            self.body.append(self.starttag(node, tag, ''))
-            self.context.append('</%s>\n' % tag)
-        else:
-            html5_polyglot.HTMLTranslator.visit_subtitle(self, node)
 
-
-    def visit_title(self, node):
-        html5_polyglot.HTMLTranslator.visit_title(self, node)
+directives.register_directive('exercise-solution', ExerciseSolution)

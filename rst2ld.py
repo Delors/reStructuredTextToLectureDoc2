@@ -9,7 +9,6 @@ A minimal front end to the Docutils Publisher, producing HTML slides using Lectu
 
 from docutils.writers import html5_polyglot
 
-
 from docutils.core import publish_cmdline, default_description
 from lddocutils.ldwriter import Writer
 
