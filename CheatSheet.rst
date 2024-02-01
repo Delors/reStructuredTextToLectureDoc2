@@ -318,12 +318,12 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    ``box-shadow`` adds a shadow.
 
+   ``rounded-corners`` the corners will be rounded.
+
    .. rubric:: Example
    
    .. code:: rst
       :class: smaller copy-to-clipboard
-
-      Text 
 
       .. container:: margin-top-1em 
                      line-above
