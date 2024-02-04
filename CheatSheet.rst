@@ -37,7 +37,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Vertical Titles
 
-   Add the class ``vertical-title`` to a slide to get a vertical title. This will change the layout of the slide to a column-based layout. To get back to a row based layout add a container with the class ``width-100``.
+   Add the class ``vertical-title``. This will change the layout of the slide to a column-based layout. To get back to a row based layout add a container with the class ``width-100``.
 
    .. rubric:: Example
 
@@ -63,6 +63,10 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
    
    For a slide without a title set the title to a single space character using a backslash and an explicit space :code:`\␣` and assign the class ``no-title`` to the slide.
 
+   .. rubric:: Smaller Slide Titles
+
+   Add the class `smaller-slide-title`` to the slide.
+
    .. rubric:: Centered Content on Slide
    
    Use the class ``center-child-elements``.
@@ -77,9 +81,6 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
       \  
       ___
-
-      .. admonition:: Warnung
-         :class: warning
 
          Text
 
@@ -263,16 +264,16 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
    .. rubric:: Tables
 
    The layout can be adapted using:
-   ``compact``, ``compact-cells``, ``no-table-borders``, ``no-inner-borders``, ``no-column-borders``
+   ``compact``, ``compact-cells``, ``no-table-borders``, ``no-inner-borders``, ``no-column-borders``, ``fake-header-row`` and ``fake-header-column``.
 
 
-   .. rubric:: On-hover Highlighting
+   .. rubric:: Highlighting Cells on Hover
 
-   To make tables easier to present, two highlighting modes are available:
+   Two highlighting modes are available:
 
    ``highlight-line-on-hover`` (always usable)
 
-   ``highlight-on-hover`` (only usable if the table has no column or row headers)
+   ``highlight-on-hover`` (explicit column or row headers are not supported)
 
 
 .. container:: cheat-sheet-block
