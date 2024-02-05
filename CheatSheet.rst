@@ -252,11 +252,13 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
    Text alignment can be controlled with: ``text-align-left``, ``text-align-center`` and ``text-align-right``
 
 
+
 .. container:: cheat-sheet-block
 
    .. rubric:: Images
 
    Adding a drop-shadow and rounded corners: ``picture``.
+
 
 
 .. container:: cheat-sheet-block
@@ -267,13 +269,12 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
    ``compact``, ``compact-cells``, ``no-table-borders``, ``no-inner-borders``, ``no-column-borders``, ``fake-header-row`` and ``fake-header-column``.
 
 
-   .. rubric:: Highlighting Cells on Hover
+   .. rubric:: Animation
+   
+   ``incremental`` (and ``wobble``).
 
-   Two highlighting modes are available:
+   ``highlight-line-on-hover`` (always usable) or ``highlight-on-hover`` (explicit column or row headers are not supported)
 
-   ``highlight-line-on-hover`` (always usable)
-
-   ``highlight-on-hover`` (explicit column or row headers are not supported)
 
 
 .. container:: cheat-sheet-block
@@ -337,9 +338,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Font Styling
 
-   **"rem" based relative sizes**: 
-   
-   ``xxl``, ``huge``, ``large``, ``small``, ``footnotesize``, ``scriptsize``, ``tiny``
+   **"rem" based relative sizes**: ``xxl``, ``huge``, ``large``, ``small``, ``footnotesize``, ``scriptsize``, ``tiny``, ``x-tiny``, ``xx-tiny``
 
    **"em" based relative sizes**: ``larger``, ``smaller``, ``much-smaller``
 
