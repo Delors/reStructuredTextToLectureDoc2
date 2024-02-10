@@ -266,14 +266,14 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
    .. rubric:: Tables
 
    The layout can be adapted using:
-   ``compact``, ``compact-cells``, ``no-table-borders``, ``no-inner-borders``, ``no-column-borders``, ``fake-header-row`` and ``fake-header-column``.
+   ``compact``, ``compact-cells``, ``no-table-borders``, ``no-inner-borders``, ``no-column-borders``, ``fake-header[-2nd]-row`` and ``fake-header[-2nd]-column``.
 
 
    .. rubric:: Animation
    
    ``incremental`` (and ``wobble``).
 
-   ``highlight-line-on-hover`` (always usable) or ``highlight-on-hover`` (explicit column or row headers are not supported)
+   ``highlight-line-on-hover`` (always usable), ``highlight-on-hover`` (explicit column or row headers are not supported) or ``highlight-identical-cells``
 
 
 
