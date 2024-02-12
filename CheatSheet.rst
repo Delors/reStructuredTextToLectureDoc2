@@ -249,7 +249,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Text Alignment
 
-   Text alignment can be controlled with: ``text-align-left``, ``text-align-center`` and ``text-align-right``
+   Control text alignment: ``text-align-[left|center|right]``
 
 
 
