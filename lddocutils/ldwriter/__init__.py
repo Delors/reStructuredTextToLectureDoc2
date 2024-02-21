@@ -156,6 +156,20 @@ class Supplemental(Directive):
         return nodes
 
 
+class PresenterNotes(Directive):
+
+    required_arguments = 0
+    final_argument_whitespace = True
+    optional_arguments = 1
+    has_content = True
+    option_spec = {}
+
+    def run(self):
+        self.assert_has_content()
+        # TODO - for the time being we just swallow the content
+        return [] 
+
+
 class LDTranslator(html5_polyglot.HTMLTranslator):
 
     ld_stylesheet_normalize = """<link rel="stylesheet" href="%(ld_path)s/normalize.css" type="text/css" />\n"""
@@ -320,6 +334,9 @@ directives.register_directive("stack", Stack)
 directives.register_directive("layer", Layer)
 
 directives.register_directive("supplemental", Supplemental)
+
+directives.register_directive("presenter-notes", PresenterNotes)
+
 
 # Directives which implement more advanced features:
 directives.register_directive("protected-exercise-solution", ProtectedExerciseSolution)
