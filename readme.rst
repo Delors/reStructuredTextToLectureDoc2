@@ -10,7 +10,8 @@ Setup a Project
 1. create a directory in which you want to store your slides; e.g., ``mkdir slides``
 2. change to the director: ``cd slides``
 3. initialize git: ``git init``
-4. add LectureDoc2 and restructuredTextToLectureDoc2 projects to the folder
+4. add the LectureDoc2 and restructuredTextToLectureDoc2 projects to the folder as submodules:
+   
    - ``git submodule add https://github.com/delors/LectureDoc2``
    - ``git submodule add https://github.com/delors/reStructuredTextToLectureDoc2``
  
@@ -18,6 +19,6 @@ Setup a Project
 Setup a Project - Optional
 ----------------------------
 
-5. add script to generate slides (https://github.com/Delors/Lectures/blob/main/gen-slides.zsh)
-6. add "docutils.conf" when necessary (https://github.com/Delors/Lectures/blob/main/docutils.conf)
-7. add .gitignore file with "\*.rst.html" if you don't want to archive the generated web pages
+1. add script to generate slides (https://github.com/Delors/Lectures/blob/main/gen-slides.zsh)
+2. add "docutils.conf" when necessary (https://github.com/Delors/Lectures/blob/main/docutils.conf)
+3. add .gitignore file with "\*.rst.html" if you don't want to archive the generated web pages
