@@ -20,7 +20,7 @@
 
 .. class:: cheat-sheet-8-columns 
 
-LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design 
+LectureDoc2 Cheat Sheet for DHBW Corporate Design
 -------------------------------------------------------------------------------
 
 .. container:: cheat-sheet-block
@@ -37,7 +37,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Vertical Titles
 
-   Add the class ``vertical-title``. This will change the layout of the slide to a column-based layout. To get back to a row based layout add a container with the class ``width-100``.
+   Add the class ``vertical-title`` to rotate the title and to change the layout of the slide to a column-based layout. To get back to a row based layout add a container with the class ``width-100``.
 
    .. rubric:: Example
 
@@ -51,7 +51,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
       .. container:: width-100
 
-         ...
+         <Row based content layout.>
 
 
 
@@ -61,13 +61,13 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       
    .. rubric:: Slide without Title
    
-   For a slide without a title set the title to a single space character using a backslash and an explicit space :code:`\␣` and assign the class ``no-title`` to the slide.
+   To hide the title of a slide assign the class ``no-title``.
 
    .. rubric:: Smaller Slide Titles
 
-   Add the class `smaller-slide-title`` to the slide.
+   Use the class `smaller-slide-title``.
 
-   .. rubric:: Centered Content on Slide
+   .. rubric:: Vertically Centered Content  
    
    Use the class ``center-child-elements``.
 
@@ -78,11 +78,12 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
    
       .. class:: center-child-elements 
                  no-title
+                 smaller-slide-title
 
-      \  
-      ___
+      Hidden on the slide! 
+      --------------------
 
-         Text
+      <Slide Content>
 
 .. container:: cheat-sheet-block
 
@@ -94,7 +95,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Exercises and Solutions
 
-   Create a slide with exercises by adding the class ``integrated-exercise`` to the slide. Solutions can be added by using the custom directive ``protected-exercise-solution`` 
+   Use ``integrated-exercise`` for slides with exercises. Solutions can be added by using the custom directive ``protected-exercise-solution`` 
 
    .. rubric:: Example (Solution in supplemental information)
 
@@ -115,19 +116,18 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       Exercise: XYZ
       --------------
 
-      Calculate uvw...
+      <Exercise Description>
 
-      .. protected-exercise-solution:: Solution
+      .. protected-exercise-solution:: A
 
-         The result is ...
+         <Protected Solution>
 
 
 .. container:: cheat-sheet-block
    
    .. rubric:: Table of Contents
 
-   A navigable table of contents (e.g. of the section slides) can be manually created by 
-   referencing the titles. 
+   A navigable table of contents can be created using standard ``rst`` techniques.
 
    .. rubric:: Example
 
@@ -154,8 +154,6 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       Test\ [#]_
       -----------------
 
-      ...
-
       .. [#] `test.org`
 
 
@@ -163,9 +161,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Explicit Footers
 
-   Use a container with the class ``footer-left`` or ``footer-right``.
-
-
+   A container with the class ``footer-left``, ``footer-right`` or ``block-footer``.
 
 
 
@@ -189,11 +185,13 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
       
       .. [Eic24] LectureDoc2; 2024 
 
+
+
 .. container:: cheat-sheet-block
 
    .. rubric:: Copy to Clipboard
 
-   To make it easily possible to copy code the clipboard add the class ``copy-to-clipboard`` to the code block.
+   Add ``copy-to-clipboard`` to a code block to enable copying code to the clipboard.
 
    .. rubric:: Example
 
@@ -210,7 +208,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Fade-out Content
 
-   Use the class ``faded-to-white`` for the container with the content that should be faded out.
+   Add the class ``faded-to-white`` to a container to whiten the content.
    
 
 
@@ -234,16 +232,16 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Supplemental Information
 
-   Add a container with the class ``supplemental`` to add respective information. How this information is rendered depends on the chosen view.
+   Use the directive ``supplemental`` for respective information. 
 
    .. rubric:: Example
 
    .. code:: rst
       :class: smaller copy-to-clipboard
 
-      .. container:: supplemental
+      .. supplemental:: 
 
-         Text
+         <Text>
 
 .. container:: cheat-sheet-block
 
@@ -283,7 +281,6 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. class:: list-with-explanations
 
-   -  Use ``li-margin-top-0-75em`` to have more space between the list items.
    - ``list-with-explanations`` renders text paragraphs of list items less pronounced.
   
      (As shown here.)
@@ -309,7 +306,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
       .. class:: positive-list
       - Point 3
-      - Point 4
+
 
 
 .. container:: cheat-sheet-block
@@ -384,10 +381,6 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
         :incremental:`Item 1 - Part 2`
       - Item 2 
 
-        - Item 2.1
-        
-          .. class:: incremental
-        - Item 2.2
 
 
 .. COMPLEX LAYOUTS
@@ -397,7 +390,7 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Column-based Layouts
 
-   We support 2- (``two-columns``) and 3-column (``three-columns``) layouts based on nested rst ``container``\ s for each column.
+   Use ``two-columns`` and ``three-columns`` for respective layouts.
 
    .. rubric:: Example
 
@@ -406,15 +399,15 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
       .. container:: two-columns 
 
+         .. container:: column no-separator
+      
+            <Column 1>
+      
          .. container:: column 
       
-            Column 1
-      
-         .. container:: column 
-      
-            Column 2
+            <Column 2>
 
-   To enable unbalanced column widths add the class ``no-default-width`` to the root container. To remove the separator between two columns use the class ``no-separator`` on the left column.
+   Add ``no-default-width`` to the root container for content based column widths. Use class ``no-separator`` on the left column to remove the separator.
    
 
 
@@ -423,33 +416,31 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
 
    .. rubric:: Stacked Layouts
 
-   Stacked layouts are based on nested rst ``container``\ s for each layer. In general. each layer - except the first one - needs to have the class ``incremental``. If a new layer should be transparent; e.g., to incrementally build up an image, add the class ``overlay`` to the layer. :dhbw-red:`(Currently, up to 10 layers are supported (CSS Limitation).)`
+   Stacked layouts are based on nested rst containers for each layer. Each layer - except of the first one - needs to have the class ``incremental`` and/or the class ``overlay`` for transparent layers. :dhbw-red:`(Up to 10 layers are supported.)`
 
    .. rubric:: Images in Stacked Layouts
 
-   To avoid that a parent element of a floating element is collapsed, add the class ``clearfix`` to the parent element. This is in particular necessary when you use a stacked layout where an element of a layer is a floating image. 
+   To avoid that a parent element of a floating element is collapsed add the class ``clearfix`` to the parent element; i. e., when a layer just contains a floating image. 
 
    .. rubric:: Example
 
    .. code:: rst
       :class: smaller copy-to-clipboard 
 
-      .. container:: stack
+      .. stack::
 
-        .. container:: layer clearfix
+        .. layer:: clearfix
         
            .. image:: <p1.svg>
               :align: left
 
-        .. container:: layer overlay
+        .. layer:: overlay
         
            .. image:: <p2.svg>
-              :align: left
 
-         .. container:: layer 
-                        incremental
+         .. layer:: incremental
 
-            Important!
+            <Content>
 
 
 
@@ -561,11 +552,6 @@ LectureDoc2 Cheat Sheet for Slides using the DHBW Corporate Design
    
             .. rubric:: <SUB-TOPIC>
 
-         .. container:: cheat-sheet-block
-
-            .. rubric:: <TOPIC>
-   
-            .. rubric:: <SUB-TOPIC>
 
 
 
