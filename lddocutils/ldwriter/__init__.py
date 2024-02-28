@@ -3,8 +3,12 @@ from docutils.nodes import TextElement, Inline, container, title, rubric
 from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.directives import unchanged_required, class_option
 from docutils.writers import html5_polyglot
-
+from Crypto.Cipher import AES
 from sys import stderr
+import base64
+from Crypto.Protocol.KDF import PBKDF2
+from Crypto.Hash import SHA512, SHA256
+from Crypto.Random import get_random_bytes
 
 """
 
@@ -41,25 +45,61 @@ class Writer(html5_polyglot.Writer):
 """
 We are now going to support protected exercise solutions in the following way:
 
-.. protected-exercise-solution:: "MTBF-Berechnung"
+.. exercise:: "title"
     :class: warning
-    :name: MTBF-Berechnung
+    
+    <exercise content>
 
-    100 MTTF + 10 MTR = 110 MTBF 
+    .. solution:: "password"
 
-    Helpful Links:
+        Helpful Links:
 
-        https://gist.github.com/mastbaum/2655700
+            https://gist.github.com/mastbaum/2655700
 
-        https://docutils.sourceforge.io/docs/howto/rst-directives.html
+            https://docutils.sourceforge.io/docs/howto/rst-directives.html
 """
 
-class protected_exercise_solution(container):
+
+class solution(container):
     # Examples are in `docutils.nodes`
     pass
 
 
-class ProtectedExerciseSolution(Directive):
+class Solution(Directive):
+    # Examples are in docutils.parsers.rst.directives.*
+
+    required_arguments = 0
+    final_argument_whitespace = True
+    optional_arguments = 0
+    has_content = True
+    option_spec = {"pwd": unchanged_required, "class": class_option}
+
+    def run(self):
+        # TODO check that solution is the last child element of an exercise
+        self.assert_has_content()
+        if "pwd" not in self.options or len(self.options["pwd"]) < 3:
+            raise self.error(
+                'solution requires a password with at least three characters: ":pwd: <password>"'
+            )
+        text = "\n".join(self.content)
+        node = solution(rawsource=text)
+        node.attributes["pwd"] = self.options["pwd"]
+        if "class" in self.options:
+            node.classes = " ".join(self.options["class"])
+        if len(self.arguments) > 0:
+            node += rubric(text=self.arguments[0])
+        # Parse the directive contents.
+        self.state.nested_parse(self.content, self.content_offset, node)
+        nodes = [node]
+        return nodes
+
+
+class exercise(container):
+    # Examples are in `docutils.nodes`
+    pass
+
+
+class Exercise(Directive):
     # Examples are in docutils.parsers.rst.directives.*
 
     required_arguments = 1
@@ -70,14 +110,16 @@ class ProtectedExerciseSolution(Directive):
 
     def run(self):
         self.assert_has_content()
-        # title_node = exercise_solution(text=self.arguments[0])
         text = "\n".join(self.content)
-        node = protected_exercise_solution(rawsource=text)
+        node = exercise(rawsource=text)
+        if "class" in self.options:
+            node.classes = "ld-exercise " +" ".join(self.options["class"])
+        else:
+            node.classes = "ld-exercise"
         node += rubric(text=self.arguments[0])
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
-        print(nodes)
         return nodes
 
 
@@ -99,7 +141,9 @@ class Stack(Directive):
         text = "\n".join(self.content)
         node = stack(rawsource=text)
         if "stack" in self.arguments:
-            raise self.error('The class "stack" is superfluous; it is automatically added.')
+            raise self.error(
+                'The class "stack" is superfluous; it is automatically added.'
+            )
         node.classes = "stack " + " ".join(self.arguments)
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
@@ -167,7 +211,7 @@ class PresenterNotes(Directive):
     def run(self):
         self.assert_has_content()
         # TODO - for the time being we just swallow the content
-        return [] 
+        return []
 
 
 class LDTranslator(html5_polyglot.HTMLTranslator):
@@ -218,6 +262,9 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.meta.append('<meta name="version" content="LD2 0.1" />\n')
 
         self.section_count = 0
+
+        self.start_of_exercise = None
+        self.start_of_solution = None
 
     def depart_document(self, node):
         self.head_prefix.extend(
@@ -318,17 +365,46 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_supplemental(self, node):
         self.body.append("</div>")
 
-    def visit_protected_exercise_solution(self, node):
-        # TODO alot.... but also add user classes
-        self.body.append(
-            self.starttag(node, "div", CLASS="protected-exercise-solution")
-        )
+    def visit_exercise(self, node):
+        if self.start_of_exercise is not None:
+            raise self.error("exercises cannot be nested")
+        self.start_of_exercise = len(self.body)
+        self.body.append(self.starttag(node, "div", CLASS=node.classes))
 
-    def depart_protected_exercise_solution(self, node):
+    def depart_exercise(self, node):
+        self.start_of_exercise = None
+        self.body.append("</div>")
+
+    def visit_solution(self, node):
+        if self.start_of_solution is not None:
+            raise self.error("solutions cannot be nested")
+
+        self.body.append(self.starttag(node, "div", CLASS="ld-exercise-solution"))
+        self.start_of_solution = len(self.body)
+
+    def depart_solution(self, node):
+        # Idea:
+        # 1. Extract the solution
+        # 2. Remove the solution from the body
+        # 3. Encrypt the solution
+        # 4. Add the encrypted solution to the body (base64 encoded)
+        end_of_solution = len(self.body)
+        exercise_body = "".join(self.body[self.start_of_solution : end_of_solution + 1])
+        del self.body[self.start_of_solution :]
+        self.start_of_solution = None
+        key = node.attributes["pwd"].encode("utf-8")
+        salt = get_random_bytes(16)
+        aesKey = PBKDF2(key, salt, dkLen=32, count=100000, hmac_hash_module=SHA256)
+        cipher = AES.new(aesKey, AES.MODE_CTR)
+        ciphertext = cipher.encrypt(exercise_body.encode("utf-8"))
+        self.body.append(base64.b64encode(salt).decode("utf-8"))
+        self.body.append(":")
+        self.body.append(base64.b64encode(ciphertext).decode("utf-8"))
         self.body.append("</div>")
 
 
-# Convenience directives which are just shortcuts for using containers
+#
+# Convenience directives which are shortcuts for using containers
 # with classes:
 directives.register_directive("stack", Stack)
 directives.register_directive("layer", Layer)
@@ -337,6 +413,7 @@ directives.register_directive("supplemental", Supplemental)
 
 directives.register_directive("presenter-notes", PresenterNotes)
 
-
+#
 # Directives which implement more advanced features:
-directives.register_directive("protected-exercise-solution", ProtectedExerciseSolution)
+directives.register_directive("exercise", Exercise)
+directives.register_directive("solution", Solution)
