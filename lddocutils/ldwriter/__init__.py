@@ -1,22 +1,23 @@
+from sys import stderr
+
 from docutils import frontend, nodes, utils
 from docutils.nodes import TextElement, Inline, container, title, rubric
 from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.directives import unchanged_required, class_option
 from docutils.writers import html5_polyglot
-from Crypto.Cipher import AES
-from sys import stderr
+
 import base64
+from Crypto.Cipher import AES
 from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Hash import SHA512, SHA256
 from Crypto.Random import get_random_bytes
 
-"""
 
+
+"""
 This Writer is heavily inspired by the rst2s5 writer:
 https://github.com/docutils/docutils/blob/master/docutils/docutils/writers/s5_html/__init__.py
 """
-
-
 class Writer(html5_polyglot.Writer):
 
     supported = ("html", "xhtml")
@@ -43,7 +44,7 @@ class Writer(html5_polyglot.Writer):
 
 
 """
-We are now going to support protected exercise solutions in the following way:
+We are supporting protected exercise solutions in the following way:
 
 .. exercise:: "title"
     :class: warning
@@ -102,9 +103,9 @@ class exercise(container):
 class Exercise(Directive):
     # Examples are in docutils.parsers.rst.directives.*
 
-    required_arguments = 1
+    required_arguments = 0
     final_argument_whitespace = True
-    optional_arguments = 0
+    optional_arguments = 1
     has_content = True
     option_spec = {"name": unchanged_required, "class": class_option}
 
@@ -112,15 +113,14 @@ class Exercise(Directive):
         self.assert_has_content()
         text = "\n".join(self.content)
         node = exercise(rawsource=text)
+        node.classes = "ld-exercise"
         if "class" in self.options:
-            node.classes = "ld-exercise " +" ".join(self.options["class"])
-        else:
-            node.classes = "ld-exercise"
-        node += rubric(text=self.arguments[0])
+            node.classes += " " +" ".join(self.options["class"])
+        if len(self.arguments) > 0:
+            node += rubric(text=self.arguments[0])        
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
-        nodes = [node]
-        return nodes
+        return [node]
 
 
 class stack(container):
