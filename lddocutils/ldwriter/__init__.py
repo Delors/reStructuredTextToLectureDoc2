@@ -263,6 +263,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
         self.section_count = 0
 
+        # Identifies the first tag belonging to the slide to hide.
+        # This is used to remove the slide from the output.
+        self.start_of_slide_to_hide = None
+
         self.start_of_exercise = None
         self.start_of_solution = None
 
@@ -321,19 +325,28 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             html5_polyglot.HTMLTranslator.visit_subtitle(self, node)
 
     def visit_section(self, node):
+        # The first section ends our title slide!
         if not self.section_count:
             self.body.append("</div>\n")
+
         self.section_count += 1
         self.section_level += 1
         if self.section_level > 1:
             # dummy for matching div's
             self.body.append(self.starttag(node, "div", CLASS="section"))
         else:
-            self.body.append(self.starttag(node, "div", CLASS="ld-slide"))
+            if "hide-slide" in node.attributes["classes"]:
+                self.start_of_slide_to_hide = len(self.body)
+            else:
+                self.body.append(self.starttag(node, "div", CLASS="ld-slide"))
 
     def depart_section(self, node):
         self.section_level -= 1
-        self.body.append("</div>")
+        if self.start_of_slide_to_hide is not None:
+            del self.body[self.start_of_slide_to_hide :]
+            self.start_of_slide_to_hide = None
+        else:
+            self.body.append("</div>")
 
     def visit_subscript(self, node):
         self.body.append(self.starttag(node, "sub"))

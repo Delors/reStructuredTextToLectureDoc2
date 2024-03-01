@@ -507,6 +507,25 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
    ``margin-none``, ``margin-0-5em``, ``margin-1em``, ``margin-top-1em``, ``margin-top-2em``, ``margin-bottom-1em``, ``margin-bottom-2em``, ``margin-right-1em``, ``margin-left-1em``, ``padding-none``, ``padding-0-5em``, ``padding-1em``, ``padding-top-1em``, ``padding-top-2em``
 
 
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Hiding slides (⚠️ rst2ld only)
+
+   Use ``hide-slide`` to exempt it from slide generation.
+
+   .. rubric:: Example
+   
+   .. code:: rst
+      :class: smaller copy-to-clipboard
+      
+      .. class:: hide-slide
+      
+      <Hidden Slide >
+      -----------------
+
+
+
 .. container:: cheat-sheet-block
 
    .. rubric:: Meta-Information
