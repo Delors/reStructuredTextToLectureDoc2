@@ -399,20 +399,26 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         # Idea:
         # 1. Extract the solution
         # 2. Remove the solution from the body
-        # 3. Encrypt the solution
+        # 3. Encrypt the solution using AES-GCM
         # 4. Add the encrypted solution to the body (base64 encoded)
+        iterationCount = 100000
         end_of_solution = len(self.body)
         exercise_body = "".join(self.body[self.start_of_solution : end_of_solution + 1])
         del self.body[self.start_of_solution :]
         self.start_of_solution = None
         key = node.attributes["pwd"].encode("utf-8")
-        salt = get_random_bytes(16)
-        aesKey = PBKDF2(key, salt, dkLen=32, count=100000, hmac_hash_module=SHA256)
-        cipher = AES.new(aesKey, AES.MODE_CTR)
-        ciphertext = cipher.encrypt(exercise_body.encode("utf-8"))
+        salt = get_random_bytes(32)
+        iv = get_random_bytes(12)
+        aesKey = PBKDF2(key, salt, dkLen=32, count=iterationCount, hmac_hash_module=SHA256)
+        cipher = AES.new(aesKey, AES.MODE_GCM, nonce=iv, mac_len=16)
+        (ciphertext,tag) = cipher.encrypt_and_digest(exercise_body.encode("utf-8"))
+        self.body.append(base64.b64encode(str(iterationCount).encode("utf-8")).decode("utf-8"))
+        self.body.append(":")
         self.body.append(base64.b64encode(salt).decode("utf-8"))
         self.body.append(":")
-        self.body.append(base64.b64encode(ciphertext).decode("utf-8"))
+        self.body.append(base64.b64encode(iv).decode("utf-8"))
+        self.body.append(":")
+        self.body.append(base64.b64encode(ciphertext+tag).decode("utf-8"))
         self.body.append("</div>")
 
 
