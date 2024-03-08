@@ -472,7 +472,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def visit_exercise(self, node):
         if self.start_of_exercise is not None:
-            raise self.error("exercises cannot be nested")
+            raise Exception("exercises cannot be nested") # TODO move to parsing phase!
 
         self.exercise_count += 1
         title = ""
@@ -496,11 +496,11 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def visit_solution(self, node):
         if self.start_of_exercise is None:
-            raise self.error("solutions must be nested in exercises")
+            raise Exception("solutions must be nested in exercises") # TODO move to parsing phase!
         if self.start_of_solution is not None:
-            raise self.error("solutions cannot be nested")
+            raise Exception("solutions cannot be nested") # TODO move to parsing phase!
         if self.current_exercise_name in self.exercise_passwords:
-            raise self.error("one exercise can only have one solution")
+            raise Exception("one exercise can only have one solution") # TODO move to parsing phase!
 
         self.exercise_passwords[self.current_exercise_name] = node.attributes["pwd"]
         self.body.append(self.starttag(node, "div", CLASS="ld-exercise-solution",ENCRYPTED=""))
