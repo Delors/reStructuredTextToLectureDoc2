@@ -337,7 +337,7 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
 
    **"rem" based relative sizes**: ``xxl``, ``huge``, ``large``, ``small``, ``footnotesize``, ``scriptsize``, ``tiny``, ``x-tiny``, ``xx-tiny``
 
-   **"em" based relative sizes**: ``larger``, ``smaller``, ``much-smaller``
+   **"em" based relative sizes**: ``larger``, ``smaller``, ``far-smaller``
 
    **Font weight**: ``bold``, ``light``, ``thin``
 
@@ -438,7 +438,7 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
         
            .. image:: <p2.svg>
 
-         .. layer:: incremental
+         .. layer:: incremental warning
 
             <Content>
 
@@ -558,7 +558,7 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
    .. rubric:: Template
 
    .. code:: rst
-      :class: much-smaller copy-to-clipboard
+      :class: far-smaller copy-to-clipboard
 
       .. class:: cheat-sheet-8-columns
 
@@ -581,7 +581,7 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
    .. rubric:: Template   
 
    .. code:: rst 
-      :class: much-smaller copy-to-clipboard
+      :class: far-smaller copy-to-clipboard
 
       .. |date| date::
       .. |at| unicode:: 0x40
