@@ -498,10 +498,6 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
 
 .. container:: cheat-sheet-block
    
-   .. rubric:: Controlling Whitespace
-
-   Adding space around an element (in particular images): ``border-transparent-1em``
-  
    .. rubric:: Fine-grained Control (Try to avoid!)
 
    ``margin-none``, ``margin-0-5em``, ``margin-1em``, ``margin-top-1em``, ``margin-top-2em``, ``margin-bottom-1em``, ``margin-bottom-2em``, ``margin-right-1em``, ``margin-left-1em``, ``padding-none``, ``padding-0-5em``, ``padding-1em``, ``padding-top-1em``, ``padding-top-2em``
