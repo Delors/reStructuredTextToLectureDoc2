@@ -503,7 +503,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             raise Exception("one exercise can only have one solution") # TODO move to parsing phase!
 
         self.exercise_passwords[self.current_exercise_name] = node.attributes["pwd"]
-        self.body.append(self.starttag(node, "div", CLASS="ld-exercise-solution",ENCRYPTED=""))
+        self.body.append(self.starttag(node, "div", CLASS="ld-exercise-solution",ENCRYPTED="")) # ENCRYPTED is a boolean attribute
         self.start_of_solution = len(self.body)
 
     def depart_solution(self, node):
