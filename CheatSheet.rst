@@ -416,7 +416,7 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
 
    .. rubric:: Stacked Layouts
 
-   Stacked layouts are based on nested rst containers for each layer. Each layer - except of the first one - needs to have the class ``incremental`` and/or the class ``overlay`` for transparent layers. :dhbw-red:`(Up to 10 layers are supported.)`
+   Stacked layouts are based on nested layers. Each layer - except of the first one - needs to have the class ``incremental`` and/or the class ``overlay`` for transparent layers. :dhbw-red:`(Up to 10 layers are supported.)` To turn off the numbering of opaque layers use ``.no-number``.
 
    .. rubric:: Images in Stacked Layouts
 
