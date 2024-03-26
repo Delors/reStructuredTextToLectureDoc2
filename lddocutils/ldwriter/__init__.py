@@ -77,8 +77,11 @@ ldPBKDF2IterationCount = 100000
 def encryptAESGCM(pwd, plaintext, iterationCount=ldPBKDF2IterationCount):
     # The following encryption scheme is compatible with the one used by 
     # LectureDoc2.
-    salt = get_random_bytes(32)
-    iv = get_random_bytes(12)
+    # Additionally, we want to encrypt the content in the same way when we 
+    # didn't change the content.
+    base_hash = hashlib.sha512(plaintext.encode("utf-8")).digest()
+    salt = base_hash[:32] # get_random_bytes(32)
+    iv = base_hash[32:44] # get_random_bytes(12)
     aesKey = PBKDF2(pwd, salt, dkLen=32, count=iterationCount, hmac_hash_module=SHA256)
     cipher = AES.new(aesKey, AES.MODE_GCM, nonce=iv, mac_len=16)
     (ciphertext, tag) = cipher.encrypt_and_digest(plaintext.encode("utf-8"))
@@ -362,10 +365,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if not self.section_count:
             self.body.append("</div>\n")
 
-        if len(self.exercise_passwords) > 0:
+        if len(self.exercise_passwords) > 0 and self.exercises_master_password is not None:
             # Write all passwords to the HTML document and (optionally) to a file
-            if self.exercises_master_password is None:
-                self.exercises_master_password = generatePassword(10)
+            # if self.exercises_master_password is None:
+            #    self.exercises_master_password = generatePassword(10)
 
             pwds = [
                         {"master password": self.exercises_master_password},
