@@ -510,7 +510,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_solution(self, node):
         # Idea:
         # 1. Extract the solution
-        # 2. Remove the "generated HTML of the" solution from the body
+        # 2. Remove the "generated HTML of the solution" from the body
         # 3. Encrypt the solution using AES-GCM
         # 4. Add the encrypted solution to the body (base64 encoded)
 
@@ -523,19 +523,25 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.start_of_solution = None
         # 3.
         pwd = node.attributes["pwd"].encode("utf-8")
-        salt = exercise_hash # We really want a stable salt here to avoid that re-running rst2ld changes the output when the password is the same and the content hasn't changed!
+        salt = exercise_hash  # We really want a stable salt here to avoid that re-running rst2ld changes the output when the password is the same and the content hasn't changed!
         iv = get_random_bytes(12)
-        aesKey = PBKDF2(pwd, salt, dkLen=32, count=ldPBKDF2IterationCount, hmac_hash_module=SHA256)
+        aesKey = PBKDF2(
+            pwd, salt, dkLen=32, count=ldPBKDF2IterationCount, hmac_hash_module=SHA256
+        )
         cipher = AES.new(aesKey, AES.MODE_GCM, nonce=iv, mac_len=16)
-        (ciphertext,tag) = cipher.encrypt_and_digest(exercise_body.encode("utf-8"))
+        (ciphertext, tag) = cipher.encrypt_and_digest(exercise_body.encode("utf-8"))
         # 4.
-        self.body.append(base64.b64encode(str(ldPBKDF2IterationCount).encode("utf-8")).decode("utf-8"))
+        self.body.append(
+            base64.b64encode(str(ldPBKDF2IterationCount).encode("utf-8")).decode(
+                "utf-8"
+            )
+        )
         self.body.append(":")
         self.body.append(base64.b64encode(salt).decode("utf-8"))
         self.body.append(":")
         self.body.append(base64.b64encode(iv).decode("utf-8"))
         self.body.append(":")
-        self.body.append(base64.b64encode(ciphertext+tag).decode("utf-8"))
+        self.body.append(base64.b64encode(ciphertext + tag).decode("utf-8"))
         self.body.append("</div>\n")
 
 
