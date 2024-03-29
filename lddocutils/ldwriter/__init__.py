@@ -520,14 +520,17 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         # 1.
         end_of_solution = len(self.body)
         exercise_body = "".join(self.body[self.start_of_solution : end_of_solution + 1])
-        exercise_hash = hashlib.sha256(exercise_body.encode("utf-8")).digest()
+        exercise_hash = hashlib.sha512(exercise_body.encode("utf-8")).digest()
         # 2.
         del self.body[self.start_of_solution :]
         self.start_of_solution = None
         # 3.
         pwd = node.attributes["pwd"].encode("utf-8")
-        salt = exercise_hash  # We really want a stable salt here to avoid that re-running rst2ld changes the output when the password is the same and the content hasn't changed!
-        iv = get_random_bytes(12)
+        # We really want a stable salt and iv to avoid that re-running
+        # rst2ld changes the output when the password is the same
+        # and the content hasn't changed!
+        salt = exercise_hash[:32]
+        iv = exercise_hash[32:44]  # get_random_bytes(12)
         aesKey = PBKDF2(
             pwd, salt, dkLen=32, count=ldPBKDF2IterationCount, hmac_hash_module=SHA256
         )
