@@ -24,6 +24,8 @@ https://github.com/docutils/docutils/blob/master/docutils/docutils/writers/s5_ht
 
 # Examples definitions of `nodes` are in `docutils.nodes`
 """
+
+
 class Writer(html5_polyglot.Writer):
 
     supported = ("html", "xhtml")
@@ -55,33 +57,39 @@ class Writer(html5_polyglot.Writer):
 
 
 def generatePassword(length=8):
-    """ Generates a reasonably secure password; 'dashes' are added after every 
-        third letter for readability. 
+    """Generates a reasonably secure password; 'dashes' are added after every
+    third letter for readability.
 
-        The user is able to specify an arbitrary password. However,
-        if the user does not provide a password, we generate a random
-        one. 
+    The user is able to specify an arbitrary password. However,
+    if the user does not provide a password, we generate a random
+    one.
 
-        Please recall, that we are "only" protecting exercise solutions
-        which will not be graded or otherwise evaluated. It is just meant
-        to keep the students from looking them up too easily.
+    Please recall, that we are "only" protecting exercise solutions
+    which will not be graded or otherwise evaluated. It is just meant
+    to keep the students from looking them up too easily.
     """
     assert length > 3
-    b = batched(bytearray(map(lambda i: i %(122-97)+97,get_random_bytes(8))).decode("UTF-8"),3)
-    m = map(lambda t : ''.join(t), b)
-    return '-'.join(m)
+    b = batched(
+        bytearray(map(lambda i: i % (122 - 97) + 97, get_random_bytes(8))).decode(
+            "UTF-8"
+        ),
+        3,
+    )
+    m = map(lambda t: "".join(t), b)
+    return "-".join(m)
 
 
 ldPBKDF2IterationCount = 100000
 
+
 def encryptAESGCM(pwd, plaintext, iterationCount=ldPBKDF2IterationCount):
-    # The following encryption scheme is compatible with the one used by 
+    # The following encryption scheme is compatible with the one used by
     # LectureDoc2.
-    # Additionally, we want to encrypt the content in the same way when we 
+    # Additionally, we want to encrypt the content in the same way when we
     # didn't change the content.
     base_hash = hashlib.sha512(plaintext.encode("utf-8")).digest()
-    salt = base_hash[:32] # get_random_bytes(32)
-    iv = base_hash[32:44] # get_random_bytes(12)
+    salt = base_hash[:32]  # get_random_bytes(32)
+    iv = base_hash[32:44]  # get_random_bytes(12)
     aesKey = PBKDF2(pwd, salt, dkLen=32, count=iterationCount, hmac_hash_module=SHA256)
     cipher = AES.new(aesKey, AES.MODE_GCM, nonce=iv, mac_len=16)
     (ciphertext, tag) = cipher.encrypt_and_digest(plaintext.encode("utf-8"))
@@ -97,10 +105,11 @@ def encryptAESGCM(pwd, plaintext, iterationCount=ldPBKDF2IterationCount):
 
 
 class exercise(container):
-    """ Represents an exercise. 
-    
-        Exercise node have the additional attribute title if the user provides one.
+    """Represents an exercise.
+
+    Exercise node have the additional attribute title if the user provides one.
     """
+
     pass
 
 
@@ -110,14 +119,15 @@ class Exercise(Directive):
 
     .. exercise:: "title"
         :class: complicated
-        
+
         <exercise content>
 
-        .. solution:: 
+        .. solution::
             :pwd: "password"
 
             <solution content>
     """
+
     # Examples are in docutils.parsers.rst.directives.*
 
     required_arguments = 0
@@ -133,7 +143,7 @@ class Exercise(Directive):
         node = exercise(rawsource=text)
         node.classes = "ld-exercise"
         if "class" in self.options:
-            node.classes += " " +" ".join(self.options["class"])
+            node.classes += " " + " ".join(self.options["class"])
         if len(self.arguments) > 0:
             exercise_title = self.arguments[0]
             node.attributes["title"] = exercise_title
@@ -141,6 +151,7 @@ class Exercise(Directive):
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
+
 
 class solution(container):
     # Examples are in `docutils.nodes`
@@ -168,8 +179,8 @@ class Solution(Directive):
         elif len(self.options["pwd"]) < 3:
             raise self.error('solution password too short: ":pwd: <password>"')
         else:
-             node.attributes["pwd"] = self.options["pwd"]
-        
+            node.attributes["pwd"] = self.options["pwd"]
+
         if "class" in self.options:
             node.classes = " ".join(self.options["class"])
         if len(self.arguments) > 0:
@@ -248,7 +259,9 @@ class Supplemental(Directive):
     def run(self):
         self.assert_has_content()
         if "supplemental" in self.arguments:
-            raise self.error('"supplemental" is superfluous; it is automatically added.')
+            raise self.error(
+                '"supplemental" is superfluous; it is automatically added.'
+            )
 
         text = "\n".join(self.content)
         node = stack(rawsource=text)
@@ -308,7 +321,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.theme_files_copied = None
         """
         # overwrite HTML meta tag default
-        ld_path = self.document.settings.ld_path        
+        ld_path = self.document.settings.ld_path
         self.stylesheet.insert(0, self.ld_stylesheet_normalize % {"ld_path": ld_path})
         self.stylesheet.append(self.ld_stylesheet_template % {"ld_path": ld_path})
         self.meta = [
@@ -327,12 +340,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.start_of_slide_to_hide = None
 
         self.ld_exercise_passwords_file = self.document.settings.ld_exercise_passwords
-        self.start_of_exercise = None # used while parsing an exercise
-        self.current_exercise_name = None # used while parsing an exercise
+        self.start_of_exercise = None  # used while parsing an exercise
+        self.current_exercise_name = None  # used while parsing an exercise
         self.start_of_solution = None
         self.exercises_master_password = None
         self.exercise_passwords = {}
-        self.exercise_count = 0 # incremented for each exercise
+        self.exercise_count = 0  # incremented for each exercise
 
     def depart_document(self, node):
         self.head_prefix.extend(
@@ -365,22 +378,27 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if not self.section_count:
             self.body.append("</div>\n")
 
-        if len(self.exercise_passwords) > 0 and self.exercises_master_password is not None:
+        if len(self.exercise_passwords) > 0:
             # Write all passwords to the HTML document and (optionally) to a file
             # if self.exercises_master_password is None:
             #    self.exercises_master_password = generatePassword(10)
 
             pwds = [
-                        {"master password": self.exercises_master_password},
-                        {"exercise passwords": self.exercise_passwords},
-                    ]
+                {"exercise passwords": self.exercise_passwords},
+            ]
+            if self.exercises_master_password is not None:
+                pwds.prepend({"master password": self.exercises_master_password})
+
             pwdsJSON = json.dumps(pwds, indent=4)
 
-            # self.body.append(self.starttag({"ids": ["ld-exercise-passwords"]}, "div"))
-            # self.body.append(pwdsJSON)
-            # self.body.append("</div>\n")
-            encryptedPWDs = encryptAESGCM(self.exercises_master_password, pwdsJSON, 100000)            
-            self.head.insert(0,f'<meta name="exercise-passwords" content="${encryptedPWDs}" />\n')
+            if self.exercises_master_password is not None:
+                encryptedPWDs = encryptAESGCM(
+                    self.exercises_master_password, pwdsJSON, 100000
+                )
+                self.head.insert(
+                    0,
+                    f'<meta name="exercise-passwords" content="${encryptedPWDs}" />\n',
+                )
 
             if self.ld_exercise_passwords_file is not None:
                 with open(self.ld_exercise_passwords_file, "w") as pwdsFile:
@@ -476,7 +494,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def visit_exercise(self, node):
         if self.start_of_exercise is not None:
-            raise Exception("exercises cannot be nested") # TODO move to parsing phase!
+            raise Exception("exercises cannot be nested")  # TODO move to parsing phase!
 
         self.exercise_count += 1
         title = ""
@@ -500,14 +518,20 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def visit_solution(self, node):
         if self.start_of_exercise is None:
-            raise Exception("solutions must be nested in exercises") # TODO move to parsing phase!
+            raise Exception(
+                "solutions must be nested in exercises"
+            )  # TODO move to parsing phase!
         if self.start_of_solution is not None:
-            raise Exception("solutions cannot be nested") # TODO move to parsing phase!
+            raise Exception("solutions cannot be nested")  # TODO move to parsing phase!
         if self.current_exercise_name in self.exercise_passwords:
-            raise Exception("one exercise can only have one solution") # TODO move to parsing phase!
+            raise Exception(
+                "one exercise can only have one solution"
+            )  # TODO move to parsing phase!
 
         self.exercise_passwords[self.current_exercise_name] = node.attributes["pwd"]
-        self.body.append(self.starttag(node, "div", CLASS="ld-exercise-solution",ENCRYPTED="")) # ENCRYPTED is a boolean attribute
+        self.body.append(
+            self.starttag(node, "div", CLASS="ld-exercise-solution", ENCRYPTED="")
+        )  # ENCRYPTED is a boolean attribute
         self.start_of_solution = len(self.body)
 
     def depart_solution(self, node):
