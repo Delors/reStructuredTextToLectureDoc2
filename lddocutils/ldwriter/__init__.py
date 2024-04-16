@@ -387,7 +387,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 {"exercise passwords": self.exercise_passwords},
             ]
             if self.exercises_master_password is not None:
-                pwds.prepend({"master password": self.exercises_master_password})
+                pwds.insert(0,{"master password": self.exercises_master_password})
 
             pwdsJSON = json.dumps(pwds, indent=4)
 
