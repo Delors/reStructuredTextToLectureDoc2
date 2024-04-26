@@ -41,8 +41,8 @@ class Writer(html5_polyglot.Writer):
                 {"metavar": "<URL>", "default": "ld"},
             ),
             (
-                "File in which the exercise passwords are stored.",
-                ["--ld-exercise-passwords"],
+                "File in which the exercises' passwords are stored.",
+                ["--ld-exercises-passwords"],
                 {"metavar": "<URL>"},
             ),
         ),
@@ -290,7 +290,9 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     ld_stylesheet_normalize = """<link rel="stylesheet" href="%(ld_path)s/normalize.css" type="text/css" />\n"""
 
     ld_stylesheet_template = """\
-    <script src="%(ld_path)s/ld-animations.js" type="text/javascript"></script>
+    <script src="%(ld_path)s/ld-crypto.js" type="text/javascript"></script>
+    <script src="%(ld_path)s/ld-lib.js" type="text/javascript"></script>
+    <script src="%(ld_path)s/ld-animations.js" type="text/javascript"></script>    
     <script src="%(ld_path)s/ld-help.js" type="text/javascript"></script>
     <script src="%(ld_path)s/ld-core.js" type="text/javascript"></script>
     <link rel="stylesheet" href="%(ld_path)s/ld.css" type="text/css" />
@@ -339,12 +341,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         # This is used to remove the slide from the output.
         self.start_of_slide_to_hide = None
 
-        self.ld_exercise_passwords_file = self.document.settings.ld_exercise_passwords
+        self.ld_exercises_passwords_file = self.document.settings.ld_exercises_passwords
         self.start_of_exercise = None  # used while parsing an exercise
         self.current_exercise_name = None  # used while parsing an exercise
         self.start_of_solution = None
         self.exercises_master_password = None
-        self.exercise_passwords = {}
+        self.exercises_passwords = {}
         self.exercise_count = 0  # incremented for each exercise
 
     def depart_document(self, node):
@@ -378,13 +380,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if not self.section_count:
             self.body.append("</div>\n")
 
-        if len(self.exercise_passwords) > 0:
+        if len(self.exercises_passwords) > 0:
             # Write all passwords to the HTML document and (optionally) to a file
             # if self.exercises_master_password is None:
             #    self.exercises_master_password = generatePassword(10)
 
             pwds = [
-                {"exercise passwords": self.exercise_passwords},
+                {"exercise passwords": self.exercises_passwords},
             ]
             if self.exercises_master_password is not None:
                 pwds.insert(0,{"master password": self.exercises_master_password})
@@ -397,11 +399,11 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 )
                 self.head.insert(
                     0,
-                    f'<meta name="exercise-passwords" content="${encryptedPWDs}" />\n',
+                    f'<meta name="exercises-passwords" content="${encryptedPWDs}" />\n',
                 )
 
-            if self.ld_exercise_passwords_file is not None:
-                with open(self.ld_exercise_passwords_file, "w") as pwdsFile:
+            if self.ld_exercises_passwords_file is not None:
+                with open(self.ld_exercises_passwords_file, "w") as pwdsFile:
                     pwdsFile.write(pwdsJSON)
 
         # self.body_suffix.insert(0, '</main>\n')
@@ -523,12 +525,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             )  # TODO move to parsing phase!
         if self.start_of_solution is not None:
             raise Exception("solutions cannot be nested")  # TODO move to parsing phase!
-        if self.current_exercise_name in self.exercise_passwords:
+        if self.current_exercise_name in self.exercises_passwords:
             raise Exception(
                 "one exercise can only have one solution"
             )  # TODO move to parsing phase!
 
-        self.exercise_passwords[self.current_exercise_name] = node.attributes["pwd"]
+        self.exercises_passwords[self.current_exercise_name] = node.attributes["pwd"]
         self.body.append(
             self.starttag(node, "div", CLASS="ld-exercise-solution", ENCRYPTED="")
         )  # ENCRYPTED is a boolean attribute
