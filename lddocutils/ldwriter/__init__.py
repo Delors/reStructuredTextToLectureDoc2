@@ -83,8 +83,7 @@ ldPBKDF2IterationCount = 100000
 
 
 def encryptAESGCM(pwd, plaintext, iterationCount=ldPBKDF2IterationCount):
-    # The following encryption scheme is compatible with the one used by
-    # LectureDoc2.
+    # The following encryption scheme is compatible with the one used by LectureDoc2.
     # Additionally, we want to encrypt the content in the same way when we
     # didn't change the content.
     base_hash = hashlib.sha512(plaintext.encode("utf-8")).digest()
@@ -346,7 +345,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.current_exercise_name = None  # used while parsing an exercise
         self.start_of_solution = None
         self.exercises_master_password = None
-        self.exercises_passwords = {}
+        self.exercises_passwords = []
+        self.exercises_passwords_titles = {}
         self.exercise_count = 0  # incremented for each exercise
 
     def depart_document(self, node):
@@ -385,9 +385,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             # if self.exercises_master_password is None:
             #    self.exercises_master_password = generatePassword(10)
 
-            pwds = [
-                {"exercise passwords": self.exercises_passwords},
-            ]
+            pwds = [{"passwords": self.exercises_passwords}]
             if self.exercises_master_password is not None:
                 pwds.insert(0,{"master password": self.exercises_master_password})
 
@@ -399,7 +397,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 )
                 self.head.insert(
                     0,
-                    f'<meta name="exercises-passwords" content="${encryptedPWDs}" />\n',
+                    f'<meta name="exercises-passwords" content="{encryptedPWDs}" />\n',
                 )
 
             if self.ld_exercises_passwords_file is not None:
@@ -525,12 +523,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             )  # TODO move to parsing phase!
         if self.start_of_solution is not None:
             raise Exception("solutions cannot be nested")  # TODO move to parsing phase!
-        if self.current_exercise_name in self.exercises_passwords:
+        if self.current_exercise_name in self.exercises_passwords_titles:
             raise Exception(
                 "one exercise can only have one solution"
             )  # TODO move to parsing phase!
 
-        self.exercises_passwords[self.current_exercise_name] = node.attributes["pwd"]
+        self.exercises_passwords.append((self.current_exercise_name,node.attributes["pwd"]))
+        self.exercises_passwords_titles[self.current_exercise_name] = node.attributes["pwd"]
         self.body.append(
             self.starttag(node, "div", CLASS="ld-exercise-solution", ENCRYPTED="")
         )  # ENCRYPTED is a boolean attribute
