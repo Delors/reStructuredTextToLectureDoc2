@@ -4,14 +4,17 @@
     :license: Released under the terms of the `2-Clause BSD license`.
     :id: lecturedoc2-tutorial
     :slide-dimensions: 1920x1200
+    :exercises-master-password: 123456
 
+.. |date| date::
+.. |at| unicode:: 0x40
 
-.. role:: red
-.. role:: green
-.. role:: the-blue
+.. role:: dhbw-gray
+.. role:: dhbw-red
 .. role:: minor
 .. role:: obsolete
 .. role:: incremental
+
 
 :math:`LectureDoc^2` Tutorial
 =============================
@@ -20,8 +23,11 @@ LectureDoc is an authoring system for creating lecture slides/notes/exercises. L
 
 This tutorial is written in reStructuredText and can be used as a template for creating your own lecture slides.
 
-*Dr. Michael Eichberg*
+*Prof. Dr. Michael Eichberg*
 
+.. container:: footer-left dhbw-gray
+
+     :Version: |date|
 
 Basics
 -----------
@@ -29,7 +35,7 @@ Basics
 A basic slide consists of a (section) header and some reStructuredText content.
 
 .. admonition:: Example
-    :class: footnotesize 
+    :class: far-smaller 
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -47,7 +53,7 @@ Embedding Formulae
 Embed math equations using reStructuredText's default directive (``.. math::``) and role (``:math:`...```).
 
 .. admonition:: Example
-    :class: footnotesize
+    :class: far-smaller 
 
     .. container:: two-columns 
 
@@ -89,7 +95,7 @@ Embed math equations using reStructuredText's default directive (``.. math::``) 
 A slide without an explicit title can be created by explicitly creating an empty title:
 
 .. admonition:: Example
-    :class: footnotesize
+    :class: far-smaller 
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -101,7 +107,21 @@ A slide without an explicit title can be created by explicitly creating an empty
 
         You have to add a space after the backslash (``\``)!
 
-   
+Alternatively, you can use the following directive: ``no-title``:
+
+.. admonition:: Example
+    :class: far-smaller 
+
+    .. code:: rst
+        :class: black copy-to-clipboard
+
+        .. class:: no-title
+
+        I will only show up in an index...
+        ------------------------------------
+
+
+
 
 Animation
 ----------
@@ -109,7 +129,7 @@ Animation
 Basic *appear* animations can be created using the (CSS) class ``incremental``. You can also define a corresponding custom role (``.. role:: incremental``) :incremental:`to animate parts of a text.`
 
 .. admonition:: Example
-    :class: incremental footnotesize 
+    :class: far-smaller incremental
 
     .. code:: rst
         :class: black copy-to-clipboard 
@@ -132,7 +152,7 @@ Animation of Lists
 In case of lists (`ol` or `ul`) it is sufficient to specify `incremental` in the class attribute of `ol` or `ul`; it is also possible, to only specify the class attribute for the required list elements.
 
 .. admonition:: Example
-    :class: footnotesize 
+    :class: far-smaller 
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -151,7 +171,7 @@ The slide dimensions can be controlled by specifying the corresponding meta info
 If not specified, the default dimension is set to :math:`1920 \times 1200`; i.e., a ratio of 16:10.
     
 .. admonition:: Example
-    :class: footnotesize 
+    :class: far-smaller 
     
     In HTML documents add at the following meta tag:
 
@@ -169,13 +189,47 @@ If not specified, the default dimension is set to :math:`1920 \times 1200`; i.e.
             :slide-dimensions: 1600x1200
 
 
+Associating a slide set with a unique id
+----------------------------------------
+
+Many functions; e.g. persistence of the slide progress, in LectureDoc2 require that a slide set is associated with a unique id.This id can be set using the meta directive.
+
+.. admonition:: Example
+    :class: far-smaller 
+
+    .. code:: rst
+        :class: black copy-to-clipboard
+
+        .. meta::
+            :id: lecturedoc2-tutorial
+            :description: LectureDoc2 Tutorial
+            :author: Michael Eichberg
+            :license: Released under the terms of the `2-Clause BSD license`.
+        
+
+
 Adding Supplemental Information
 ---------------------------------
 
-Adding information that should not be on the slides, but provide additional information, can be added using a container at the root level in combination with the class ``supplemental``.
+Adding information that should not be on the slides, but provide additional information/explanations, can be added using the ``supplemental`` directive. 
 
 .. admonition:: Example 
-    :class: footnotesize
+    :class: far-smaller
+
+    .. code:: rst
+        :class: black copy-to-clipboard
+
+        .. supplemental::
+
+            **Formatting Slides**
+
+            Formatting slides is done using classes and roles.
+
+
+Alternatively, a container with the class ``supplemental`` can also be used:
+
+.. admonition:: Example 
+    :class: far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -184,38 +238,71 @@ Adding information that should not be on the slides, but provide additional info
 
             **Formatting Slides**
 
-            Creating heavily formatted slides is easily possible 
-            using rst directives and roles which are mapped to 
-            CSS classes.
 
-.. container:: supplemental
+.. supplemental::
 
     **Formatting Slides**
 
     Creating heavily formatted slides is easily possible using rst directives and roles which are mapped to CSS classes.
 
 
-Creating Section Marker Slides
+.. class:: new-section transition-fade
+
+Structuring Documents
+----------------------
+
+
+.. class:: transition-move-left
+
+Creating Sections
 --------------------------------
 
-Creating a slide which marks the beginning of a new section can be done using the "new-section" class.
+Creating a slide which marks the beginning of a new section can be done using the ``new-section`` class.
 
 .. admonition:: Example 
-    :class: footnotesize
+    :class: far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
 
         .. class:: new-section
 
-        <Title of Section>
-        -------------------
+        Structuring Documents
+        ----------------------
 
         ...
 
-        <Title of next Slide>
-        ----------------------
+        Creating Sections
+        -----------------
 
+
+.. class:: transition-move-to-top
+
+Slide Transitions
+------------------
+
+Slide transitions can be controlled using the ``transition-...`` classes:
+
+- ``transition-fade``
+- ``transition-move-left``
+- ``transition-move-to-top``
+- ``transition-scale``
+
+.. admonition:: Example 
+    :class: far-smaller
+
+    .. code:: rst
+        :class: black copy-to-clipboard
+
+        .. class:: transition-move-to-top
+
+        Slide Transitions
+        ------------------
+
+See the LectureDoc2 Cheat Sheet for a comprehensive list of predefined transitions.
+
+
+.. class:: transition-scale
 
 Adding Code
 --------------------------------
@@ -223,7 +310,7 @@ Adding Code
 Adding code can be done using reStructuredText's code directive. 
 
 .. admonition:: Example
-    :class: footnotesize
+    :class: far-smaller
 
     .. container:: two-columns 
 
@@ -250,7 +337,118 @@ Adding code can be done using reStructuredText's code directive.
                     print(i)
 
 
+Links to External Resources
+---------------------------
+
+LectureDoc2 supports links to external resources: 
+ - https://github.com/Delors/LectureDoc2
+ - `LectureDoc2 Sourcecode <https://github.com/Delors/LectureDoc2>`_
+
+.. admonition:: Example 
+    :class: far-smaller
+
+    .. code:: rst
+        :class: black copy-to-clipboard
+
+        LectureDoc2 supports links to external resources: 
+
+        - https://github.com/Delors/LectureDoc2
+        - `LectureDoc2 Sourcecode <https://github.com/Delors/LectureDoc2>`_
+
+
+Links to Internal Targets
+-------------------------
+
+LectureDoc2 supports links to external resources: 
+
+- The title of a slide can be used as a link target: `Advanced Formatting`_
+- An element which is explicitly marked as a target can be used as a link target:
+
+  `Link Target in Incremental Block`_
+
+.. admonition:: Example 
+    :class: far-smaller 
+
+    .. container:: two-columns
+
+        .. container:: column
+
+            Slide with explicit marked-up element:
+
+            .. code:: rst
+                :class: black copy-to-clipboard
+
+                Advanced Formatting
+                ---------------------
+
+                .. container:: incremental
+
+                    .. _Link Target:
+
+                    See the LectureDoc2 Cheat Sheet.
+
+        .. container:: column
+
+            References are defined as follows:
+
+            .. code:: rst
+                :class: black copy-to-clipboard
+
+                Links to internal targets: 
+
+                - Link to slide: `Advanced Formatting`_
+                - Link to a marked-up element: 
+                
+                  `Link Target`_
+
+
+Scientific Citations
+--------------------
+
+Citations are fully supported in LectureDoc2.
+
+A reference to a book: [Martin2017]_
+
+.. admonition:: Example 
+    :class: far-smaller
+
+    .. code:: rst
+        :class: black copy-to-clipboard
+
+        A reference to a book: [Martin2017]_
+
+
+
+Bibliography
+------------
+
+- .. [Martin2017] Clean Architecture: A Craftsman's Guide to Software Structure and Design; Robert C. Martin, Addison-Wesley, 2017
+- ...
+
+
+.. admonition:: Example 
+    :class: far-smaller
+
+    .. code:: rst
+        :class: black copy-to-clipboard
+
+        .. [Martin2017] Clean Architecture: ...; Robert C. Martin, Addison-Wesley, 2017
+
+
+
 Advanced Formatting    
 ---------------------
 
-LectureDoc comes with a set of predefined CSS classes that can be used to format the slides. Some of these classes have explicit support by LectureDoc and will be rendered differently in the different views (continuous view vs. slide view) (e.g., stacked layouts or supplemental information). See the `LectureDoc2` Cheat Sheet for a comprehensive list of predefined CSS classes.
+LectureDoc comes with a set of predefined (CSS) classes that can be used to format the slides. Some of these classes have explicit support by LectureDoc and will be rendered differently in the different situations (e.g., continuous view vs. slide view will render stacked layouts or supplemental information differently). 
+
+.. class:: incremental
+
+- :dhbw-red:`dhbw-red`
+- :minor:`minor`
+- :obsolete:`obsolete`
+
+.. container:: incremental
+
+    .. _Link Target in Incremental Block:
+
+    `See the LectureDoc2 Cheat Sheet for a comprehensive list of predefined CSS classes.`
