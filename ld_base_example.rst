@@ -29,13 +29,15 @@ This tutorial is written in reStructuredText and can be used as a template for c
 
      :Version: |date|
 
+
+
 Basics
 -----------
 
 A basic slide consists of a (section) header and some reStructuredText content.
 
 .. admonition:: Example
-    :class: far-smaller 
+    :class: far-far-smaller 
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -53,7 +55,7 @@ Embedding Formulae
 Embed math equations using reStructuredText's default directive (``.. math::``) and role (``:math:`...```).
 
 .. admonition:: Example
-    :class: far-smaller 
+    :class: far-far-smaller 
 
     .. container:: two-columns 
 
@@ -95,7 +97,7 @@ Embed math equations using reStructuredText's default directive (``.. math::``) 
 A slide without an explicit title can be created by explicitly creating an empty title:
 
 .. admonition:: Example
-    :class: far-smaller 
+    :class: far-far-smaller 
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -110,7 +112,7 @@ A slide without an explicit title can be created by explicitly creating an empty
 Alternatively, you can use the following directive: ``no-title``:
 
 .. admonition:: Example
-    :class: far-smaller 
+    :class: far-far-smaller 
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -126,10 +128,10 @@ Alternatively, you can use the following directive: ``no-title``:
 Animation
 ----------
 
-Basic *appear* animations can be created using the (CSS) class ``incremental``. You can also define a corresponding custom role (``.. role:: incremental``) :incremental:`to animate parts of a text.`
+Basic *appear* animations can be created using the (CSS) class ``incremental``\ [#]_. You can also define a corresponding custom role (``.. role:: incremental``) :incremental:`to animate parts of a text.`
 
 .. admonition:: Example
-    :class: far-smaller incremental
+    :class: far-far-smaller incremental
 
     .. code:: rst
         :class: black copy-to-clipboard 
@@ -146,22 +148,41 @@ Basic *appear* animations can be created using the (CSS) class ``incremental``. 
 
             ...
 
+.. [#] Animation progress can be reset by pressing the ``r`` key.
+
+
 Animation of Lists
 -------------------
 
 In case of lists (`ol` or `ul`) it is sufficient to specify `incremental` in the class attribute of `ol` or `ul`; it is also possible, to only specify the class attribute for the required list elements.
 
 .. admonition:: Example
-    :class: far-smaller 
+    :class: far-far-smaller 
 
-    .. code:: rst
-        :class: black copy-to-clipboard
+    .. container:: two-columns
 
-        ..class:: incremental
+        .. container:: column
 
-        - this
-        - is
-        - a test
+            The following code:
+
+                .. code:: rst
+                  :class: black copy-to-clipboard
+
+                  .. class:: incremental
+
+                  - this
+                  - is
+                  - a test
+
+        .. container:: column
+
+            Will render incrementally like this:
+
+            .. class:: incremental
+
+            - this
+            - is
+            - a test
 
 
 Slide Dimensions
@@ -171,7 +192,7 @@ The slide dimensions can be controlled by specifying the corresponding meta info
 If not specified, the default dimension is set to :math:`1920 \times 1200`; i.e., a ratio of 16:10.
     
 .. admonition:: Example
-    :class: far-smaller 
+    :class: far-far-smaller 
     
     In HTML documents add at the following meta tag:
 
@@ -195,7 +216,7 @@ Associating a slide set with a unique id
 Many functions; e.g. persistence of the slide progress, in LectureDoc2 require that a slide set is associated with a unique id.This id can be set using the meta directive.
 
 .. admonition:: Example
-    :class: far-smaller 
+    :class: far-far-smaller 
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -214,7 +235,7 @@ Adding Supplemental Information
 Adding information that should not be on the slides, but provide additional information/explanations, can be added using the ``supplemental`` directive. 
 
 .. admonition:: Example 
-    :class: far-smaller
+    :class: far-far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -229,7 +250,7 @@ Adding information that should not be on the slides, but provide additional info
 Alternatively, a container with the class ``supplemental`` can also be used:
 
 .. admonition:: Example 
-    :class: far-smaller
+    :class: far-far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -260,7 +281,7 @@ Creating Sections
 Creating a slide which marks the beginning of a new section can be done using the ``new-section`` class.
 
 .. admonition:: Example 
-    :class: far-smaller
+    :class: far-far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -289,7 +310,7 @@ Slide transitions can be controlled using the ``transition-...`` classes:
 - ``transition-scale``
 
 .. admonition:: Example 
-    :class: far-smaller
+    :class: far-far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -310,7 +331,7 @@ Adding Code
 Adding code can be done using reStructuredText's code directive. 
 
 .. admonition:: Example
-    :class: far-smaller
+    :class: far-far-smaller
 
     .. container:: two-columns 
 
@@ -345,7 +366,7 @@ LectureDoc2 supports links to external resources:
  - `LectureDoc2 Sourcecode <https://github.com/Delors/LectureDoc2>`_
 
 .. admonition:: Example 
-    :class: far-smaller
+    :class: far-far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -367,7 +388,7 @@ LectureDoc2 supports links to external resources:
   `Link Target in Incremental Block`_
 
 .. admonition:: Example 
-    :class: far-smaller 
+    :class: far-far-smaller 
 
     .. container:: two-columns
 
@@ -410,7 +431,7 @@ Citations are fully supported in LectureDoc2.
 A reference to a book: [Martin2017]_
 
 .. admonition:: Example 
-    :class: far-smaller
+    :class: far-far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -427,7 +448,7 @@ Bibliography
 
 
 .. admonition:: Example 
-    :class: far-smaller
+    :class: far-far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -452,3 +473,154 @@ LectureDoc comes with a set of predefined (CSS) classes that can be used to form
     .. _Link Target in Incremental Block:
 
     `See the LectureDoc2 Cheat Sheet for a comprehensive list of predefined CSS classes.`
+
+
+Stacked layouts
+----------------
+
+Stacked layouts enables updating parts of a slide by putting the content into layers and then showing the layers incrementally.
+
+.. admonition:: Example 
+    :class: far-far-smaller 
+
+    .. container:: two-columns smaller
+
+        .. container:: column
+
+            .. stack:: monospaced
+
+                .. layer::
+
+                    :dhbw-gray:`This text is gray.`
+
+                .. layer:: incremental overlay
+
+                    .. raw:: html
+
+                        <svg width="600" height="200">
+                            <rect width="800" height="200" 
+                                  style="fill:rgb(0,0,255,0.25);stroke-width:1;stroke:rgb(0,0,0)" />
+                        </svg>
+
+        .. container:: column 
+
+            .. code:: rst
+                :class: black copy-to-clipboard 
+
+                .. stack:: monospaced
+
+                  .. layer::
+
+                    :dhbw-gray:`This text is gray.`
+
+                  .. layer:: incremental overlay
+
+                    .. raw:: html
+
+                      <svg width="600" height="200">
+                        <rect width="800" height="200" 
+                          style="fill:rgb(0,0,255,0.25);
+                      ⇥ ⇥ ⇥ ⇥ ⇥ ⇥stroke-width:1;
+                      ⇥ ⇥ ⇥ ⇥ ⇥ ⇥stroke:rgb(0,0,0)" />
+                      </svg>
+
+
+.. class:: integrated-exercise
+
+Integrated Exercises
+---------------------
+
+Exercises can be integrated into the slide set.
+
+.. admonition:: Example 
+    :class: far-far-smaller 
+
+    .. container:: two-columns
+
+        .. container:: column
+
+            .. exercise:: Exercise: 1+1
+
+                Compute: :math:`\sqrt 2 = ?`
+
+                .. solution::
+                    :pwd: sqrt
+
+                    Solution: :math:`1,4142135624`.
+
+            To unlock the solution go to the continuous view and enter the password.
+    
+        .. container:: column
+            
+            .. code:: rst
+                :class: black copy-to-clipboard
+
+                .. exercise:: Exercise: 1+1
+
+                    Compute: :math:`\sqrt 2 = ?`.
+
+                    .. solution::
+                        :pwd: sqrt
+
+                        Solution: :math:`1,4142135624`.
+
+If you have multiple exercises, you can define a master password to unlock all solutions at once (press ``m`` to open the dialog).
+
+.. code:: rst 
+    :class: black copy-to-clipboard smaller
+
+    .. meta::
+        :exercises-master-password: 123456
+
+
+
+.. class:: new-section transition-fade
+
+Images
+-------
+
+
+.. class:: padding-none no-title transition-scale
+
+Image in the Background (Hack)
+-------------------------------
+
+.. stack:: monospaced padding-none margin-none
+
+    .. layer:: padding-none margin-none
+
+        .. image:: ld_base_example/tag_cloud.png
+            :width: 100%
+            :align: center
+
+    .. layer:: overlay
+
+        .. class:: dhbw-light-gray-background
+
+        .. rubric:: Image in the Background
+
+        .. admonition:: Example 
+            :class: far-far-smaller 
+
+            .. code:: rst
+                :class: black copy-to-clipboard
+
+                .. class:: padding-none no-title transition-scale
+
+                Image in the Background 
+                ------------------------
+
+                .. rubric:: Image in the Background
+
+                .. stack:: monospaced padding-none margin-none
+
+                    .. layer:: padding-none margin-none
+
+                        .. image:: ld_base_example/tag_cloud.png
+                            :width: 100%
+                            :align: center
+
+                    .. layer:: overlay
+
+                        Content on the slide...
+
