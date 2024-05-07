@@ -270,6 +270,34 @@ class Supplemental(Directive):
         return nodes
 
 
+class incremental(container):
+    pass
+
+
+class Incremental(Directive):
+
+    required_arguments = 0
+    final_argument_whitespace = True
+    optional_arguments = 1
+    has_content = True
+    option_spec = {}
+
+    def run(self):
+        self.assert_has_content()
+        if "incremental" in self.arguments:
+            raise self.error(
+                '"incremental" is superfluous; it is automatically added.'
+            )
+
+        text = "\n".join(self.content)
+        node = stack(rawsource=text)
+        node.classes = "incremental " + " ".join(self.arguments)
+        self.state.nested_parse(self.content, self.content_offset, node)
+        nodes = [node]
+        return nodes
+
+
+
 class PresenterNotes(Directive):
 
     required_arguments = 0
@@ -293,7 +321,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     <script src="%(ld_path)s/ld-lib.js" type="text/javascript"></script>
     <script src="%(ld_path)s/ld-animations.js" type="text/javascript"></script>    
     <script src="%(ld_path)s/ld-help.js" type="text/javascript"></script>
-    <script src="%(ld_path)s/ld-core.js" type="text/javascript"></script>
+    <script defer src="%(ld_path)s/ld-core.js" type="text/javascript"></script>
     <link rel="stylesheet" href="%(ld_path)s/ld.css" type="text/css" />
     <link rel="stylesheet" href="%(ld_path)s/themes/DHBW/theme.css" type="text/css" />\n"""
 
@@ -481,6 +509,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_layer(self, node):
         self.body.append("</div>")
 
+    def visit_incremental(self, node):
+        self.body.append(self.starttag(node, "div", CLASS=node.classes))
+
+    def depart_incremental(self, node):
+        self.body.append("</div>")
+
     def visit_supplemental(self, node):
         self.body.append(self.starttag(node, "div", CLASS=node.classes))
 
@@ -582,6 +616,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 directives.register_directive("stack", Stack)
 directives.register_directive("layer", Layer)
 
+
+directives.register_directive("incremental", Incremental)
 directives.register_directive("supplemental", Supplemental)
 
 directives.register_directive("presenter-notes", PresenterNotes)
@@ -590,3 +626,4 @@ directives.register_directive("presenter-notes", PresenterNotes)
 # Advanced directives which are (optionally) parametrized
 directives.register_directive("exercise", Exercise)
 directives.register_directive("solution", Solution)
+
