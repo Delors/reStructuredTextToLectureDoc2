@@ -297,7 +297,6 @@ class Incremental(Directive):
         return nodes
 
 
-
 class PresenterNotes(Directive):
 
     required_arguments = 0
@@ -562,11 +561,17 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 "one exercise can only have one solution"
             )  # TODO move to parsing phase!
 
-        self.exercises_passwords.append((self.current_exercise_name,node.attributes["pwd"]))
-        self.exercises_passwords_titles[self.current_exercise_name] = node.attributes["pwd"]
-        self.body.append(
-            self.starttag(node, "div", CLASS="ld-exercise-solution", ENCRYPTED="")
-        )  # ENCRYPTED is a boolean attribute
+        self.exercises_passwords.append(
+            (self.current_exercise_name, node.attributes["pwd"])
+        )
+        self.exercises_passwords_titles[self.current_exercise_name] = node.attributes[
+            "pwd"
+        ]
+        attributes = {
+            "class": "ld-exercise-solution",
+            "data-encrypted": "true",  # ENCRYPTED is a boolean attribute
+        }
+        self.body.append(self.starttag(node, "div", **attributes))
         self.start_of_solution = len(self.body)
 
     def depart_solution(self, node):
@@ -626,4 +631,3 @@ directives.register_directive("presenter-notes", PresenterNotes)
 # Advanced directives which are (optionally) parametrized
 directives.register_directive("exercise", Exercise)
 directives.register_directive("solution", Solution)
-
