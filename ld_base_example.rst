@@ -94,7 +94,7 @@ Embed math equations using reStructuredText's default directive (``.. math::``) 
 \ 
 --
 
-A slide without an explicit title can be created by explicitly creating an empty title:
+A slide without an explicit title can be created by explicitly creating an empty title.
 
 .. admonition:: Example
     :class: far-far-smaller 
@@ -109,7 +109,7 @@ A slide without an explicit title can be created by explicitly creating an empty
 
         You have to add a space after the backslash (``\``)!
 
-Alternatively, you can use the following directive: ``no-title``:
+Alternatively, you can use the following class: ``no-title`` in combination with the ``class`` directive:
 
 .. admonition:: Example
     :class: far-far-smaller 
@@ -154,7 +154,7 @@ Basic *appear* animations can be created using the (CSS) class ``incremental``\ 
 Animation of Lists
 -------------------
 
-In case of lists (`ol` or `ul`) it is sufficient to specify `incremental` in the class attribute of `ol` or `ul`; it is also possible, to only specify the class attribute for the required list elements.
+In case of (un-)ordered lists (``ol`` or ``ul`` in HTML) it is sufficient to associate the class ``incremental`` using the ``class`` directive with the list. It is also possible, to only specify the class attribute for the required list items.
 
 .. admonition:: Example
     :class: far-far-smaller 
@@ -213,7 +213,7 @@ If not specified, the default dimension is set to :math:`1920 \times 1200`; i.e.
 Associating a slide set with a unique id
 ----------------------------------------
 
-Many functions; e.g. persistence of the slide progress, in LectureDoc2 require that a slide set is associated with a unique id.This id can be set using the meta directive.
+Many functions in LectureDoc2 - e.g. persistence of the slide progress - require that a slide set is associated with a unique id. This id can be set using the meta directive.
 
 .. admonition:: Example
     :class: far-far-smaller 
@@ -291,7 +291,7 @@ Creating a slide which marks the beginning of a new section can be done using th
         Structuring Documents
         ----------------------
 
-        ...
+        .. class:: new-subsection
 
         Creating Sections
         -----------------
@@ -428,7 +428,7 @@ Scientific Citations
 
 Citations are fully supported in LectureDoc2.
 
-A reference to a book: [Martin2017]_
+A reference to a book: [Martin2017]_ (Details are found in the bibliography (see next slide)).
 
 .. admonition:: Example 
     :class: far-far-smaller
@@ -460,7 +460,7 @@ Bibliography
 Advanced Formatting    
 ---------------------
 
-LectureDoc comes with a set of predefined (CSS) classes that can be used to format the slides. Some of these classes have explicit support by LectureDoc and will be rendered differently in the different situations (e.g., continuous view vs. slide view will render stacked layouts or supplemental information differently). 
+LectureDoc comes with a set of predefined (CSS) classes that can be used to format the slides. Some of these classes have explicit support by LectureDoc and will be rendered differently in the different situations (e.g., continuous view vs. slide view will render *stacked layouts* or *supplemental information* differently). 
 
 .. class:: incremental
 
