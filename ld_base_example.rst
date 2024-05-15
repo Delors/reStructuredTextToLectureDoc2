@@ -23,6 +23,8 @@ LectureDoc is an authoring system for creating lecture slides/notes/exercises. L
 
 This tutorial is written in reStructuredText and can be used as a template for creating your own lecture slides.
 
+The *code* of this tutorial is available on GitHub: `Delors/reStructuredTextToLectureDoc2/main/ld_base_example.rst <https://raw.githubusercontent.com/Delors/reStructuredTextToLectureDoc2/main/ld_base_example.rst>`__
+
 *Prof. Dr. Michael Eichberg*
 
 .. container:: footer-left dhbw-gray
