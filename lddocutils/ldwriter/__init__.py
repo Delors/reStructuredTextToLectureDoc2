@@ -1,12 +1,12 @@
-from sys import stderr
 from itertools import batched
 import json
 
 from docutils import nodes
-from docutils.parsers.rst import Directive, directives
+from docutils.parsers.rst import Directive, directives, roles
 from docutils.parsers.rst.directives import unchanged_required, class_option
-from docutils.nodes import Inline, container, title, rubric
+from docutils.nodes import inline, container, title, rubric
 from docutils.writers import html5_polyglot
+
 
 import base64
 import hashlib
@@ -297,6 +297,29 @@ class Incremental(Directive):
         return nodes
 
 
+class source(inline):
+    pass
+
+
+class Source(Directive):
+
+    required_arguments = 0
+    final_argument_whitespace = False
+    optional_arguments = 0
+    has_content = False
+    option_spec = {"url-prefix": unchanged_required, "suffix": unchanged_required}
+
+    def run(self):
+        text = "File"
+        node = source(rawsource=text)
+        if "url-prefix" in self.options:
+            node.attributes["url-prefix"] = self.options["url-prefix"]
+        if "suffix" in self.options:
+            node.attributes["suffix"] = self.options["suffix"]
+        nodes = [node]
+        return nodes
+
+
 class PresenterNotes(Directive):
 
     required_arguments = 0
@@ -520,6 +543,20 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_supplemental(self, node):
         self.body.append("</div>")
 
+    def visit_source(self, node):
+        source = self.document["source"]
+        if "suffix" in node.attributes:
+            source = source + node.attributes["suffix"]
+        if "url-prefix" in node.attributes:
+            source = node.attributes["url-prefix"] + source
+            self.body.append(f'<a class="reference external" href="{source}">{source}</a>')
+        else: 
+            self.body.append(source)
+
+    def depart_source(self, node):
+        pass
+
+
     # --------------------------------------------------------------------------
     #
     # Handling of exercises and solutions
@@ -631,3 +668,5 @@ directives.register_directive("presenter-notes", PresenterNotes)
 # Advanced directives which are (optionally) parametrized
 directives.register_directive("exercise", Exercise)
 directives.register_directive("solution", Solution)
+
+directives.register_directive("source", Source)
