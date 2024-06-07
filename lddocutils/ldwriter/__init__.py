@@ -307,13 +307,13 @@ class Source(Directive):
     final_argument_whitespace = False
     optional_arguments = 0
     has_content = False
-    option_spec = {"url-prefix": unchanged_required, "suffix": unchanged_required}
+    option_spec = {"prefix": unchanged_required, "suffix": unchanged_required}
 
     def run(self):
         text = "File"
         node = source(rawsource=text)
-        if "url-prefix" in self.options:
-            node.attributes["url-prefix"] = self.options["url-prefix"]
+        if "prefix" in self.options:
+            node.attributes["prefix"] = self.options["prefix"]
         if "suffix" in self.options:
             node.attributes["suffix"] = self.options["suffix"]
         nodes = [node]
@@ -547,8 +547,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         source = self.document["source"]
         if "suffix" in node.attributes:
             source = source + node.attributes["suffix"]
-        if "url-prefix" in node.attributes:
-            source = node.attributes["url-prefix"] + source
+        if "prefix" in node.attributes:
+            source = node.attributes["prefix"] + source
             self.body.append(f'<a class="reference external" href="{source}">{source}</a>')
         else: 
             self.body.append(source)
