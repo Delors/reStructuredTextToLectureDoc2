@@ -6,7 +6,6 @@
     :slide-dimensions: 1920x1200
     :exercises-master-password: 123456
 
-.. |date| date::
 .. |at| unicode:: 0x40
 
 .. role:: dhbw-gray
@@ -29,7 +28,7 @@ The *code* of this tutorial is available on GitHub: `Delors/reStructuredTextToLe
 
 .. container:: footer-left dhbw-gray
 
-     :Version: |date|
+     :Version: 1.0
 
 
 
