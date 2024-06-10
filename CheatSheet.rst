@@ -5,8 +5,6 @@
     :id: ld2-dhbw-cheat-sheet
     :slide-dimensions: 2560x1440
 
-.. |date| date::
-
 .. role:: dhbw-red
 .. role:: shiny-red
 .. role:: shiny-green
@@ -28,7 +26,7 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
    .. rubric:: Information
    
    :Author: Michael Eichberg
-   :Version: |date|
+   :Version: 1.0
 
 
 .. CHANGING THE OVERALL SLIDE LAYOUT   
@@ -579,9 +577,6 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
    .. code:: rst 
       :class: far-smaller copy-to-clipboard
 
-      .. |date| date::
-      .. |at| unicode:: 0x40
-
       .. role:: incremental   
       .. role:: eng
       .. role:: ger
@@ -596,8 +591,8 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
       .. role:: the-orange
       .. role:: shiny-green
       .. role:: shiny-red 
-      .. role:: black
       .. role:: dark-red
+      .. role:: black
 
       .. role:: raw-html(raw)
          :format: html
