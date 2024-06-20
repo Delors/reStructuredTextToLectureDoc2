@@ -336,7 +336,12 @@ class PresenterNotes(Directive):
 
 class LDTranslator(html5_polyglot.HTMLTranslator):
 
-    ld_stylesheet_normalize = """<link rel="stylesheet" href="%(ld_path)s/normalize.css" type="text/css" />\n"""
+    mathjax_script = '<script type="text/javascript" src="%s"></script>\n'
+    """ we need to ensure that MathJax is properly initialized; we will 
+       call it later to do the typesetting."""
+
+    # ld_stylesheet_normalize = """<link rel="stylesheet" href="%(ld_path)s/normalize.css" />\n"""
+    ld_stylesheet_normalize = """<style>@import url("%(ld_path)s/normalize.css") layer(normalize); </style>\n"""
 
     ld_stylesheet_template = """\
     <script src="%(ld_path)s/ld-crypto.js" type="text/javascript"></script>
@@ -347,6 +352,16 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     <link rel="stylesheet" href="%(ld_path)s/ld.css" type="text/css" />
     <link rel="stylesheet" href="%(ld_path)s/themes/DHBW/theme.css" type="text/css" />\n"""
 
+
+    embedded_stylesheet = '<style>@layer docutils { \n\n%s\n}</style>\n'
+    """ We overwrite how the embedded stylesheet is inserted into the document 
+        to assign it an appropriate CSS layer. This facilitates redefining the
+        styles by later defined layers; otherwise the styles would be added
+        to the unnamed layer which takes precedence over all other layers and
+        therefore cannot be overridden by styles defined in normal layers.
+    """
+
+    
     def __init__(self, *args):
         html5_polyglot.HTMLTranslator.__init__(self, *args)
 
@@ -373,7 +388,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         """
         # overwrite HTML meta tag default
         ld_path = self.document.settings.ld_path
-        self.stylesheet.insert(0, self.ld_stylesheet_normalize % {"ld_path": ld_path})
+        self.stylesheet.insert(0, self.ld_stylesheet_normalize % {"ld_path": ld_path+"/css"})
         self.stylesheet.append(self.ld_stylesheet_template % {"ld_path": ld_path})
         self.meta = [
             '<meta name="viewport" '
@@ -399,6 +414,11 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.exercises_passwords_titles = {}
         self.exercise_count = 0  # incremented for each exercise
 
+    def visit_document(self, node):
+        #self.embedded_stylesheet = '<style>@layer docutils { \n\n%s\n}</style>\n'
+        super().visit_document(node);
+        pass;
+
     def depart_document(self, node):
         self.head_prefix.extend(
             [
@@ -416,16 +436,15 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         # skip content-type meta tag with interpolated charset value:
         self.html_head.extend(self.head[1:])
         self.fragment.extend(self.body)
-        # title = ''.join(self.html_title).replace('<h1 class="title">', '<h1>')
-        # layout = self.layout_template % {'header': header,
-        #                                 'title': title,
-        #                                 'footer': footer}
-        # self.body_prefix.extend(layout)
-        # self.body_prefix.append('<main>\n')
-        all_classes = node.document["classes"]
-        all_classes.append("ld-slide")
+
+        title_slide_classes = node.document["classes"] + ["ld-slide"]
+        title_slide_id = next(iter(node.ids))
         self.body_prefix.append(
-            self.starttag({"classes": all_classes, "ids": ["slide0"]}, "div")
+            self.starttag({}, "template")
+        ) 
+        self.body_suffix.insert(0,"</template>\n");
+        self.body_prefix.append(
+            self.starttag({"classes": title_slide_classes, "ids": [title_slide_id] }, "div")
         )
         if not self.section_count:
             self.body.append("</div>\n")
@@ -454,7 +473,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 with open(self.ld_exercises_passwords_file, "w") as pwdsFile:
                     pwdsFile.write(pwdsJSON)
 
-        # self.body_suffix.insert(0, '</main>\n')
         self.html_body.extend(
             self.body_prefix[1:]
             + self.body_pre_docinfo
