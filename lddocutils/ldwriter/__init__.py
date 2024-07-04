@@ -388,8 +388,9 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         """
         # overwrite HTML meta tag default
         ld_path = self.document.settings.ld_path
-        self.stylesheet.insert(0, self.ld_stylesheet_normalize % {"ld_path": ld_path+"/css"})
-        self.stylesheet.append(self.ld_stylesheet_template % {"ld_path": ld_path})
+        # self.stylesheet.insert(0, self.ld_stylesheet_normalize % {"ld_path": ld_path+"/css"})
+        # self.stylesheet.append(self.ld_stylesheet_template % {"ld_path": ld_path})
+        self.stylesheet = [self.ld_stylesheet_template % {"ld_path": ld_path}]
         self.meta = [
             '<meta name="viewport" '
             'content="width=device-width, initial-scale=1.0, user-scalable=no" />\n'
