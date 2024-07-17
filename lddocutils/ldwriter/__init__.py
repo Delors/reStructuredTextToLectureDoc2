@@ -2,6 +2,7 @@ from itertools import batched
 import json
 
 from docutils import nodes
+from docutils import frontend
 from docutils.parsers.rst import Directive, directives, roles
 from docutils.parsers.rst.directives import unchanged_required, class_option
 from docutils.nodes import inline, container, title, rubric
@@ -25,6 +26,13 @@ https://github.com/docutils/docutils/blob/master/docutils/docutils/writers/s5_ht
 # Examples definitions of `nodes` are in `docutils.nodes`
 """
 
+def validate_ld_tranformers_list(setting, value=None, option_parser=None,
+                         config_parser=None, config_section=None):
+    transformer_configurations = frontend.validate_comma_separated_list(setting, value, option_parser,config_parser,config_section)
+    transformers = dict(map(lambda tc: tc.split(sep=" ",maxsplit=1) , transformer_configurations))
+
+    return transformers
+
 
 class Writer(html5_polyglot.Writer):
 
@@ -44,6 +52,12 @@ class Writer(html5_polyglot.Writer):
                 "File in which the exercises' passwords are stored.",
                 ["--ld-exercises-passwords"],
                 {"metavar": "<URL>"},
+            ),
+            (
+                "Class-based JavaScript transformers.",
+                ["--ld-transformers"],
+                {'metavar': '<class_name dir[,class_name dir,...]>',
+                 'validator': validate_ld_tranformers_list},
             ),
         ),
     )
@@ -140,9 +154,9 @@ class Exercise(Directive):
 
         text = "\n".join(self.content)
         node = exercise(rawsource=text)
-        node.classes = "ld-exercise"
+        node.attributes["classes"] = ["ld-exercise"] 
         if "class" in self.options:
-            node.classes += " " + " ".join(self.options["class"])
+            node.attributes["classes"] += self.options["class"]
         if len(self.arguments) > 0:
             exercise_title = self.arguments[0]
             node.attributes["title"] = exercise_title
@@ -180,8 +194,9 @@ class Solution(Directive):
         else:
             node.attributes["pwd"] = self.options["pwd"]
 
+        node.attributes["classes"] = ["ld-exercise-solution"]
         if "class" in self.options:
-            node.classes = " ".join(self.options["class"])
+            node.attributes["classes"] += self.options["class"]
         if len(self.arguments) > 0:
             node += rubric(text=self.arguments[0])
         # Parse the directive contents.
@@ -209,11 +224,10 @@ class Stack(Directive):
         node = stack(rawsource=text)
         if "stack" in self.arguments:
             raise self.error('"stack" is superfluous; it is automatically added.')
-        node.classes = "stack " + " ".join(self.arguments)
+        node.attributes["classes"] += ["stack"] + self.arguments 
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
-        nodes = [node]
-        return nodes
+        return [node]
 
 
 class layer(container):
@@ -236,11 +250,10 @@ class Layer(Directive):
 
         text = "\n".join(self.content)
         node = layer(rawsource=text)
-        node.classes = "layer " + " ".join(self.arguments)
+        node.attributes["classes"] += ["layer"] + self.arguments
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
-        nodes = [node]
-        return nodes
+        return [node]
 
 
 class supplemental(container):
@@ -264,12 +277,13 @@ class Supplemental(Directive):
 
         text = "\n".join(self.content)
         node = stack(rawsource=text)
-        node.classes = "supplemental " + " ".join(self.arguments)
+        node.attributes["classes"] += ["supplemental"] + self.arguments
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
 
 
+# OBSOLETE
 class incremental(container):
     pass
 
@@ -291,7 +305,8 @@ class Incremental(Directive):
 
         text = "\n".join(self.content)
         node = stack(rawsource=text)
-        node.classes = "incremental " + " ".join(self.arguments)
+        
+        node.attributes["classes"] += ["incremental"] + self.arguments
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
@@ -337,20 +352,22 @@ class PresenterNotes(Directive):
 class LDTranslator(html5_polyglot.HTMLTranslator):
 
     mathjax_script = '<script type="text/javascript" src="%s"></script>\n'
-    """ we need to ensure that MathJax is properly initialized; we will 
+    """ We need to ensure that MathJax is properly initialized; we will 
        call it later to do the typesetting."""
 
     # ld_stylesheet_normalize = """<link rel="stylesheet" href="%(ld_path)s/normalize.css" />\n"""
     ld_stylesheet_normalize = """<style>@import url("%(ld_path)s/normalize.css") layer(normalize); </style>\n"""
 
-    ld_stylesheet_template = """\
-    <script src="%(ld_path)s/ld-crypto.js" type="text/javascript"></script>
-    <script src="%(ld_path)s/ld-lib.js" type="text/javascript"></script>
-    <script src="%(ld_path)s/ld-animations.js" type="text/javascript"></script>    
-    <script src="%(ld_path)s/ld-help.js" type="text/javascript"></script>
-    <script defer src="%(ld_path)s/ld-core.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="%(ld_path)s/ld.css" type="text/css" />
-    <link rel="stylesheet" href="%(ld_path)s/themes/DHBW/theme.css" type="text/css" />\n"""
+    # NOW MODULARIZED:  <script src="%(ld_path)s/ld-crypto.js" type="text/javascript"></script>
+    #                   <script src="%(ld_path)s/ld-lib.js" type="text/javascript"></script>
+    # NOW A SIMPLE HTML FRAGMENT:
+    #                   <script src="%(ld_path)s/ld-help.js" type="text/javascript"></script>
+    ld_stylesheet_template = """
+    <script src="%(ld_path)s/ld-core.js" type="module"></script>\n
+    <script src="%(ld_path)s/ld-components.js" type="module"></script>\n
+    <link rel="stylesheet" href="%(ld_path)s/ld.css" type="text/css" />\n
+    <link rel="stylesheet" href="%(ld_path)s/themes/DHBW/theme.css" type="text/css" />\n
+    <!-- Additional scripts that interact with LectureDoc have to added below. -->"""
 
 
     embedded_stylesheet = '<style>@layer docutils { \n\n%s\n}</style>\n'
@@ -420,7 +437,29 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         super().visit_document(node);
         pass;
 
+    def analyze_classes(self,node):
+        required_ld_transformers = set()
+        if hasattr(node, "attributes"):
+            for cls in node.attributes["classes"]:
+                if cls in self.settings.ld_transformers:
+                    required_ld_transformers.add(self.settings.ld_transformers[cls])
+        if hasattr(node, "children"):
+            for child in node.children:
+                required_ld_transformers.update(self.analyze_classes(child))
+        return required_ld_transformers
+
     def depart_document(self, node):
+        # let's search the DOM for classes that require special treatment
+        # by JavaScript libraries, if we find any, we will add links to the 
+        # necessary JavaScript libraries to the document.
+
+        if hasattr(self.settings, "ld_transformers"):
+            required_ld_transformers = self.analyze_classes(node)
+            for transformer in required_ld_transformers:
+                self.head.append(
+                    f'<script src="{transformer}" type="module"></script>'
+                )
+
         self.head_prefix.extend(
             [
                 self.doctype,
@@ -539,25 +578,25 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.body.append("</sup>")
 
     def visit_stack(self, node):
-        self.body.append(self.starttag(node, "div", CLASS=node.classes))
+        self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
 
     def depart_stack(self, node):
         self.body.append("</div>")
 
     def visit_layer(self, node):
-        self.body.append(self.starttag(node, "div", CLASS=node.classes))
+        self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
 
     def depart_layer(self, node):
         self.body.append("</div>")
 
     def visit_incremental(self, node):
-        self.body.append(self.starttag(node, "div", CLASS=node.classes))
+        self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
 
     def depart_incremental(self, node):
         self.body.append("</div>")
 
     def visit_supplemental(self, node):
-        self.body.append(self.starttag(node, "div", CLASS=node.classes))
+        self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
 
     def depart_supplemental(self, node):
         self.body.append("</div>")
@@ -593,7 +632,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.current_exercise_name = title
         self.start_of_exercise = len(self.body)
         attributes = {
-            "class": node.classes,
+            "class": " ".join(node.attributes["classes"]),
             "ids": ["ld-exercise-" + str(self.exercise_count)],
             "data-exercise-id": str(self.exercise_count),
             "data-exercise-title": title,
@@ -624,7 +663,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             "pwd"
         ]
         attributes = {
-            "class": "ld-exercise-solution",
+            "class": " ".join(node.attributes["classes"]),
             "data-encrypted": "true",  # ENCRYPTED is a boolean attribute
         }
         self.body.append(self.starttag(node, "div", **attributes))
@@ -639,8 +678,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
         # 1.
         end_of_solution = len(self.body)
-        exercise_body = "".join(self.body[self.start_of_solution : end_of_solution + 1])
-        exercise_hash = hashlib.sha512(exercise_body.encode("utf-8")).digest()
+        solution_body = "".join(self.body[self.start_of_solution : end_of_solution + 1])
+        solution_hash = hashlib.sha512(solution_body.encode("utf-8")).digest()
         # 2.
         del self.body[self.start_of_solution :]
         self.start_of_solution = None
@@ -649,13 +688,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         # We really want a stable salt and iv to avoid that re-running
         # rst2ld changes the output when the password is the same
         # and the content hasn't changed!
-        salt = exercise_hash[:32]
-        iv = exercise_hash[32:44]  # get_random_bytes(12)
+        salt = solution_hash[:32]
+        iv = solution_hash[32:44]  # get_random_bytes(12)
         aesKey = PBKDF2(
             pwd, salt, dkLen=32, count=ldPBKDF2IterationCount, hmac_hash_module=SHA256
         )
         cipher = AES.new(aesKey, AES.MODE_GCM, nonce=iv, mac_len=16)
-        (ciphertext, tag) = cipher.encrypt_and_digest(exercise_body.encode("utf-8"))
+        (ciphertext, tag) = cipher.encrypt_and_digest(solution_body.encode("utf-8"))
         # 4.
         self.body.append(
             base64.b64encode(str(ldPBKDF2IterationCount).encode("utf-8")).decode(
