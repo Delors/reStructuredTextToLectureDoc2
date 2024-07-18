@@ -26,12 +26,12 @@ https://github.com/docutils/docutils/blob/master/docutils/docutils/writers/s5_ht
 # Examples definitions of `nodes` are in `docutils.nodes`
 """
 
-def validate_ld_tranformers_list(setting, value=None, option_parser=None,
+def validate_ld_modules_list(setting, value=None, option_parser=None,
                          config_parser=None, config_section=None):
-    transformer_configurations = frontend.validate_comma_separated_list(setting, value, option_parser,config_parser,config_section)
-    transformers = dict(map(lambda tc: tc.split(sep=" ",maxsplit=1) , transformer_configurations))
+    module_configurations = frontend.validate_comma_separated_list(setting, value, option_parser,config_parser,config_section)
+    modules = dict(map(lambda tc: tc.split(sep=" ",maxsplit=1) , module_configurations))
 
-    return transformers
+    return modules
 
 
 class Writer(html5_polyglot.Writer):
@@ -54,10 +54,10 @@ class Writer(html5_polyglot.Writer):
                 {"metavar": "<URL>"},
             ),
             (
-                "Class-based JavaScript transformers.",
-                ["--ld-transformers"],
+                "Configures class-based modules.",
+                ["--ld-modules"],
                 {'metavar': '<class_name dir[,class_name dir,...]>',
-                 'validator': validate_ld_tranformers_list},
+                 'validator': validate_ld_modules_list},
             ),
         ),
     )
@@ -304,12 +304,40 @@ class Incremental(Directive):
             )
 
         text = "\n".join(self.content)
-        node = stack(rawsource=text)
+        node = incremental(rawsource=text)
         
         node.attributes["classes"] += ["incremental"] + self.arguments
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
+
+
+class module(container):
+    pass
+
+
+class Module(Directive):
+
+    required_arguments = 0
+    final_argument_whitespace = True
+    optional_arguments = 1
+    has_content = True
+    option_spec = {"class": class_option}
+
+    def run(self):
+        self.assert_has_content()
+        if "module" in self.arguments:
+            raise self.error(
+                '"module" is superfluous; it is automatically added.'
+            )
+        text = "\n".join(self.content)
+        node = module(text,nodes.Text(text))
+        node.attributes["classes"] += ["module"] + self.arguments
+        if "class" in self.options:
+            node.attributes["classes"] += self.options["class"]
+        # self.state.nested_parse(self.content, self.content_offset, node)
+        return [node]
+
 
 
 class source(inline):
@@ -365,9 +393,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     ld_stylesheet_template = """
     <script src="%(ld_path)s/ld-core.js" type="module"></script>\n
     <script src="%(ld_path)s/ld-components.js" type="module"></script>\n
+    <!-- Additional scripts that interact with LectureDoc have to be added below. -->
     <link rel="stylesheet" href="%(ld_path)s/ld.css" type="text/css" />\n
     <link rel="stylesheet" href="%(ld_path)s/themes/DHBW/theme.css" type="text/css" />\n
-    <!-- Additional scripts that interact with LectureDoc have to added below. -->"""
+    """
 
 
     embedded_stylesheet = '<style>@layer docutils { \n\n%s\n}</style>\n'
@@ -438,27 +467,22 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         pass;
 
     def analyze_classes(self,node):
-        required_ld_transformers = set()
+        required_ld_modules = set()
         if hasattr(node, "attributes"):
             for cls in node.attributes["classes"]:
-                if cls in self.settings.ld_transformers:
-                    required_ld_transformers.add(self.settings.ld_transformers[cls])
+                if cls in self.settings.ld_modules:
+                    required_ld_modules.add(self.settings.ld_modules[cls])
         if hasattr(node, "children"):
             for child in node.children:
-                required_ld_transformers.update(self.analyze_classes(child))
-        return required_ld_transformers
+                required_ld_modules.update(self.analyze_classes(child))
+        return required_ld_modules
 
     def depart_document(self, node):
         # let's search the DOM for classes that require special treatment
         # by JavaScript libraries, if we find any, we will add links to the 
         # necessary JavaScript libraries to the document.
 
-        if hasattr(self.settings, "ld_transformers"):
-            required_ld_transformers = self.analyze_classes(node)
-            for transformer in required_ld_transformers:
-                self.head.append(
-                    f'<script src="{transformer}" type="module"></script>'
-                )
+
 
         self.head_prefix.extend(
             [
@@ -473,6 +497,14 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 self.head.extend(self.math_header)
             else:
                 self.stylesheet.extend(self.math_header)
+
+        if hasattr(self.settings, "ld_modules"):
+            required_ld_modules = self.analyze_classes(node)
+            for module in required_ld_modules:
+                self.stylesheet.append(
+                   f'\n    <script src="{module}" type="module"></script>'
+                )
+
         # skip content-type meta tag with interpolated charset value:
         self.html_head.extend(self.head[1:])
         self.fragment.extend(self.body)
@@ -593,6 +625,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
 
     def depart_incremental(self, node):
+        self.body.append("</div>")
+
+    def visit_module(self, node):
+        self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
+
+    def depart_module(self, node):
         self.body.append("</div>")
 
     def visit_supplemental(self, node):
@@ -716,6 +754,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 directives.register_directive("stack", Stack)
 directives.register_directive("layer", Layer)
 
+
+directives.register_directive("module", Module)
 
 directives.register_directive("incremental", Incremental)
 directives.register_directive("supplemental", Supplemental)
