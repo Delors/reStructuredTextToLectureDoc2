@@ -16,10 +16,12 @@
 .. role:: minor
 
 
+.. THE FOLLOWING CHANGES THE OVERALL SLIDE LAYOUT   
+
 .. class:: cheat-sheet-8-columns 
 
 LectureDoc2 Cheat Sheet for DHBW Corporate Design
--------------------------------------------------------------------------------
+-------------------------------------------------------------
 
 .. container:: cheat-sheet-block
 
@@ -28,8 +30,6 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
    :Author: Michael Eichberg
    :Version: 1.0
 
-
-.. CHANGING THE OVERALL SLIDE LAYOUT   
    
 .. container:: cheat-sheet-block
 

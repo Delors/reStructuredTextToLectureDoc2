@@ -18,11 +18,9 @@
 :math:`LectureDoc^2` Tutorial
 =============================
 
-LectureDoc is an authoring system for creating lecture slides/notes/exercises. LectureDoc enables you to write a single (HTML or) reStructuredText document that contains the slides, additional annotations and also exercises.
+LectureDoc is an authoring system for creating lecture material; i. e., lecture slides, notes and exercises. LectureDoc enables you to write a single (HTML or) reStructuredText document that contains the slides, additional annotations and also exercises. Using LectureDoc's module system even more advanced use cases, such as integrated quizzes, are possible.
 
-This tutorial is written in reStructuredText and can be used as a template for creating your own lecture slides.
-
-The *code* of this tutorial is available on GitHub: `Delors/reStructuredTextToLectureDoc2/main/ld_base_example.rst <https://raw.githubusercontent.com/Delors/reStructuredTextToLectureDoc2/main/ld_base_example.rst>`__
+This tutorial is written in reStructuredText and can be used as a template for creating your own lecture slides. The *code* of this tutorial is available on GitHub: `Delors/reStructuredTextToLectureDoc2/main/ld_base_example.rst <https://github.com/Delors/reStructuredTextToLectureDoc2/blob/main/ld_base_example.en.rst?plain=1>`__
 
 *Prof. Dr. Michael Eichberg*
 
@@ -110,7 +108,7 @@ A slide without an explicit title can be created by explicitly creating an empty
 
         You have to add a space after the backslash (``\``)!
 
-Alternatively, you can use the following class: ``no-title`` in combination with the ``class`` directive:
+Alternatively and also recommended, you can use the following class: ``no-title`` in combination with the ``class`` directive:
 
 .. admonition:: Example
     :class: far-far-smaller 
@@ -190,7 +188,7 @@ Slide Dimensions
 ----------------
 
 The slide dimensions can be controlled by specifying the corresponding meta information.
-If not specified, the default dimension is set to :math:`1920 \times 1200`; i.e., a ratio of 16:10.
+If not specified, the dimension is set to :math:`1920 \times 1200` (default); i.e., a ratio of 16:10.
     
 .. admonition:: Example
     :class: far-far-smaller 
