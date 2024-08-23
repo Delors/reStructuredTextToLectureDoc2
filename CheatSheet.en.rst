@@ -20,7 +20,7 @@
 
 .. class:: cheat-sheet-8-columns 
 
-LectureDoc2 Cheat Sheet for DHBW Corporate Design
+LectureDoc2 Cheat Sheet (DHBW Corporate Design)
 -------------------------------------------------------------
 
 .. container:: cheat-sheet-block
@@ -28,7 +28,7 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
    .. rubric:: Information
    
    :Author: Michael Eichberg
-   :Version: 1.0
+   :Version: August 2024
 
    
 .. container:: cheat-sheet-block
@@ -93,33 +93,30 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
 
    .. rubric:: Exercises and Solutions
 
-   Use ``integrated-exercise`` for slides with exercises. Solutions can be added by using the custom directive ``protected-exercise-solution`` 
+   Associate the class ``integrated-exercise`` with a slide to indicate that the slide contains an exercise.
 
+   Use the directive ``.. exercise::`` to add an exercise. To add a solution use the custom directive ``.. solution::`` inside of an exercise block and specify the password (optional) using the attribute ``:pwd:``.
+   
    .. rubric:: Example (Solution in supplemental information)
 
    .. code:: rst
       :class: smaller copy-to-clipboard
 
-      .. admonition:: Solution
-         :class: supplemental
-                 exercise-solution
+      .. exercise:: <Title>
 
-   .. rubric:: Example (Solution requires password.)
+         <Description of the exercise.>
+
+         .. solution:: <Title>
+            :pwd: 1234 
+
+            <Solution>
+
+   You can configure a master-password using meta information:
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
 
-      .. class:: integrated-exercise 
-
-      Exercise: XYZ
-      --------------
-
-      <Exercise Description>
-
-      .. protected-exercise-solution:: A
-
-         <Protected Solution>
-
+      .. meta::
+         :exercises-master-password: <Master-password>
 
 .. container:: cheat-sheet-block
    
@@ -144,7 +141,7 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
    
    .. rubric:: Footnotes
 
-   ``.. [#]`` and ``[#]_`` create footnotes.
+   ``[#]_`` and ``.. [#]`` create footnotes.
 
    .. code:: rst
       :class: smaller copy-to-clipboard
@@ -208,21 +205,6 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
 
    Add the class ``faded-to-white`` to a container to whiten the content.
    
-
-
-.. container:: cheat-sheet-block
-
-   .. rubric:: Boxes with Supplemental Information on the Slide
-
-   .. rubric:: Example
-
-   .. code:: rst
-      :class: smaller copy-to-clipboard
-
-      .. admonition:: TBD
-         :class: note 
-
-         Some text in a box.
 
      
 
@@ -522,15 +504,15 @@ LectureDoc2 Cheat Sheet for DHBW Corporate Design
 
 .. container:: cheat-sheet-block
 
-   .. rubric:: Meta-Information
+   .. rubric:: Configuration
 
    LectureDoc meta information:
 
-   ``id`` A unique identifier for the slide set. Required to store the current state of the presentation.
+   ``id`` The unique identifier for the slide set. Required to store the current state of the presentation.
 
-   ``slide-dimensions`` The dimensions of the slides (default: "1920x1200").
+   ``slide-dimensions`` the slides dimension (default: "1920x1200").
    
-   ``first-slide`` The first slide that is shown when the presentation is started (e.g., <Slide Number> or "last-viewed").
+   ``first-slide`` Determines the first slide that is shown (e.g., <Slide Number> or "last-viewed").
 
    .. rubric:: Example
    
