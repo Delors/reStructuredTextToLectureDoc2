@@ -254,7 +254,7 @@ Alternatively, a container with the class ``supplemental`` can also be used:
     .. code:: rst
         :class: black copy-to-clipboard
 
-        .. container:: supplemental
+        .. supplemental::
 
             **Formatting Slides**
 
