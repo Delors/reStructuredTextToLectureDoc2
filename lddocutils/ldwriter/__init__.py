@@ -4,11 +4,11 @@ import json
 from docutils import nodes
 from docutils import frontend
 from docutils.parsers.rst import Directive, directives, roles
-from docutils.parsers.rst.directives import unchanged_required, class_option
+from docutils.parsers.rst.directives import unchanged_required, class_option, unchanged
 from docutils.nodes import inline, container, title, rubric
 from docutils.writers import html5_polyglot
 
-
+import os
 import base64
 import hashlib
 from Crypto.Cipher import AES
@@ -350,7 +350,7 @@ class Source(Directive):
     final_argument_whitespace = False
     optional_arguments = 0
     has_content = False
-    option_spec = {"prefix": unchanged_required, "suffix": unchanged_required}
+    option_spec = {"prefix": unchanged_required, "suffix": unchanged_required, "path": unchanged}
 
     def run(self):
         text = "File"
@@ -359,6 +359,15 @@ class Source(Directive):
             node.attributes["prefix"] = self.options["prefix"]
         if "suffix" in self.options:
             node.attributes["suffix"] = self.options["suffix"]
+        if "path" in self.options:
+            match self.options["path"]:
+                case "file":
+                    # nothing to do here; default case
+                    pass
+                case "dir":
+                    node.attributes["path"] = "dir"
+                case _ :
+                    raise self.error("Unknown path type")
         nodes = [node]
         return nodes
 
@@ -641,6 +650,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def visit_source(self, node):
         source = self.document["source"]
+        if "path" in node.attributes and node.attributes["path"] == "dir":
+            source = os.path.dirname(source)            
         if "suffix" in node.attributes:
             source = source + node.attributes["suffix"]
         if "prefix" in node.attributes:
