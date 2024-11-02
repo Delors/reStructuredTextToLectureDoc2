@@ -63,7 +63,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
 
    .. rubric:: Smaller Slide Titles
 
-   Use the class `smaller-slide-title``.
+   Use the class ``smaller-slide-title``.
 
    .. rubric:: Vertically Centered Content  
    
@@ -562,8 +562,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
       .. role:: incremental   
       .. role:: eng
       .. role:: ger
-      .. role:: ger-quote
-      .. role:: minor
+            .. role:: minor
       .. role:: obsolete
       .. role:: dhbw-red
       .. role:: dhbw-gray
