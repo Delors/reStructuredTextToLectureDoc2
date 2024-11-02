@@ -435,7 +435,6 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    ``obsolete``: for obsolete statements.
    ``ger``: to markup German Words.
    ``eng``: to markup English words.
-   ``ger-quote``: Uses German quotation marks.
 
 
 .. container:: cheat-sheet-block
