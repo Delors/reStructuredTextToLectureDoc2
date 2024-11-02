@@ -405,6 +405,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     <!-- Additional scripts that interact with LectureDoc have to be added below. -->
     <link rel="stylesheet" href="%(ld_path)s/ld.css" type="text/css" />\n
     <link rel="stylesheet" href="%(ld_path)s/themes/DHBW/theme.css" type="text/css" />\n
+    <!-- When we make better use of HTML Components for LectureDoc's UI we can remove the following line -->
+    <link rel="stylesheet" href="%(ld_path)s/ld-ui.css" type="text/css" />\n
     """
 
 
