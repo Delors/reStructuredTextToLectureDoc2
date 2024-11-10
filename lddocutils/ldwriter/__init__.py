@@ -120,7 +120,7 @@ def encryptAESGCM(pwd, plaintext, iterationCount=ldPBKDF2IterationCount):
 class exercise(container):
     """Represents an exercise.
 
-    Exercise node have the additional attribute title if the user provides one.
+    Exercise nodes have the additional attribute title if the user provides one.
     """
 
     pass
@@ -161,6 +161,8 @@ class Exercise(Directive):
             exercise_title = self.arguments[0]
             node.attributes["title"] = exercise_title
             node += rubric(text=exercise_title)
+            # exercise_rubric = rubric(rawsource=exercise_title)
+            # self.state.nested_parse(exercise_title, self.content_offset, exercise_rubric)
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -348,26 +350,39 @@ class Source(Directive):
 
     required_arguments = 0
     final_argument_whitespace = False
-    optional_arguments = 0
+    optional_arguments = 1
     has_content = False
     option_spec = {"prefix": unchanged_required, "suffix": unchanged_required, "path": unchanged}
 
     def run(self):
-        text = "File"
+        text = self.content
+        
         node = source(rawsource=text)
+        
         if "prefix" in self.options:
             node.attributes["prefix"] = self.options["prefix"]
         if "suffix" in self.options:
             node.attributes["suffix"] = self.options["suffix"]
+
+        # it is the name of the specified file or "this" file.
+        filename = self.state_machine.document["source"] 
+        if len(self.arguments) == 0:
+            relative_path = filename
+        else:
+            relative_curdir = os.path.dirname(filename)
+            relative_path = relative_curdir + os.sep + self.arguments[0]
+
         if "path" in self.options:
             match self.options["path"]:
-                case "file":
-                    # nothing to do here; default case
-                    pass
-                case "dir":
-                    node.attributes["path"] = "dir"
+                case "relative":
+                    node.attributes["resolved_path"] = relative_path
+                case "absolute":
+                    node.attributes["resolved_path"] = os.path.abspath(relative_path)
                 case _ :
                     raise self.error("Unknown path type")
+        else:
+            node.attributes["resolved_path"] = relative_path
+        
         nodes = [node]
         return nodes
 
@@ -492,8 +507,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         # let's search the DOM for classes that require special treatment
         # by JavaScript libraries, if we find any, we will add links to the 
         # necessary JavaScript libraries to the document.
-
-
 
         self.head_prefix.extend(
             [
@@ -651,17 +664,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.body.append("</div>")
 
     def visit_source(self, node):
-        source = self.document["source"]
-        if "path" in node.attributes and node.attributes["path"] == "dir":
-            source = os.path.dirname(source)            
+        source = node.attributes["resolved_path"]
         if "suffix" in node.attributes:
             source = source + node.attributes["suffix"]
         if "prefix" in node.attributes:
             source = node.attributes["prefix"] + source
-            self.body.append(f'<a class="reference external" href="{source}">{source}</a>')
-        else: 
-            self.body.append(source)
-
+        self.body.append(f'<a class="reference external" href="{source}">{source}</a>')
+        
     def depart_source(self, node):
         pass
 
