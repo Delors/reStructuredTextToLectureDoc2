@@ -518,6 +518,16 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.head = self.meta[:] + self.head
         if self.math_header:
             if self.math_output == "mathjax":
+                self.head.append("""<script>
+                    window.MathJax = {
+                        tex: {
+                            tags: 'ams',
+                        },
+                        chtml: { 
+                            displayAlign: 'center' /*left or center*/
+                        }
+                    };
+                </script>""")
                 self.head.extend(self.math_header)
             else:
                 self.stylesheet.extend(self.math_header)
