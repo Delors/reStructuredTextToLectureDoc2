@@ -468,7 +468,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         )
         self.meta = [
             '<meta name="viewport" '
-            'content="width=device-width, initial-scale=1.0, user-scalable=no" />\n'
+            'content="width=device-width, initial-scale=1.0" />\n'
         ]
         self.meta.append('<meta name="version" content="LD2 0.2" />\n')
 
