@@ -560,15 +560,15 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             # if self.exercises_master_password is None:
             #    self.exercises_master_password = generatePassword(10)
 
-            pwds = [{"passwords": self.exercises_passwords}]
+            passwords = [{"passwords": self.exercises_passwords}]
             if self.exercises_master_password is not None:
-                pwds.insert(0,{"master password": self.exercises_master_password})
+                passwords.insert(0,{"master password": self.exercises_master_password})
 
-            pwdsJSON = json.dumps(pwds, indent=4)
+            passwordsJSON = json.dumps(passwords, indent=4)
 
             if self.exercises_master_password is not None:
                 encryptedPWDs = encryptAESGCM(
-                    self.exercises_master_password, pwdsJSON, 100000
+                    self.exercises_master_password, passwordsJSON, 100000
                 )
                 self.head.insert(
                     0,
@@ -576,8 +576,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 )
 
             if self.ld_exercises_passwords_file is not None:
-                with open(self.ld_exercises_passwords_file, "w") as pwdsFile:
-                    pwdsFile.write(pwdsJSON)
+                with open(self.ld_exercises_passwords_file, "w") as passwordsFile:
+                    passwordsFile.write(passwordsJSON)
 
         self.html_body.extend(
             self.body_prefix[1:]
