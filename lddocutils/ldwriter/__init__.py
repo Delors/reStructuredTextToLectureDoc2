@@ -463,14 +463,14 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         # self.stylesheet.insert(0, self.ld_stylesheet_normalize % {"ld_path": ld_path+"/css"})
         # self.stylesheet.append(self.ld_stylesheet_template % {"ld_path": ld_path})
         self.stylesheet = [self.ld_stylesheet_template % {"ld_path": ld_path}]
+        self.meta.append(
+            '<meta charset="utf-8">\n'
+        )
         self.meta = [
             '<meta name="viewport" '
             'content="width=device-width, initial-scale=1.0, user-scalable=no" />\n'
         ]
-        self.meta.append(
-            '<meta http-equiv="Content-Type" ' 'content="text/html; charset=utf-8">\n'
-        )
-        self.meta.append('<meta name="version" content="LD2 0.1" />\n')
+        self.meta.append('<meta name="version" content="LD2 0.2" />\n')
 
         self.section_count = 0
 
