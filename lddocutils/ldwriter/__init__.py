@@ -1,5 +1,6 @@
 from itertools import batched
 import json
+import textwrap
 
 from docutils import nodes
 from docutils import frontend
@@ -43,6 +44,11 @@ class Writer(html5_polyglot.Writer):
         "LectureDoc2 Specific Options",
         "Configuration options used when generating LectureDoc2 lecture notes.",
         (
+             (
+                "Specifies the default version of LectureDoc2 that is to be used.",
+                ["--ld-default-version"],
+                {"choices": ["genesis","renaissance"], "default": "genesis"},
+            ),
             (
                 "Specifies the path to LectureDoc2.",
                 ["--ld-path"],
@@ -233,7 +239,6 @@ class Stack(Directive):
 
 
 class layer(container):
-    # Examples are in `docutils.nodes`
     pass
 
 
@@ -285,7 +290,6 @@ class Supplemental(Directive):
         return nodes
 
 
-# OBSOLETE
 class incremental(container):
     pass
 
@@ -437,40 +441,15 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def __init__(self, *args):
         html5_polyglot.HTMLTranslator.__init__(self, *args)
 
-        # insert ld-specific stylesheet and script stuff:
-        """
-        self.theme_file_path = None
-        try:
-            self.setup_theme()
-        except docutils.ApplicationError as e:
-            self.document.reporter.warning(e)
-        view_mode = self.document.settings.view_mode
-        control_visibility = ('visible', 'hidden')[self.document.settings
-                                                   .hidden_controls]
-        self.stylesheet.append(self.s5_stylesheet_template
-                               % {'path': self.theme_file_path,
-                                  'view_mode': view_mode,
-                                  'control_visibility': control_visibility})
-        if not self.document.settings.current_slide:
-            self.stylesheet.append(self.disable_current_slide)
-        self.s5_footer = []
-        self.s5_header = []
+        self.ld_path = self.document.settings.ld_path
+        self.ld_version = self.document.settings.ld_default_version
         
-        self.theme_files_copied = None
-        """
-        # overwrite HTML meta tag default
-        ld_path = self.document.settings.ld_path
-        # self.stylesheet.insert(0, self.ld_stylesheet_normalize % {"ld_path": ld_path+"/css"})
-        # self.stylesheet.append(self.ld_stylesheet_template % {"ld_path": ld_path})
-        self.stylesheet = [self.ld_stylesheet_template % {"ld_path": ld_path}]
-        self.meta.append(
-            '<meta charset="utf-8">\n'
-        )
+        # Overwrite HTMLTranslator meta tag default        
         self.meta = [
+            '<meta charset="utf-8">\n',
             '<meta name="viewport" '
             'content="width=device-width, initial-scale=1.0" />\n'
         ]
-        self.meta.append('<meta name="version" content="LD2 0.2" />\n')
 
         self.section_count = 0
 
@@ -504,6 +483,36 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         return required_ld_modules
 
     def depart_document(self, node):
+        # self.stylesheet.insert(0, self.ld_stylesheet_normalize % {"ld_path": ld_path+"/css"})
+        # self.stylesheet.append(self.ld_stylesheet_template % {"ld_path": ld_path})
+        ld_path = self.ld_path + "/" + self.ld_version 
+        self.stylesheet = [self.ld_stylesheet_template % {"ld_path": ld_path}]
+        
+        self.meta.append(f'<meta name="version" content="LD2 {self.ld_version.upper()}" />\n')
+
+        if len(self.exercises_passwords) > 0:
+            # Write all passwords to the HTML document and (optionally) to a file
+            # if self.exercises_master_password is None:
+            #    self.exercises_master_password = generatePassword(10)
+
+            passwords = [{"passwords": self.exercises_passwords}]
+            if self.exercises_master_password is not None:
+                passwords.insert(0,{"master password": self.exercises_master_password})
+
+            passwordsJSON = json.dumps(passwords, indent=4)
+
+            if self.exercises_master_password is not None:
+                encryptedPWDs = encryptAESGCM(
+                    self.exercises_master_password, passwordsJSON, 100000
+                )
+                self.meta.append(
+                    f'<meta name="exercises-passwords" content="{encryptedPWDs}" />\n',
+                )
+
+            if self.ld_exercises_passwords_file is not None:
+                with open(self.ld_exercises_passwords_file, "w") as passwordsFile:
+                    passwordsFile.write(passwordsJSON)
+
         # let's search the DOM for classes that require special treatment
         # by JavaScript libraries, if we find any, we will add links to the 
         # necessary JavaScript libraries to the document.
@@ -518,16 +527,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.head = self.meta[:] + self.head
         if self.math_header:
             if self.math_output == "mathjax":
-                self.head.append("""<script>
-                    window.MathJax = {
-                        tex: {
-                            tags: 'ams',
-                        },
-                        chtml: { 
-                            displayAlign: 'center' /*left or center*/
-                        }
-                    };
-                </script>""")
+                self.head.append(textwrap.dedent("""\
+                    <script>
+                        window.MathJax = {
+                            tex: { tags: 'ams', },
+                            chtml: { displayAlign: 'center' /*left or center*/ }
+                        };
+                    </script>\n"""))
                 self.head.extend(self.math_header)
             else:
                 self.stylesheet.extend(self.math_header)
@@ -555,30 +561,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if not self.section_count:
             self.body.append("</div>\n")
 
-        if len(self.exercises_passwords) > 0:
-            # Write all passwords to the HTML document and (optionally) to a file
-            # if self.exercises_master_password is None:
-            #    self.exercises_master_password = generatePassword(10)
-
-            passwords = [{"passwords": self.exercises_passwords}]
-            if self.exercises_master_password is not None:
-                passwords.insert(0,{"master password": self.exercises_master_password})
-
-            passwordsJSON = json.dumps(passwords, indent=4)
-
-            if self.exercises_master_password is not None:
-                encryptedPWDs = encryptAESGCM(
-                    self.exercises_master_password, passwordsJSON, 100000
-                )
-                self.head.insert(
-                    0,
-                    f'<meta name="exercises-passwords" content="{encryptedPWDs}" />\n',
-                )
-
-            if self.ld_exercises_passwords_file is not None:
-                with open(self.ld_exercises_passwords_file, "w") as passwordsFile:
-                    passwordsFile.write(passwordsJSON)
-
         self.html_body.extend(
             self.body_prefix[1:]
             + self.body_pre_docinfo
@@ -590,6 +572,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def visit_meta(self, node):
         if node.attributes["name"] == "exercises-master-password":
             self.exercises_master_password = node.attributes["content"]
+        elif node.attributes["name"] == "version":
+            self.ld_version = node.attributes["content"]
         else:
             html5_polyglot.HTMLTranslator.visit_meta(self, node)
 
