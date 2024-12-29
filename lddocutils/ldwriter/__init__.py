@@ -416,7 +416,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     """ We need to ensure that MathJax is properly initialized; we will 
         call it later to do the typesetting."""
 
-    ld_stylesheet_template_genesis = """
+    ld_scripts_and_styles_template_genesis = """
     <script src="%(ld_path)s/ld-core.js" type="module"></script>\n
     <script src="%(ld_path)s/ld-components.js" type="module"></script>\n
     <link rel="stylesheet" href="%(ld_path)s/ld.css" />\n
@@ -437,11 +437,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def __init__(self, *args):
         html5_polyglot.HTMLTranslator.__init__(self, *args)
 
+        # Get the settings from the document to make them easily accessible
         self.ld_path = self.document.settings.ld_path
         self.ld_version = self.document.settings.ld_default_version
         self.ld_theme_path = self.document.settings.theme
+        self.ld_exercises_passwords_file = self.document.settings.ld_exercises_passwords
         
-        # Overwrite HTMLTranslator meta tag default        
+        # Overwrite HTMLTranslator's meta tag default        
         self.meta = [
             '<meta charset="utf-8">\n',
             '<meta name="viewport" '
@@ -450,18 +452,18 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
         self.section_count = 0
 
-        # Identifies the first tag belonging to the slide to hide.
-        # This is used to remove the slide from the output.
+        # Identifies the first tag belonging to a slide which should be hidden;
+        # i. e., which will not be in the generated output.
         self.start_of_slide_to_hide = None
 
-        self.ld_exercises_passwords_file = self.document.settings.ld_exercises_passwords
-        self.start_of_exercise = None  # used while parsing an exercise
-        self.current_exercise_name = None  # used while parsing an exercise
+        # The following attributes are used to handle exercises and solutions
+        self.start_of_exercise = None  
+        self.current_exercise_name = None  
         self.start_of_solution = None
         self.exercises_master_password = None
         self.exercises_passwords = []
         self.exercises_passwords_titles = {}
-        self.exercise_count = 0  # incremented for each exercise
+        self.exercise_count = 0  
 
     def visit_document(self, node):
         super().visit_document(node);
@@ -480,8 +482,16 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def depart_document(self, node):
         ld_path = self.ld_path + "/" + self.ld_version 
-        self.stylesheet = [self.ld_stylesheet_template_genesis % {"ld_path": ld_path}]
-        
+
+        if self.ld_version == "genesis":
+            self.stylesheet = [self.ld_scripts_and_styles_template_genesis % {"ld_path": ld_path}]
+        elif self.ld_version == "renaissance":
+            self.stylesheet = [self.ld_scripts_and_styles_template_renaissance % {"ld_path": ld_path}]
+            if self.ld_theme_path is not None:
+                self.stylesheet.append(self.theme_template_renaissance % {"ld_path": ld_path, "theme_path": "/" + self.ld_theme_path})
+        else: 
+            raise Exception("Unknown LectureDoc2 version: " + self.ld_version)
+
         self.meta.append(f'<meta name="version" content="LD2 {self.ld_version.upper()}" />\n')
 
         if len(self.exercises_passwords) > 0:
