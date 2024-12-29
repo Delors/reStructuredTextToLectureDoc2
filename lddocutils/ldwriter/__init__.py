@@ -27,7 +27,7 @@ https://github.com/docutils/docutils/blob/master/docutils/docutils/writers/s5_ht
 # Examples definitions of `nodes` are in `docutils.nodes`
 """
 
-def validate_ld_modules_list(setting, value=None, option_parser=None,
+def validate_modules_list(setting, value=None, option_parser=None,
                          config_parser=None, config_section=None):
     module_configurations = frontend.validate_comma_separated_list(setting, value, option_parser,config_parser,config_section)
     modules = dict(map(lambda tc: tc.split(sep=" ",maxsplit=1) , module_configurations))
@@ -59,11 +59,16 @@ class Writer(html5_polyglot.Writer):
                 ["--ld-exercises-passwords"],
                 {"metavar": "<URL>"},
             ),
+             (
+                "Specifies the css file which defines the custom theme. The file has to be specified relative to LectureDoc's main folder.",
+                ["--theme"],
+                {"metavar": "<URL>"},
+            ),
             (
                 "Configures class-based modules.",
-                ["--ld-modules"],
+                ["--modules"],
                 {'metavar': '<class_name dir[,class_name dir,...]>',
-                 'validator': validate_ld_modules_list},
+                 'validator': validate_modules_list},
             ),
         ),
     )
@@ -409,40 +414,32 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     mathjax_script = '<script type="text/javascript" src="%s"></script>\n'
     """ We need to ensure that MathJax is properly initialized; we will 
-       call it later to do the typesetting."""
+        call it later to do the typesetting."""
 
-    # ld_stylesheet_normalize = """<link rel="stylesheet" href="%(ld_path)s/normalize.css" />\n"""
-    ld_stylesheet_normalize = """<style>@import url("%(ld_path)s/normalize.css") layer(normalize); </style>\n"""
-
-    # NOW MODULARIZED:  <script src="%(ld_path)s/ld-crypto.js" type="text/javascript"></script>
-    #                   <script src="%(ld_path)s/ld-lib.js" type="text/javascript"></script>
-    # NOW A SIMPLE HTML FRAGMENT:
-    #                   <script src="%(ld_path)s/ld-help.js" type="text/javascript"></script>
-    ld_stylesheet_template = """
+    ld_stylesheet_template_genesis = """
     <script src="%(ld_path)s/ld-core.js" type="module"></script>\n
     <script src="%(ld_path)s/ld-components.js" type="module"></script>\n
-    <!-- Additional scripts that interact with LectureDoc have to be added below. -->
-    <link rel="stylesheet" href="%(ld_path)s/ld.css" type="text/css" />\n
-    <link rel="stylesheet" href="%(ld_path)s/themes/DHBW/theme.css" type="text/css" />\n
-    <!-- When we make better use of HTML Components for LectureDoc's UI we can remove the following line -->
-    <link rel="stylesheet" href="%(ld_path)s/ld-ui.css" type="text/css" />\n
+    <link rel="stylesheet" href="%(ld_path)s/ld.css" />\n
+    <link rel="stylesheet" href="%(ld_path)s/themes/DHBW/theme.css" />\n
+    <link rel="stylesheet" href="%(ld_path)s/ld-ui.css" />\n
     """
 
-
-    embedded_stylesheet = '<style>@layer docutils { \n\n%s\n}</style>\n'
-    """ We overwrite how the embedded stylesheet is inserted into the document 
-        to assign it an appropriate CSS layer. This facilitates redefining the
-        styles by later defined layers; otherwise the styles would be added
-        to the unnamed layer which takes precedence over all other layers and
-        therefore cannot be overridden by styles defined in normal layers.
+    ld_scripts_and_styles_template_renaissance = """
+    <script src="%(ld_path)s/ld-core.js" type="module"></script>\n
+    <script src="%(ld_path)s/ld-components.js" type="module"></script>\n
+    <link rel="stylesheet" href="%(ld_path)s/ld.css" />\n
     """
 
+    theme_template_renaissance = """
+    <link rel="stylesheet" href="%(ld_path)s%(theme_path)s" />\n
+    """
     
     def __init__(self, *args):
         html5_polyglot.HTMLTranslator.__init__(self, *args)
 
         self.ld_path = self.document.settings.ld_path
         self.ld_version = self.document.settings.ld_default_version
+        self.ld_theme_path = self.document.settings.theme
         
         # Overwrite HTMLTranslator meta tag default        
         self.meta = [
@@ -467,26 +464,23 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.exercise_count = 0  # incremented for each exercise
 
     def visit_document(self, node):
-        #self.embedded_stylesheet = '<style>@layer docutils { \n\n%s\n}</style>\n'
         super().visit_document(node);
         pass;
 
     def analyze_classes(self,node):
-        required_ld_modules = set()
+        required_modules = set()
         if hasattr(node, "attributes"):
             for cls in node.attributes["classes"]:
-                if cls in self.settings.ld_modules:
-                    required_ld_modules.add(self.settings.ld_modules[cls])
+                if cls in self.settings.modules:
+                    required_modules.add(self.settings.modules[cls])
         if hasattr(node, "children"):
             for child in node.children:
-                required_ld_modules.update(self.analyze_classes(child))
-        return required_ld_modules
+                required_modules.update(self.analyze_classes(child))
+        return required_modules
 
     def depart_document(self, node):
-        # self.stylesheet.insert(0, self.ld_stylesheet_normalize % {"ld_path": ld_path+"/css"})
-        # self.stylesheet.append(self.ld_stylesheet_template % {"ld_path": ld_path})
         ld_path = self.ld_path + "/" + self.ld_version 
-        self.stylesheet = [self.ld_stylesheet_template % {"ld_path": ld_path}]
+        self.stylesheet = [self.ld_stylesheet_template_genesis % {"ld_path": ld_path}]
         
         self.meta.append(f'<meta name="version" content="LD2 {self.ld_version.upper()}" />\n')
 
@@ -538,9 +532,9 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             else:
                 self.stylesheet.extend(self.math_header)
 
-        if hasattr(self.settings, "ld_modules"):
-            required_ld_modules = self.analyze_classes(node)
-            for module in required_ld_modules:
+        if hasattr(self.settings, "modules"):
+            required_modules = self.analyze_classes(node)
+            for module in required_modules:
                 self.stylesheet.append(
                    f'\n    <script src="{module}" type="module"></script>'
                 )
