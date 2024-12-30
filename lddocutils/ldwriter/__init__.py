@@ -544,10 +544,14 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
         if hasattr(self.settings, "modules"):
             required_modules = self.analyze_classes(node)
-            for module in required_modules:
+            if len(required_modules) > 0:
                 self.stylesheet.append(
-                   f'\n    <script src="{module}" type="module"></script>'
-                )
+                        f'\n    <!-- Modules added for specific classes used in the document: -->'
+                    )
+                for module in required_modules:
+                    self.stylesheet.append(
+                        f'\n    <script src="{module}" type="module"></script>'
+                    )
 
         # skip content-type meta tag with interpolated charset value:
         self.html_head.extend(self.head[1:])
