@@ -425,8 +425,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     """
 
     ld_scripts_and_styles_template_renaissance = """
-    <script src="%(ld_path)s/ld-core.js" type="module"></script>\n
-    <script src="%(ld_path)s/ld-components.js" type="module"></script>\n
+    <script src="%(ld_path)s/ld.js" type="module"></script>\n
     <link rel="stylesheet" href="%(ld_path)s/ld.css" />\n
     """
 
