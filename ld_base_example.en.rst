@@ -459,7 +459,7 @@ Bibliography
 Advanced Formatting    
 ---------------------
 
-LectureDoc comes with a set of predefined (CSS) classes that can be used to format the slides. Some of these classes have explicit support by LectureDoc and will be rendered differently in the different situations (e.g., continuous view vs. slide view will render *stacked layouts* or *supplemental information* differently). 
+LectureDoc comes with a set of predefined (CSS) classes that can be used to format the slides. Some of these classes have explicit support by LectureDoc and will be rendered differently in the different situations (e.g., document view vs. slide view will render *stacked layouts* or *supplemental information* differently). 
 
 .. class:: incremental
 
@@ -547,7 +547,7 @@ Exercises can be integrated into the slide set.
 
                     Solution: :math:`1,4142135624`.
 
-            To unlock the solution go to the continuous view and enter the password.
+            To unlock the solution go to the document view and enter the password.
     
         .. container:: column
             
