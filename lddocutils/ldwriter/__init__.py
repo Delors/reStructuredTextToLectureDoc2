@@ -242,7 +242,6 @@ class Stack(Directive):
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
 
-
 class layer(container):
     pass
 
@@ -263,6 +262,58 @@ class Layer(Directive):
         text = "\n".join(self.content)
         node = layer(rawsource=text)
         node.attributes["classes"] += ["layer"] + self.arguments
+        # Parse the directive contents.
+        self.state.nested_parse(self.content, self.content_offset, node)
+        return [node]
+
+
+class deck(container):
+    pass
+
+
+class Deck(Directive):
+
+    required_arguments = 0
+    final_argument_whitespace = True
+    optional_arguments = 1
+    has_content = True
+    option_spec = {}
+
+    def run(self):
+        self.assert_has_content()
+        text = "\n".join(self.content)
+        node = deck(rawsource=text)
+        if "deck" in self.arguments:
+            raise self.error('"deck" is superfluous; it is automatically added.')
+        node.attributes["classes"] += self.arguments 
+        # Parse the directive contents.
+        self.state.nested_parse(self.content, self.content_offset, node)
+        return [node]
+
+
+class card(container):
+    pass
+
+
+class Card(Directive):
+
+    required_arguments = 0
+    final_argument_whitespace = True
+    optional_arguments = 1
+    has_content = True
+    option_spec = {}
+
+    def run(self):
+        self.assert_has_content()
+        if "card" in self.arguments:
+            raise self.error('"card" is superfluous; it is automatically added.')
+
+        if "incremental" in self.arguments:
+            raise self.error('"incremental" is superfluous; it is automatically added.')
+
+        text = "\n".join(self.content)
+        node = card(rawsource=text)
+        node.attributes["classes"] += self.arguments
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -452,6 +503,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         ]
 
         self.section_count = 0
+        self.card_count = []
 
         # Identifies the first tag belonging to a slide which should be hidden;
         # i. e., which will not be in the generated output.
@@ -648,6 +700,26 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_layer(self, node):
         self.body.append("</div>")
 
+    def visit_deck(self, node):
+        self.card_count.append(0)
+        self.body.append(self.starttag(node, "ld-deck", CLASS=" ".join(node.attributes["classes"])))
+
+    def depart_deck(self, node):
+        self.card_count.pop()
+        self.body.append("</ld-deck>")
+
+    def visit_card(self, node):
+        if (len(self.card_count) == 0):
+            raise Exception("card directive must be nested in a deck directive")
+        card_id = self.card_count.pop()
+        if(card_id > 0):
+            node.attributes["classes"] += ["incremental"]
+        self.card_count.append(card_id + 1)
+        self.body.append(self.starttag(node, "ld-card", CLASS=" ".join(node.attributes["classes"])))
+
+    def depart_card(self, node):
+        self.body.append("</ld-card>")
+
     def visit_incremental(self, node):
         self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
 
@@ -776,8 +848,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 #
 # Convenience directives which are "simple" shortcuts for containers with
 # respective classes:
-directives.register_directive("stack", Stack)
-directives.register_directive("layer", Layer)
+directives.register_directive("stack", Stack) # [DEPRECATED] GENESIS
+directives.register_directive("layer", Layer) # [DEPRECATED] GENESIS
+directives.register_directive("deck", Deck) # RENAISSANCE
+directives.register_directive("card", Card) # RENAISSANCE
 
 
 directives.register_directive("module", Module)
