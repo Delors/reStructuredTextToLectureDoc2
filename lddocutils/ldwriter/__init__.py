@@ -3,11 +3,15 @@ import json
 import textwrap
 
 from docutils import nodes
+from docutils.nodes import Element, Admonition,admonition
+from docutils.nodes import inline, container, title, rubric
 from docutils import frontend
+from docutils.languages import en
+from docutils.languages import de
 from docutils.parsers.rst import Directive, directives, roles
 from docutils.parsers.rst.directives import unchanged_required, class_option, unchanged
-from docutils.nodes import inline, container, title, rubric
 from docutils.writers import html5_polyglot
+from docutils.parsers.rst.directives.admonitions import BaseAdmonition
 
 import os
 import base64
@@ -128,6 +132,93 @@ def encryptAESGCM(pwd, plaintext, iterationCount=ldPBKDF2IterationCount):
     )
 
 
+# 
+# Additional Admonitions (LD2 - Renaissance)
+de.labels["example"] = "Beispiel"
+en.labels["example"] = "Example"
+class example(Admonition, Element): pass
+de.labels["background"] = "Hintergrund"
+en.labels["background"] = "Background"
+class background(Admonition, Element): pass
+de.labels["definition"] = "Definition"
+en.labels["definition"] = "Definition"
+class definition(Admonition, Element): pass
+de.labels["proof"] = "Beweis"
+en.labels["proof"] = "Proof"
+class proof(Admonition, Element): pass
+de.labels["theorem"] = "Satz"
+en.labels["theorem"] = "Theorem"
+class theorem(Admonition, Element): pass
+de.labels["lemma"] = "Lemma"
+en.labels["lemma"] = "Lemma"
+class lemma(Admonition, Element): pass
+de.labels["observation"] = "Beobachtung"
+en.labels["observation"] = "Observation"
+class observation(Admonition, Element): pass
+de.labels["remark"] = "Bemerkung"
+en.labels["remark"] = "Remark"
+class remark(Admonition, Element): pass
+de.labels["summary"] = "Zusammenfassung"
+en.labels["summary"] = "Summary"
+class summary(Admonition, Element): pass
+de.labels["legend"] = "Legende"
+en.labels["legend"] = "Legend"
+class legend(Admonition, Element): pass
+
+class Example(BaseAdmonition):
+
+    node_class = example
+
+class Background(BaseAdmonition):
+
+    node_class = background
+
+class Definition(BaseAdmonition):
+    
+    node_class = definition
+
+class Proof(BaseAdmonition):
+    
+    node_class = proof
+
+class Theorem(BaseAdmonition):
+    
+    node_class = theorem
+
+class Lemma(BaseAdmonition):
+
+    node_class = lemma
+
+class Observation(BaseAdmonition):
+
+    node_class = observation
+
+class Remark(BaseAdmonition):
+
+    node_class = remark
+
+class Summary(BaseAdmonition):
+
+    node_class = summary
+
+class Legend(BaseAdmonition):
+
+    node_class = legend
+
+directives.register_directive("example", Example)
+directives.register_directive("background", Background)
+directives.register_directive("definition", Definition)
+directives.register_directive("proof", Proof)
+directives.register_directive("theorem", Theorem)
+directives.register_directive("lemma", Lemma)
+directives.register_directive("observation", Observation)
+directives.register_directive("remark", Remark)
+directives.register_directive("summary", Summary)
+directives.register_directive("legend", Legend)
+
+
+
+
 class exercise(container):
     """Represents an exercise.
 
@@ -179,7 +270,7 @@ class Exercise(Directive):
         return [node]
 
 
-class solution(container):
+class solution(container): # TODO add ",part" to the base class (https://github.com/docutils/docutils/blob/master/docutils/docutils/nodes.py - line 1437)
     # Examples are in `docutils.nodes`
     pass
 
@@ -852,7 +943,6 @@ directives.register_directive("stack", Stack) # [DEPRECATED] GENESIS
 directives.register_directive("layer", Layer) # [DEPRECATED] GENESIS
 directives.register_directive("deck", Deck) # RENAISSANCE
 directives.register_directive("card", Card) # RENAISSANCE
-
 
 directives.register_directive("module", Module)
 
