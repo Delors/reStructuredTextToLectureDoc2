@@ -1,4 +1,5 @@
-.. meta:: 
+.. meta::
+    :version: genesis
     :author: Michael Eichberg
     :keywords: LectureDoc2, "Cheat Sheet", DHBW
     :description lang=de: Cheat Sheet für die Generierung von Vorlesungsunterlagen mit LectureDoc2 im DHBW Corporate Design.

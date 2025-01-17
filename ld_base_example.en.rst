@@ -1,4 +1,5 @@
 .. meta::
+    :version: genesis
     :author: Michael Eichberg
     :description: LectureDoc2 Tutorial
     :license: Released under the terms of the `2-Clause BSD license`.
