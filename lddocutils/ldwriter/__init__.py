@@ -537,19 +537,33 @@ class Source(Directive):
         nodes = [node]
         return nodes
 
+class presenter_note(General, Element): pass
 
-class PresenterNotes(Directive):
+class PresenterNote(Directive):
 
     required_arguments = 0
     final_argument_whitespace = True
     optional_arguments = 1
     has_content = True
-    option_spec = {}
+    option_spec = {'name': directives.unchanged}
 
     def run(self):
         self.assert_has_content()
-        # TODO - for the time being we just swallow the content
-        return []
+        text = '\n'.join(self.content)
+        try:
+            if self.arguments:
+                classes = directives.class_option(self.arguments[0])
+            else:
+                classes = []
+        except ValueError:
+            raise self.error(
+                'Invalid class attribute value for "%s" directive: "%s".'
+                % (self.name, self.arguments[0]))
+        node = presenter_note(text)
+        node['classes'].extend(classes)
+        self.add_name(node)
+        self.state.nested_parse(self.content, self.content_offset, node)
+        return [node]
 
 
 class LDTranslator(html5_polyglot.HTMLTranslator):
@@ -840,6 +854,11 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_source(self, node):
         pass
 
+    def visit_presenter_note(self, node):
+        self.body.append(self.starttag(node, "ld-presenter-note", CLASS=" ".join(node.attributes["classes"])))
+    
+    def depart_presenter_note(self, node):
+        self.body.append("</ld-presenter-note>")
 
     # --------------------------------------------------------------------------
     #
@@ -949,7 +968,7 @@ directives.register_directive("module", Module)
 directives.register_directive("incremental", Incremental)
 directives.register_directive("supplemental", Supplemental)
 
-directives.register_directive("presenter-notes", PresenterNotes)
+directives.register_directive("presenter-note", PresenterNote)
 
 #
 # Advanced directives which are (optionally) parametrized
