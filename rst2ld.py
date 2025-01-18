@@ -7,8 +7,6 @@
 A minimal front end to the Docutils Publisher, producing HTML documents for LectureDoc2.
 """
 
-from docutils.writers import html5_polyglot
-
 from docutils.core import publish_cmdline, default_description
 from lddocutils.ldwriter import Writer
 
