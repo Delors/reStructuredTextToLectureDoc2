@@ -17,6 +17,7 @@ from Crypto.Hash import SHA512, SHA256
 from Crypto.Random import get_random_bytes
 
 import lddocutils.ldwriter.admonitions
+import lddocutils.ldwriter.exercises
 
 """
 Writer for LectureDoc2 HTML output.
@@ -689,6 +690,19 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             self.start_of_slide_to_hide = None
         else:
             self.body.append("</div>")
+
+
+    def visit_question(self, node):
+        self.body.append(self.starttag(node, "ld-question", CLASS=" ".join(node.attributes["classes"])))
+    
+    def depart_question(self, node):
+        self.body.append("</ld-question>")
+    
+    def visit_answer(self, node):
+        self.body.append(self.starttag(node, "ld-answer", CLASS=" ".join(node.attributes["classes"])))
+
+    def depart_answer(self, node):
+        self.body.append("</ld-answer>")
 
     def visit_subscript(self, node):
         self.body.append(self.starttag(node, "sub"))
