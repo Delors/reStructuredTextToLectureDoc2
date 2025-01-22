@@ -1,10 +1,11 @@
-from docutils.languages import en, de
-from docutils.nodes import Element, Admonition,admonition
-from docutils.parsers.rst.directives.admonitions import BaseAdmonition
-from docutils.parsers.rst import directives
-
 # 
 # Additional Admonitions (LD2 - Renaissance)
+
+from docutils.languages import en, de
+from docutils.nodes import Element, Admonition
+from docutils.parsers.rst import directives
+from docutils.parsers.rst.directives.admonitions import BaseAdmonition
+
 de.labels["example"] = "Beispiel"
 en.labels["example"] = "Example"
 class example(Admonition, Element): pass
@@ -22,6 +23,9 @@ en.labels["theorem"] = "Theorem"
 class theorem(Admonition, Element): pass
 de.labels["lemma"] = "Lemma"
 en.labels["lemma"] = "Lemma"
+class conclusion(Admonition, Element): pass
+de.labels["conclusion"] = "Schlussfolgerung"
+en.labels["conclusion"] = "Conclusion"
 class lemma(Admonition, Element): pass
 de.labels["observation"] = "Beobachtung"
 en.labels["observation"] = "Observation"
@@ -35,6 +39,9 @@ class summary(Admonition, Element): pass
 de.labels["legend"] = "Legende"
 en.labels["legend"] = "Legend"
 class legend(Admonition, Element): pass
+de.labels["repetition"] = "Wiederholung"
+en.labels["repetition"] = "Repetition"
+class repetition(Admonition, Element): pass
 
 class Example(BaseAdmonition):
 
@@ -60,6 +67,10 @@ class Lemma(BaseAdmonition):
 
     node_class = lemma
 
+class Conclusion(BaseAdmonition):
+
+    node_class = conclusion
+
 class Observation(BaseAdmonition):
 
     node_class = observation
@@ -76,13 +87,19 @@ class Legend(BaseAdmonition):
 
     node_class = legend
 
+class Repetition(BaseAdmonition):
+
+    node_class = repetition
+
 directives.register_directive("example", Example)
 directives.register_directive("background", Background)
 directives.register_directive("definition", Definition)
 directives.register_directive("proof", Proof)
 directives.register_directive("theorem", Theorem)
 directives.register_directive("lemma", Lemma)
+directives.register_directive("conclusion", Conclusion)
 directives.register_directive("observation", Observation)
 directives.register_directive("remark", Remark)
 directives.register_directive("summary", Summary)
 directives.register_directive("legend", Legend)
+directives.register_directive("repetition", Repetition)
