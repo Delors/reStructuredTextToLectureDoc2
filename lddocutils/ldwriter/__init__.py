@@ -653,6 +653,35 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         else:
             html5_polyglot.HTMLTranslator.visit_meta(self, node)
 
+    def visit_image(self, node):
+        if node.attributes["uri"].endswith(".svg"):
+            # SVGs need to be embedded using an object tag to be displayed
+            # correctly, when external fonts are referenced in the svg file.
+            # TODO Handle "alts"
+            attributes = {
+                "class": " ".join(node.attributes["classes"]),
+                "data": node.attributes["uri"],
+                "type": "image/svg+xml",
+                "role": "img",
+            }
+            if "align" in node.attributes:
+                attributes["class"] += " align-"+node.attributes["align"]
+            if "alt" in node.attributes:
+                attributes["aria-label"] = node.attributes["alt"]
+            if "width" in node.attributes:
+                attributes["width"] = node.attributes["width"]
+            if "height" in node.attributes:
+                attributes["height"] = node.attributes["height"]
+            self.body.append(self.starttag(node, "object", **attributes))
+        else:
+            html5_polyglot.HTMLTranslator.visit_image(self, node)
+
+    def depart_image(self, node):
+        if(node.attributes["uri"].endswith(".svg")):
+            self.body.append("</object>")
+        else:
+            html5_polyglot.HTMLTranslator.depart_image(self, node)
+
     def visit_title(self, node):
         html5_polyglot.HTMLTranslator.visit_title(self, node)
 
