@@ -186,10 +186,7 @@ class solution(container): # TODO add ",part" to the base class (https://github.
 
 
 class Solution(Directive):
-    # Examples are in docutils.parsers.rst.directives.*
 
-    required_arguments = 0
-    optional_arguments = 0
     has_content = True
     option_spec = {"pwd": unchanged_required, "class": class_option}
 
