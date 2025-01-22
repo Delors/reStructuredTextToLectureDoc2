@@ -138,6 +138,8 @@ class exercise(container):
     pass
 
 
+# The class is closely modeled after:
+# docutils.parsers.rst.directives.admonitions.BaseAdmonition
 class Exercise(Directive):
     """
     We are supporting protected exercise solutions in the following way:
@@ -153,31 +155,46 @@ class Exercise(Directive):
             <solution content>
     """
 
-    # Examples are in docutils.parsers.rst.directives.*
-
-    required_arguments = 0
+    optional_arguments = 1 # the optional title
     final_argument_whitespace = True
-    optional_arguments = 1
     has_content = True
-    option_spec = {"name": unchanged_required, "class": class_option}
+    option_spec = {
+        "formatted-title": unchanged_required,
+        "name": unchanged_required, 
+        "class": class_option}
 
     def run(self):
         self.assert_has_content()
-
         text = "\n".join(self.content)
-        node = exercise(rawsource=text)
-        node.attributes["classes"] = ["ld-exercise"] 
+        exercise_node = exercise(rawsource=text)
+        exercise_node.attributes["classes"] = ["ld-exercise"] 
         if "class" in self.options:
-            node.attributes["classes"] += self.options["class"]
+            exercise_node.attributes["classes"] += self.options["class"]
+
         if len(self.arguments) > 0:
             exercise_title = self.arguments[0]
-            node.attributes["title"] = exercise_title
-            node += rubric(text=exercise_title)
-            # exercise_rubric = rubric(rawsource=exercise_title)
-            # self.state.nested_parse(exercise_title, self.content_offset, exercise_rubric)
-        # Parse the directive contents.
-        self.state.nested_parse(self.content, self.content_offset, node)
-        return [node]
+            exercise_node.attributes["title"] = exercise_title
+
+            if "formatted-title" in self.options:
+                exercise_html_title = self.options["formatted-title"]
+                textnodes, messages = self.state.inline_text(exercise_html_title,
+                                                            self.lineno)
+                title = nodes.rubric(exercise_title, '', *textnodes)
+                title.source, title.line = (
+                        self.state_machine.get_source_and_line(self.lineno))
+                title.attributes["classes"] = ["ld-exercise-title"]
+                exercise_node += title
+                exercise_node += messages
+            else:
+                title = nodes.rubric(text=exercise_title)
+                title.source, title.line = (
+                        self.state_machine.get_source_and_line(self.lineno))
+                title.attributes["classes"] = ["ld-exercise-title"]
+                exercise_node += title
+
+        
+        self.state.nested_parse(self.content, self.content_offset, exercise_node)
+        return [exercise_node]
 
 
 class solution(container): # TODO add ",part" to the base class (https://github.com/docutils/docutils/blob/master/docutils/docutils/nodes.py - line 1437)
