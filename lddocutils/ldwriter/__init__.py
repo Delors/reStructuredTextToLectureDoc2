@@ -189,7 +189,6 @@ class Solution(Directive):
     # Examples are in docutils.parsers.rst.directives.*
 
     required_arguments = 0
-    final_argument_whitespace = True
     optional_arguments = 0
     has_content = True
     option_spec = {"pwd": unchanged_required, "class": class_option}
