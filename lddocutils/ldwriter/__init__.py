@@ -402,7 +402,6 @@ class Module(Directive):
         return [node]
 
 
-
 class source(inline):
     pass
 
@@ -500,7 +499,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
          <link rel="stylesheet" href="%(ld_path)s%(theme_path)s" layer="theme" />\n -->
          <style>@import url("%(ld_path)s%(theme_path)s") layer(theme)</style>
     """
-    
+
     def __init__(self, *args):
         html5_polyglot.HTMLTranslator.__init__(self, *args)
 
@@ -509,8 +508,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.ld_version = self.document.settings.ld_default_version
         self.ld_theme_path = self.document.settings.theme
         self.ld_exercises_passwords_file = self.document.settings.ld_exercises_passwords
-        
-        # Overwrite HTMLTranslator's meta tag default        
+
+        # Overwrite HTMLTranslator's meta tag default
         self.meta = [
             '<meta charset="utf-8">\n',
             '<meta name="viewport" '
@@ -586,7 +585,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                     passwordsFile.write(passwordsJSON)
 
         # let's search the DOM for classes that require special treatment
-        # by JavaScript libraries, if we find any, we will add links to the 
+        # by JavaScript libraries, if we find any, we will add links to the
         # necessary JavaScript libraries to the document.
 
         self.head_prefix.extend(
@@ -802,13 +801,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if "prefix" in node.attributes:
             source = node.attributes["prefix"] + source
         self.body.append(f'<a class="reference external" href="{source}">{source}</a>')
-        
+
     def depart_source(self, node):
         pass
 
     def visit_presenter_note(self, node):
         self.body.append(self.starttag(node, "ld-presenter-note", CLASS=" ".join(node.attributes["classes"])))
-    
+
     def depart_presenter_note(self, node):
         self.body.append("</ld-presenter-note>")
 
