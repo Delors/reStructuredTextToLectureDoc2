@@ -42,6 +42,10 @@ class legend(Admonition, Element): pass
 de.labels["repetition"] = "Wiederholung"
 en.labels["repetition"] = "Repetition"
 class repetition(Admonition, Element): pass
+de.labels["question"] = "Frage"
+en.labels["question"] = "Question"
+class question(Admonition, Element): pass
+
 
 class Example(BaseAdmonition):
 
@@ -91,6 +95,10 @@ class Repetition(BaseAdmonition):
 
     node_class = repetition
 
+class Question(BaseAdmonition):
+
+    node_class = question
+
 directives.register_directive("example", Example)
 directives.register_directive("background", Background)
 directives.register_directive("definition", Definition)
@@ -103,3 +111,4 @@ directives.register_directive("remark", Remark)
 directives.register_directive("summary", Summary)
 directives.register_directive("legend", Legend)
 directives.register_directive("repetition", Repetition)
+directives.register_directive("question", Question)

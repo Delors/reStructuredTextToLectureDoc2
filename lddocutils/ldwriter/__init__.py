@@ -16,8 +16,8 @@ from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Hash import SHA512, SHA256
 from Crypto.Random import get_random_bytes
 
-import lddocutils.ldwriter.admonitions
-import lddocutils.ldwriter.exercises
+import lddocutils.ldwriter.lddirectives.admonitions
+import lddocutils.ldwriter.lddirectives.exercises
 
 """
 Writer for LectureDoc2 HTML output.
@@ -421,24 +421,26 @@ class source(inline):
 
 class Source(Directive):
 
-    required_arguments = 0
+    optional_arguments = 1 # the optional file name otherwise the current file
     final_argument_whitespace = False
-    optional_arguments = 1
     has_content = False
-    option_spec = {"prefix": unchanged_required, "suffix": unchanged_required, "path": unchanged}
+    option_spec = {
+        "prefix": unchanged_required,
+        "suffix": unchanged_required,
+        "path": unchanged,
+    }
 
     def run(self):
         text = self.content
-        
         node = source(rawsource=text)
-        
+
         if "prefix" in self.options:
             node.attributes["prefix"] = self.options["prefix"]
         if "suffix" in self.options:
             node.attributes["suffix"] = self.options["suffix"]
 
         # it is the name of the specified file or "this" file.
-        filename = self.state_machine.document["source"] 
+        filename = self.state_machine.document["source"]
         if len(self.arguments) == 0:
             relative_path = filename
         else:
@@ -451,13 +453,14 @@ class Source(Directive):
                     node.attributes["resolved_path"] = relative_path
                 case "absolute":
                     node.attributes["resolved_path"] = os.path.abspath(relative_path)
-                case _ :
+                case _:
                     raise self.error("Unknown path type")
         else:
             node.attributes["resolved_path"] = relative_path
-        
+
         nodes = [node]
         return nodes
+
 
 class presenter_note(General, Element): pass
 
@@ -545,6 +548,9 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.exercises_passwords_titles = {}
         self.exercise_count = 0  
 
+        self.start_of_presenter_note = None
+        self.presenter_note_count = 0
+
     def visit_document(self, node):
         super().visit_document(node);
         pass;
@@ -574,28 +580,30 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
         self.meta.append(f'<meta name="version" content="LD2 {self.ld_version.upper()}" />\n')
 
+        passwords = []
         if len(self.exercises_passwords) > 0:
-            # Write all passwords to the HTML document and (optionally) to a file
-            # if self.exercises_master_password is None:
-            #    self.exercises_master_password = generatePassword(10)
-
             passwords = [{"passwords": self.exercises_passwords}]
-            if self.exercises_master_password is not None:
-                passwords.insert(0,{"master password": self.exercises_master_password})
 
+        if len(passwords) > 0:
+            if self.ld_version == "genesis" and self.exercises_master_password is not None:
+                passwords.insert(0,{"master password": self.exercises_master_password})
             passwordsJSON = json.dumps(passwords, indent=4)
 
-            if self.exercises_master_password is not None:
-                encryptedPWDs = encryptAESGCM(
-                    self.exercises_master_password, passwordsJSON, 100000
-                )
-                self.meta.append(
-                    f'<meta name="exercises-passwords" content="{encryptedPWDs}" />\n',
-                )
+        if self.exercises_master_password is not None:
+            encryptedPWDs = encryptAESGCM(
+                self.exercises_master_password, passwordsJSON, 100000
+            )
+            self.meta.append(
+                f'<meta name="exercises-passwords" content="{encryptedPWDs}" />\n',
+            )
 
-            if self.ld_exercises_passwords_file is not None:
-                with open(self.ld_exercises_passwords_file, "w") as passwordsFile:
-                    passwordsFile.write(passwordsJSON)
+            if self.ld_version != "genesis":
+                passwords.insert(0,{"master password": self.exercises_master_password})
+
+        if len(passwords) > 0 and self.ld_exercises_passwords_file is not None:
+            with open(self.ld_exercises_passwords_file, "w") as passwordsFile:
+                json.dump(passwords, passwordsFile,indent=2, ensure_ascii=False)
+                    
 
         # let's search the DOM for classes that require special treatment
         # by JavaScript libraries, if we find any, we will add links to the
@@ -732,19 +740,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         else:
             self.body.append("</div>")
 
-
-    def visit_question(self, node):
-        self.body.append(self.starttag(node, "ld-question", CLASS=" ".join(node.attributes["classes"])))
-    
-    def depart_question(self, node):
-        self.body.append("</ld-question>")
-    
-    def visit_answer(self, node):
-        self.body.append(self.starttag(node, "ld-answer", CLASS=" ".join(node.attributes["classes"])))
-
-    def depart_answer(self, node):
-        self.body.append("</ld-answer>")
-
     def visit_subscript(self, node):
         self.body.append(self.starttag(node, "sub"))
 
@@ -819,10 +814,53 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         pass
 
     def visit_presenter_note(self, node):
-        self.body.append(self.starttag(node, "ld-presenter-note", CLASS=" ".join(node.attributes["classes"])))
+        self.presenter_note_count += 1
+        
+        if self.exercises_master_password is None:
+            raise Exception("presenter notes require a master password")
+        
+        if self.start_of_presenter_note is not None:
+            raise Exception("presenter notes cannot be nested")  # TODO move to parsing phase!
+        
+        attributes = {
+            "class": " ".join(node.attributes["classes"]),
+            "data-encrypted": "true",  # ENCRYPTED is a boolean attribute
+        }
+        self.body.append(self.starttag(node, "ld-presenter-note", **attributes))
+        self.start_of_presenter_note = len(self.body)
 
     def depart_presenter_note(self, node):
-        self.body.append("</ld-presenter-note>")
+        end_of_presenter_note = len(self.body)
+        presenter_note_body = "".join(self.body[self.start_of_presenter_note : end_of_presenter_note + 1])
+        presenter_note_hash = hashlib.sha512(presenter_note_body.encode("utf-8")).digest()
+        # 2.
+        del self.body[self.start_of_presenter_note :]
+        self.start_of_presenter_note = None
+        # 3.
+        pwd = self.exercises_master_password.encode("utf-8")
+        # We really want a stable salt and iv to avoid that re-running
+        # rst2ld changes the output when the password is the same
+        # and the content hasn't changed!
+        salt = presenter_note_hash[:32]
+        iv = presenter_note_hash[32:44]  # get_random_bytes(12)
+        aesKey = PBKDF2(
+            pwd, salt, dkLen=32, count=ldPBKDF2IterationCount, hmac_hash_module=SHA256
+        )
+        cipher = AES.new(aesKey, AES.MODE_GCM, nonce=iv, mac_len=16)
+        (ciphertext, tag) = cipher.encrypt_and_digest(presenter_note_body.encode("utf-8"))
+        # 4.
+        self.body.append(
+            base64.b64encode(str(ldPBKDF2IterationCount).encode("utf-8")).decode(
+                "utf-8"
+            )
+        )
+        self.body.append(":")
+        self.body.append(base64.b64encode(salt).decode("utf-8"))
+        self.body.append(":")
+        self.body.append(base64.b64encode(iv).decode("utf-8"))
+        self.body.append(":")
+        self.body.append(base64.b64encode(ciphertext + tag).decode("utf-8"))
+        self.body.append("</ld-presenter-note>\n")
 
     # --------------------------------------------------------------------------
     #
