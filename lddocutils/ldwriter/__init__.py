@@ -2,11 +2,8 @@ from itertools import batched
 import json
 import textwrap
 
-from docutils import nodes
-from docutils.nodes import inline, container, title, rubric
-from docutils import frontend
-from docutils.nodes import General, Element
-
+from docutils import nodes, frontend
+from docutils.nodes import General, Element, inline, container, title, rubric
 from docutils.parsers.rst import Directive, directives, roles
 from docutils.parsers.rst.directives import unchanged_required, class_option, unchanged
 from docutils.writers import html5_polyglot
