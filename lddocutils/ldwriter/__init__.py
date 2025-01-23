@@ -586,6 +586,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             if self.ld_version == "genesis" and self.exercises_master_password is not None:
                 passwords.insert(0,{"master password": self.exercises_master_password})
             passwordsJSON = json.dumps(passwords, indent=4)
+        else:
+            passwordsJSON = "[\n]"
 
         if self.exercises_master_password is not None:
             encryptedPWDs = encryptAESGCM(
