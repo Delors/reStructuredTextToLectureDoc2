@@ -799,7 +799,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if(card_id > 0):
             node.attributes["classes"] += ["incremental"]
         self.card_count.append(card_id + 1)
-        self.body.append(self.starttag(node, "ld-card", CLASS=" ".join(node.attributes["classes"])))
+        self.body.append(self.starttag(node, "ld-card"))
 
     def depart_card(self, node):
         self.body.append("</ld-card>")
