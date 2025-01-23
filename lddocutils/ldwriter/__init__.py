@@ -287,9 +287,8 @@ class deck(container):
 
 class Deck(Directive):
 
-    required_arguments = 0
-    final_argument_whitespace = True
     optional_arguments = 1
+    final_argument_whitespace = True
     has_content = True
     option_spec = {}
 
@@ -311,7 +310,6 @@ class card(container):
 
 class Card(Directive):
 
-    required_arguments = 0
     final_argument_whitespace = True
     optional_arguments = 1
     has_content = True
@@ -674,10 +672,9 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             html5_polyglot.HTMLTranslator.visit_meta(self, node)
 
     def visit_image(self, node):
-        if node.attributes["uri"].endswith(".svg"):
+        if node.attributes["uri"].endswith(".svg") and not "icon" in node.attributes["classes"]:
             # SVGs need to be embedded using an object tag to be displayed
             # correctly, when external fonts are referenced in the svg file.
-            # TODO Handle "alts"
             attributes = {
                 "class": " ".join(node.attributes["classes"]),
                 "data": node.attributes["uri"],
@@ -752,21 +749,22 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_superscript(self, node):
         self.body.append("</sup>")
 
-    def visit_stack(self, node):
+    def visit_stack(self, node): # [DEPRECATED] GENESIS
         self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
 
-    def depart_stack(self, node):
+    def depart_stack(self, node): # [DEPRECATED] GENESIS
         self.body.append("</div>")
 
-    def visit_layer(self, node):
+    def visit_layer(self, node): # [DEPRECATED] GENESIS
         self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
 
-    def depart_layer(self, node):
+    def depart_layer(self, node): # [DEPRECATED] GENESIS
         self.body.append("</div>")
 
     def visit_deck(self, node):
-        self.card_count.append(0)
-        self.body.append(self.starttag(node, "ld-deck", CLASS=" ".join(node.attributes["classes"])))
+        self.card_count.append(0) # required to determine if a card is incremental
+        starttag = self.starttag(node, "ld-deck")
+        self.body.append(starttag)
 
     def depart_deck(self, node):
         self.card_count.pop()
