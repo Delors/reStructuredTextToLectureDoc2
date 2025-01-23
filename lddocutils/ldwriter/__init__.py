@@ -643,17 +643,30 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.html_head.extend(self.head[1:])
         self.fragment.extend(self.body)
 
-        title_slide_classes = node.document["classes"] + ["ld-slide"]
+        if self.ld_version == "genesis":
+            title_slide_classes = node.document["classes"] + ["ld-slide"]
+        else:
+            title_slide_classes = node.document["classes"]
         title_slide_id = next(iter(node.ids))
         self.body_prefix.append(
             self.starttag({}, "template")
         ) 
-        self.body_suffix.insert(0,"</template>\n");
+        self.body_suffix.insert(0,"</template>\n");        
+        if self.ld_version == "genesis":
+            slide_tag = "div"
+        else:
+            slide_tag = "ld-topic"
         self.body_prefix.append(
-            self.starttag({"classes": title_slide_classes, "ids": [title_slide_id] }, "div")
+            self.starttag({
+                "classes": title_slide_classes, 
+                "ids": [title_slide_id] }, 
+                slide_tag)
         )
         if not self.section_count:
-            self.body.append("</div>\n")
+            if self.ld_version == "genesis":
+                self.body.append("</div>\n")
+            else:
+                self.body.append("</ld-topic>\n")
 
         self.html_body.extend(
             self.body_prefix[1:]
@@ -716,7 +729,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def visit_section(self, node):
         # The first section ends our title slide!
         if not self.section_count:
-            self.body.append("</div>\n")
+            if self.ld_version == "genesis":
+                self.body.append("</div>\n")
+            else:
+                self.body.append("</ld-topic>\n")
 
         self.section_count += 1
         self.section_level += 1
@@ -727,7 +743,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             if "hide-slide" in node.attributes["classes"]:
                 self.start_of_slide_to_hide = len(self.body)
             else:
-                self.body.append(self.starttag(node, "div", CLASS="ld-slide"))
+                if self.ld_version == "genesis":
+                    self.body.append(self.starttag(node, "div", CLASS="ld-slide"))
+                else:
+                    self.body.append(self.starttag(node, "ld-topic"))
 
     def depart_section(self, node):
         self.section_level -= 1
@@ -735,7 +754,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             del self.body[self.start_of_slide_to_hide :]
             self.start_of_slide_to_hide = None
         else:
-            self.body.append("</div>")
+            if self.ld_version == "genesis":
+                self.body.append("</div>")
+            else:
+                self.body.append("</ld-topic>")
 
     def visit_subscript(self, node):
         self.body.append(self.starttag(node, "sub"))
