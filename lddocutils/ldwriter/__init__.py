@@ -622,7 +622,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 self.head.append(textwrap.dedent("""\
                     <script>
                         window.MathJax = {
-                            tex: { tags: 'ams', },
+                            tex: { tags: 'ams' },
                             chtml: { displayAlign: 'center' /*left or center*/ }
                         };
                     </script>\n"""))
