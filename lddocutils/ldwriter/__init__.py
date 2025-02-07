@@ -360,6 +360,28 @@ class Supplemental(Directive):
         return nodes
 
 
+class story(container):
+    pass
+
+
+class Story(Directive):
+
+    required_arguments = 0
+    final_argument_whitespace = True
+    optional_arguments = 1
+    has_content = True
+    option_spec = {}
+
+    def run(self):
+        self.assert_has_content()
+
+        text = "\n".join(self.content)
+        node = story(rawsource=text)
+        node.attributes["classes"] += self.arguments
+        self.state.nested_parse(self.content, self.content_offset, node)
+        nodes = [node]
+        return nodes
+
 class scrollable(container):
     pass
 
@@ -864,6 +886,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_scrollable(self, node):
         self.body.append("</ld-scrollable>")
 
+    def visit_story(self, node):
+        self.body.append(self.starttag(node, "ld-story", CLASS=" ".join(node.attributes["classes"])))
+    
+    def depart_story(self, node):
+        self.body.append("</ld-story>")
+
     def visit_presenter_note(self, node):
         self.presenter_note_count += 1
         
@@ -1022,6 +1050,8 @@ directives.register_directive("incremental", Incremental)
 directives.register_directive("supplemental", Supplemental)
 
 directives.register_directive("presenter-note", PresenterNote)
+
+directives.register_directive("story", Story)
 
 directives.register_directive("scrollable", Scrollable)
 
