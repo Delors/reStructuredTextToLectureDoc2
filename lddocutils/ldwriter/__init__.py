@@ -232,11 +232,12 @@ class Solution(Directive):
         return nodes
 
 
+# DEPRECATED in Renaissance
 class stack(container):
     # Examples are in `docutils.nodes`
     pass
 
-
+# DEPRECATED in Renaissance
 class Stack(Directive):
 
     required_arguments = 0
@@ -256,10 +257,11 @@ class Stack(Directive):
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
 
+# DEPRECATED in Renaissance
 class layer(container):
     pass
 
-
+# DEPRECATED in Renaissance
 class Layer(Directive):
 
     required_arguments = 0
@@ -357,6 +359,27 @@ class Supplemental(Directive):
         nodes = [node]
         return nodes
 
+
+class scrollable(container):
+    pass
+
+
+class Scrollable(Directive):
+
+    required_arguments = 0
+    final_argument_whitespace = True
+    optional_arguments = 1
+    has_content = True
+    option_spec = {}
+
+    def run(self):
+        self.assert_has_content()
+        text = "\n".join(self.content)
+        node = scrollable(rawsource=text)
+        node.attributes["classes"] += self.arguments
+        self.state.nested_parse(self.content, self.content_offset, node)
+        nodes = [node]
+        return nodes
 
 class incremental(container):
     pass
@@ -835,6 +858,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_source(self, node):
         pass
 
+    def visit_scrollable(self, node):
+        self.body.append(self.starttag(node, "ld-scrollable", CLASS=" ".join(node.attributes["classes"])))
+    
+    def depart_scrollable(self, node):
+        self.body.append("</ld-scrollable>")
+
     def visit_presenter_note(self, node):
         self.presenter_note_count += 1
         
@@ -993,6 +1022,8 @@ directives.register_directive("incremental", Incremental)
 directives.register_directive("supplemental", Supplemental)
 
 directives.register_directive("presenter-note", PresenterNote)
+
+directives.register_directive("scrollable", Scrollable)
 
 #
 # Advanced directives which are (optionally) parametrized
