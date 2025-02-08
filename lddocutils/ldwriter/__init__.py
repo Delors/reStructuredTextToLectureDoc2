@@ -392,12 +392,16 @@ class Scrollable(Directive):
     final_argument_whitespace = True
     optional_arguments = 1
     has_content = True
-    option_spec = {}
+    option_spec = {
+        "height": unchanged_required
+    }
 
     def run(self):
         self.assert_has_content()
         text = "\n".join(self.content)
         node = scrollable(rawsource=text)
+        if "height" in self.options:
+            node.attributes["height"] = self.options["height"]
         node.attributes["classes"] += self.arguments
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
@@ -881,7 +885,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         pass
 
     def visit_scrollable(self, node):
-        self.body.append(self.starttag(node, "ld-scrollable", CLASS=" ".join(node.attributes["classes"])))
+        attributes = {
+            "class": " ".join(node.attributes["classes"])
+        }
+        if "height" in node.attributes:
+            attributes["data-height"] = node.attributes["height"]
+        self.body.append(self.starttag(node, "ld-scrollable", **attributes))
+
     
     def depart_scrollable(self, node):
         self.body.append("</ld-scrollable>")
