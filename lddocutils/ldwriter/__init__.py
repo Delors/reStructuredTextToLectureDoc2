@@ -16,8 +16,8 @@ from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Hash import SHA512, SHA256
 from Crypto.Random import get_random_bytes
 
-import lddocutils.ldwriter.lddirectives.admonitions
-import lddocutils.ldwriter.lddirectives.exercises
+
+
 
 """
 Writer for LectureDoc2 HTML output.
@@ -1071,3 +1071,9 @@ directives.register_directive("exercise", Exercise)
 directives.register_directive("solution", Solution)
 
 directives.register_directive("source", Source)
+
+
+# Imported for the "side effects" of registering the directives
+import lddocutils.ldwriter.lddirectives.admonitions
+import lddocutils.ldwriter.lddirectives.exercises
+import lddocutils.ldwriter.lddirectives.grids
