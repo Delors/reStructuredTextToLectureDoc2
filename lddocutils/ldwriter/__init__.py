@@ -56,8 +56,8 @@ class Writer(html5_polyglot.Writer):
                 {"metavar": "<URL>", "default": "ld"},
             ),
             (
-                "File in which the exercises' passwords are stored.",
-                ["--ld-exercises-passwords"],
+                "File in which the extracted passwords are stored.",
+                ["--ld-passwords"],
                 {"metavar": "<URL>"},
             ),
              (
@@ -570,7 +570,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.ld_path = self.document.settings.ld_path
         self.ld_version = self.document.settings.ld_default_version
         self.ld_theme_path = self.document.settings.theme
-        self.ld_exercises_passwords_file = self.document.settings.ld_exercises_passwords
+        self.ld_passwords_file = self.document.settings.ld_passwords
 
         # Overwrite HTMLTranslator's meta tag default
         self.meta = [
@@ -589,11 +589,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         # The following attributes are used to handle exercises and solutions
         self.start_of_exercise = None  
         self.current_exercise_name = None  
-        self.start_of_solution = None
-        self.exercises_master_password = None
+        self.start_of_solution = None        
         self.exercises_passwords = []
         self.exercises_passwords_titles = {}
         self.exercise_count = 0  
+
+        self.master_password = None
 
         self.start_of_presenter_note = None
         self.presenter_note_count = 0
@@ -632,25 +633,25 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             passwords = [{"passwords": self.exercises_passwords}]
 
         if len(passwords) > 0:
-            if self.ld_version == "genesis" and self.exercises_master_password is not None:
-                passwords.insert(0,{"master password": self.exercises_master_password})
+            if self.ld_version == "genesis" and self.master_password is not None:
+                passwords.insert(0,{"master password": self.master_password})
             passwordsJSON = json.dumps(passwords, indent=4)
         else:
             passwordsJSON = "[\n]"
 
-        if self.exercises_master_password is not None:
+        if self.master_password is not None:
             encryptedPWDs = encryptAESGCM(
-                self.exercises_master_password, passwordsJSON, 100000
+                self.master_password, passwordsJSON, 100000
             )
             self.meta.append(
                 f'<meta name="exercises-passwords" content="{encryptedPWDs}" />\n',
             )
 
             if self.ld_version != "genesis":
-                passwords.insert(0,{"master password": self.exercises_master_password})
+                passwords.insert(0,{"master password": self.master_password})
 
-        if len(passwords) > 0 and self.ld_exercises_passwords_file is not None:
-            with open(self.ld_exercises_passwords_file, "w") as passwordsFile:
+        if len(passwords) > 0 and self.ld_passwords_file is not None:
+            with open(self.ld_passwords_file, "w") as passwordsFile:
                 json.dump(passwords, passwordsFile,indent=2, ensure_ascii=False)
                     
 
@@ -728,8 +729,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         )
 
     def visit_meta(self, node):
-        if node.attributes["name"] == "exercises-master-password":
-            self.exercises_master_password = node.attributes["content"]
+        if node.attributes["name"] == "master-password":
+            self.master_password = node.attributes["content"]
         elif node.attributes["name"] == "version":
             self.ld_version = node.attributes["content"]
         else:
@@ -905,7 +906,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def visit_presenter_note(self, node):
         self.presenter_note_count += 1
         
-        if self.exercises_master_password is None:
+        if self.master_password is None:
             raise Exception("presenter notes require a master password")
         
         if self.start_of_presenter_note is not None:
@@ -926,7 +927,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         del self.body[self.start_of_presenter_note :]
         self.start_of_presenter_note = None
         # 3.
-        pwd = self.exercises_master_password.encode("utf-8")
+        pwd = self.master_password.encode("utf-8")
         # We really want a stable salt and iv to avoid that re-running
         # rst2ld changes the output when the password is the same
         # and the content hasn't changed!

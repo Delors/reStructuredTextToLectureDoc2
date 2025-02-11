@@ -117,7 +117,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. code:: rst
 
       .. meta::
-         :exercises-master-password: <Master-password>
+         :master-password: <Master-password>
 
 .. container:: cheat-sheet-block
    

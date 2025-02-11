@@ -5,7 +5,7 @@
     :license: Released under the terms of the `2-Clause BSD license`.
     :id: lecturedoc2-tutorial
     :slide-dimensions: 1920x1200
-    :exercises-master-password: 123456
+    :master-password: 123456
 
 .. |at| unicode:: 0x40
 
@@ -599,7 +599,7 @@ If you have multiple exercises, you can define a master password (123456) to unl
     :class: copy-to-clipboard
 
     .. meta::
-        :exercises-master-password: 123456
+        :master-password: 123456
 
 
 
