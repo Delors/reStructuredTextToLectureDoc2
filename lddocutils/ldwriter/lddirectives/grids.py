@@ -29,17 +29,18 @@ class Grid(Directive):
     a simple multiple column layout.
     """
 
-    optional_arguments = 0 
-    final_argument_whitespace = False
+    optional_arguments = 1 
+    final_argument_whitespace = True
     has_content = True
-    option_spec = {"class": class_option}
+
 
     def run(self):
         self.assert_has_content()
         text = "\n".join(self.content)
         node = grid(rawsource=text)
-        if "class" in self.options:
-            node.attributes["classes"] = self.options["class"]
+        if len(self.arguments) > 0:
+            node.attributes["classes"] =  self.arguments
+        # TODO add possibility to specify the overall layout
         node.attributes["classes"] += ["default-layout"]
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -58,8 +59,10 @@ class cell(container):
 
 class Cell(Directive):
 
+    optional_arguments = 1 
+    final_argument_whitespace = True
     has_content = True
-    option_spec = { "class": class_option ,"align": unchanged_required}
+    option_spec = { "align": unchanged_required}
 
     def run(self):
         # TODO check that cells are the only children of grid nodes
@@ -67,8 +70,8 @@ class Cell(Directive):
 
         text = "\n".join(self.content)
         node = cell(rawsource=text)
-        if "class" in self.options:
-            node.attributes["classes"] = self.options["class"]
+        if len(self.arguments) > 0:
+            node.attributes["classes"] =  self.arguments
         if "align" in self.options:
             node.attributes["align"] = self.options["align"]    
         self.state.nested_parse(self.content, self.content_offset, node)
