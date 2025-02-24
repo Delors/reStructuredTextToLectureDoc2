@@ -145,6 +145,7 @@ class Exercise(Directive):
     We are supporting protected exercise solutions in the following way:
 
     .. exercise:: "title"
+        :formatted-title: This is **important**
         :class: complicated
 
         <exercise content>
@@ -176,8 +177,8 @@ class Exercise(Directive):
             exercise_node.attributes["title"] = exercise_title
 
             if "formatted-title" in self.options:
-                exercise_html_title = self.options["formatted-title"]
-                textnodes, messages = self.state.inline_text(exercise_html_title,
+                exercise_formatted_title = self.options["formatted-title"]
+                textnodes, messages = self.state.inline_text(exercise_formatted_title,
                                                             self.lineno)
                 title = nodes.rubric(exercise_title, '', *textnodes)
                 title.source, title.line = (
