@@ -807,7 +807,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             del self.body[self.start_of_slide_to_hide :]
             self.start_of_slide_to_hide = None
         else:
-            if self.ld_version == "genesis":
+            if self.section_level > 0 or self.ld_version == "genesis":
                 self.body.append("</div>")
             else:
                 self.body.append("</ld-topic>")
