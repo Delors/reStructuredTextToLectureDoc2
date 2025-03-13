@@ -45,7 +45,7 @@ A basic slide consists of a (section) header and some reStructuredText content.
 .. example::
 
     .. code:: rst
-        :class: black copy-to-clipboard
+        :class: copy-to-clipboard
 
         Basics
         -----------
@@ -60,11 +60,10 @@ Embedding Formulae
 Embed math equations using reStructuredText's default directive (``.. math::``) and role (``:math:`...```).
 
 .. example::
-    :class: far-far-smaller 
 
-    .. container:: two-columns 
+    .. grid::
 
-        .. container:: column
+        .. cell:: 
 
             The following rst fragment:
 
@@ -82,7 +81,7 @@ Embed math equations using reStructuredText's default directive (``.. math::``) 
                         0 + 1 & = 0 - 1 & = 1
                     \end{matrix}
 
-        .. container:: column
+        .. cell::
 
             Will render like this:
 
@@ -171,31 +170,32 @@ In case of (un-)ordered lists (``ol`` or ``ul`` in HTML) it is sufficient to ass
 
 .. example::
 
-    .. container:: two-columns
-
-        .. container:: column
+    .. grid::
+        
+        .. cell::
 
             The following code:
 
-                .. code:: rst
-                  :class: copy-to-clipboard
-                  :number-lines:
+            .. code:: rst
+                :class: copy-to-clipboard
+                :number-lines:
 
-                  .. class:: incremental
+                .. class:: incremental
 
-                  - this
-                  - is
-                  - a test
+                - this
+                - is
+                - a test
 
-        .. container:: column
+        .. cell::
 
             Will render incrementally like this:
 
-            .. class:: incremental
+                .. class:: incremental
 
-            - this
-            - is
-            - a test
+                - this
+                - is
+                - a test
+
 
 
 Slide Dimensions
@@ -396,9 +396,9 @@ LectureDoc2 supports links to external resources:
 
 .. example:: 
 
-    .. container:: two-columns
+    .. grid::
 
-        .. container:: column
+        .. cell::
 
             Slide with explicit marked-up element:
 
@@ -406,16 +406,16 @@ LectureDoc2 supports links to external resources:
                 :class: copy-to-clipboard
                 :number-lines:
 
-                Advanced Formatting
+                Adv. Formatting
                 ---------------------
 
                 .. container:: incremental
 
-                    .. _Link Target in Incremental Block:
+                  .. _Link Target in Block:
 
-                    See the LectureDoc2 Cheat Sheet.
+                  See the LectureDoc2 Cheat Sheet.
 
-        .. container:: column
+        .. cell::
 
             References are defined as follows:
 
@@ -425,10 +425,10 @@ LectureDoc2 supports links to external resources:
 
                 Links to internal targets: 
 
-                - Link to slide: `Advanced Formatting`_
+                - Link to slide: `Adv. Formatting`_
                 - Link to a marked-up element: 
                 
-                  `Link Target in Incremental Block`_
+                  `Link Target in Block`_
 
 
 Scientific Citations
@@ -625,7 +625,7 @@ Image in the Background (Hack)
     .. card:: overlay
 
         .. example:: 
-            :class: transparent margin-1em
+            :class: backdrop-blur margin-0-5em
 
             .. code:: rst
                 :class: copy-to-clipboard
