@@ -127,6 +127,13 @@ class answer(Admonition, Element):
     pass
 
 
+de.labels["remember"] = "Zur Erinnerung"
+en.labels["remember"] = "Remember"
+
+
+class remember(Admonition, Element):
+    pass
+
 
 
 class Background(BaseAdmonition):
@@ -231,3 +238,11 @@ class Answer(BaseAdmonition):
 
 
 directives.register_directive("answer", Answer)
+
+
+class Remember(BaseAdmonition):
+
+    node_class = remember
+
+
+directives.register_directive("remember", Remember)
