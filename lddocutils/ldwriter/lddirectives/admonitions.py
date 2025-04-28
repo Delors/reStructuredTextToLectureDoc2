@@ -135,6 +135,14 @@ class remember(Admonition, Element):
     pass
 
 
+de.labels["deprecated"] = "Veraltet"
+en.labels["deprecated"] = "Deprecated"
+
+
+class deprecated(Admonition, Element):
+    pass
+
+
 
 class Background(BaseAdmonition):
 
@@ -246,3 +254,11 @@ class Remember(BaseAdmonition):
 
 
 directives.register_directive("remember", Remember)
+
+
+class Deprecated(BaseAdmonition):
+
+    node_class = deprecated
+
+
+directives.register_directive("deprecated", Deprecated)
