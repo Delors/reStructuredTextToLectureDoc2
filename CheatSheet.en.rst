@@ -6,15 +6,7 @@
     :id: ld2-dhbw-cheat-sheet
     :slide-dimensions: 2560x1440
 
-.. role:: dhbw-red
-.. role:: shiny-red
-.. role:: shiny-green
-.. role:: the-green
-.. role:: the-blue
-.. role:: dark-red
-.. role:: black
-
-.. role:: minor
+.. role:: red
 
 
 .. THE FOLLOWING CHANGES THE OVERALL SLIDE LAYOUT   
@@ -397,7 +389,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
 
    .. rubric:: Stacked Layouts
 
-   Stacked layouts are based on nested layers. Each layer - except of the first one - needs to have the class ``incremental`` and/or the class ``overlay`` for transparent layers. :dhbw-red:`(Up to 10 layers are supported.)` To turn off the numbering of opaque layers use ``.no-number``.
+   Stacked layouts are based on nested layers. Each layer - except of the first one - needs to have the class ``incremental`` and/or the class ``overlay`` for transparent layers. :red:`(Up to 10 layers are supported.)` To turn off the numbering of opaque layers use ``.no-number``.
 
    .. rubric:: Images in Stacked Layouts
 
@@ -450,19 +442,11 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    
    .. rubric:: Font Colors
 
-   :minor:`DHBW Colors:` ``dhbw-red``, ``dhbw-gray``, ``dhbw-light-gray``
-   
-   :minor:`DHBW Compatible Colors:` ``the-blue``, ``the-green``, ``the-orange``
-
-   :minor:`Other:` ``black``, ``shiny-green``, ``shiny-red``, ``dark-red``
+   ``red``, ``gray``, ``light-gray``, ``blue``, ``green``, ``orange``, ``black``, ``shiny-green``, ``shiny-red``, ``dark-red``
 
    .. rubric:: Background Colors
 
-   :minor:`DHBW Colors:` ``dhbw-red-background``, ``dhbw-gray-background``, ``dhbw-light-gray-background``
-   
-   :minor:`DHBW Compatible Colors:` ``the-blue-background``, ``the-green-background``, ``the-yellow-background``
-
-   :minor:`Other:` ``light-green-background``, ``white-background``
+   ``red-background``, ``dhbw-gray-background``, ``dhbw-light-gray-background``, ``white-background``, ``blue-background``, ``light-green-background``, ``green-background``, ``yellow-background``
 
 
    .. rubric:: Example
@@ -562,14 +546,14 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
       .. role:: incremental   
       .. role:: eng
       .. role:: ger
-            .. role:: minor
+      .. role:: peripheral
       .. role:: obsolete
-      .. role:: dhbw-red
-      .. role:: dhbw-gray
-      .. role:: dhbw-light-gray
-      .. role:: the-blue
-      .. role:: the-green
-      .. role:: the-orange
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
       .. role:: shiny-green
       .. role:: shiny-red 
       .. role:: dark-red
