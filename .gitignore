@@ -3,4 +3,4 @@ __pycache__
 .vscode
 *.rst.html
 *.rst.html.pdf
-*.rst.html.passwords.txt
+*.rst.html.passwords.*
