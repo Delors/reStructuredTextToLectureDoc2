@@ -161,14 +161,14 @@ class Exercise(Directive):
     has_content = True
     option_spec = {
         "formatted-title": unchanged_required,
-        "name": unchanged_required, 
+        "name": unchanged_required,
         "class": class_option}
 
     def run(self):
         self.assert_has_content()
         text = "\n".join(self.content)
         exercise_node = exercise(rawsource=text)
-        exercise_node.attributes["classes"] = ["ld-exercise"] 
+        exercise_node.attributes["classes"] = ["ld-exercise"]
         if "class" in self.options:
             exercise_node.attributes["classes"] += self.options["class"]
 
@@ -193,7 +193,7 @@ class Exercise(Directive):
                 title.attributes["classes"] = ["ld-exercise-title"]
                 exercise_node += title
 
-        
+
         self.state.nested_parse(self.content, self.content_offset, exercise_node)
         return [exercise_node]
 
@@ -253,7 +253,7 @@ class Stack(Directive):
         node = stack(rawsource=text)
         if "stack" in self.arguments:
             raise self.error('"stack" is superfluous; it is automatically added.')
-        node.attributes["classes"] += ["stack"] + self.arguments 
+        node.attributes["classes"] += ["stack"] + self.arguments
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -301,7 +301,7 @@ class Deck(Directive):
         node = deck(rawsource=text)
         if "deck" in self.arguments:
             raise self.error('"deck" is superfluous; it is automatically added.')
-        node.attributes["classes"] += self.arguments 
+        node.attributes["classes"] += self.arguments
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -404,33 +404,6 @@ class Scrollable(Directive):
         if "height" in self.options:
             node.attributes["height"] = self.options["height"]
         node.attributes["classes"] += self.arguments
-        self.state.nested_parse(self.content, self.content_offset, node)
-        nodes = [node]
-        return nodes
-
-class incremental(container):
-    pass
-
-
-class Incremental(Directive):
-
-    required_arguments = 0
-    final_argument_whitespace = True
-    optional_arguments = 1
-    has_content = True
-    option_spec = {}
-
-    def run(self):
-        self.assert_has_content()
-        if "incremental" in self.arguments:
-            raise self.error(
-                '"incremental" is superfluous; it is automatically added.'
-            )
-
-        text = "\n".join(self.content)
-        node = incremental(rawsource=text)
-        
-        node.attributes["classes"] += ["incremental"] + self.arguments
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
@@ -542,7 +515,7 @@ class PresenterNote(Directive):
 class LDTranslator(html5_polyglot.HTMLTranslator):
 
     mathjax_script = '<script type="text/javascript" src="%s"></script>\n'
-    """ We need to ensure that MathJax is properly initialized; we will 
+    """ We need to ensure that MathJax is properly initialized; we will
         call it later to do the typesetting."""
 
     ld_scripts_and_styles_template_genesis = """
@@ -559,7 +532,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     """
 
     theme_template_renaissance = """
-    <!-- As of 2024 it is not yet possible to use "layer" with linked stylesheets 
+    <!-- As of 2024 it is not yet possible to use "layer" with linked stylesheets
          <link rel="stylesheet" href="%(ld_path)s%(theme_path)s" layer="theme" />\n -->
          <style>@import url("%(ld_path)s%(theme_path)s") layer(theme)</style>
     """
@@ -588,12 +561,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.start_of_slide_to_hide = None
 
         # The following attributes are used to handle exercises and solutions
-        self.start_of_exercise = None  
-        self.current_exercise_name = None  
-        self.start_of_solution = None        
+        self.start_of_exercise = None
+        self.current_exercise_name = None
+        self.start_of_solution = None
         self.exercises_passwords = []
         self.exercises_passwords_titles = {}
-        self.exercise_count = 0  
+        self.exercise_count = 0
 
         self.master_password = None
 
@@ -616,7 +589,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         return required_modules
 
     def depart_document(self, node):
-        ld_path = self.ld_path + "/" + self.ld_version 
+        ld_path = self.ld_path + "/" + self.ld_version
 
         if self.ld_version == "genesis":
             self.stylesheet = [self.ld_scripts_and_styles_template_genesis % {"ld_path": ld_path}]
@@ -624,7 +597,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             self.stylesheet = [self.ld_scripts_and_styles_template_renaissance % {"ld_path": ld_path}]
             if self.ld_theme_path is not None:
                 self.stylesheet.append(self.theme_template_renaissance % {"ld_path": ld_path, "theme_path": "/" + self.ld_theme_path})
-        else: 
+        else:
             raise Exception("Unknown LectureDoc2 version: " + self.ld_version)
 
         self.meta.append(f'<meta name="version" content="LD2 {self.ld_version.upper()}" />\n')
@@ -654,7 +627,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if len(passwords) > 0 and self.ld_passwords_file is not None:
             with open(self.ld_passwords_file, "w") as passwordsFile:
                 json.dump(passwords, passwordsFile,indent=2, ensure_ascii=False)
-                    
+
 
         # let's search the DOM for classes that require special treatment
         # by JavaScript libraries, if we find any, we will add links to the
@@ -703,16 +676,16 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         title_slide_id = next(iter(node.ids))
         self.body_prefix.append(
             self.starttag({}, "template")
-        ) 
-        self.body_suffix.insert(0,"</template>\n");        
+        )
+        self.body_suffix.insert(0,"</template>\n");
         if self.ld_version == "genesis":
             slide_tag = "div"
         else:
             slide_tag = "ld-topic"
         self.body_prefix.append(
             self.starttag({
-                "classes": title_slide_classes, 
-                "ids": [title_slide_id] }, 
+                "classes": title_slide_classes,
+                "ids": [title_slide_id] },
                 slide_tag)
         )
         if not self.section_count:
@@ -857,12 +830,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_card(self, node):
         self.body.append("</ld-card>")
 
-    def visit_incremental(self, node):
-        self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
-
-    def depart_incremental(self, node):
-        self.body.append("</div>")
-
     def visit_module(self, node):
         self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
 
@@ -894,25 +861,25 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             attributes["data-height"] = node.attributes["height"]
         self.body.append(self.starttag(node, "ld-scrollable", **attributes))
 
-    
+
     def depart_scrollable(self, node):
         self.body.append("</ld-scrollable>")
 
     def visit_story(self, node):
         self.body.append(self.starttag(node, "ld-story", CLASS=" ".join(node.attributes["classes"])))
-    
+
     def depart_story(self, node):
         self.body.append("</ld-story>")
 
     def visit_presenter_note(self, node):
         self.presenter_note_count += 1
-        
+
         if self.master_password is None:
             raise Exception("presenter notes require a master password")
-        
+
         if self.start_of_presenter_note is not None:
             raise Exception("presenter notes cannot be nested")  # TODO move to parsing phase!
-        
+
         attributes = {
             "class": " ".join(node.attributes["classes"]),
             "data-encrypted": "true",  # ENCRYPTED is a boolean attribute
@@ -1058,7 +1025,6 @@ directives.register_directive("card", Card) # RENAISSANCE
 
 directives.register_directive("module", Module)
 
-directives.register_directive("incremental", Incremental)
 directives.register_directive("supplemental", Supplemental)
 
 directives.register_directive("presenter-note", PresenterNote)
