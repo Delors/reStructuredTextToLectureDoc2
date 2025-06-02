@@ -137,9 +137,16 @@ class remember(Admonition, Element):
 
 de.labels["deprecated"] = "Veraltet"
 en.labels["deprecated"] = "Deprecated"
-
-
 class deprecated(Admonition, Element):
+    pass
+
+
+
+de.labels["assessment"] = "Bewertung"
+en.labels["assessment"] = "Assessment"
+
+
+class assessment(Admonition, Element):
     pass
 
 
@@ -262,3 +269,11 @@ class Deprecated(BaseAdmonition):
 
 
 directives.register_directive("deprecated", Deprecated)
+
+
+class Assessment(BaseAdmonition):
+
+    node_class = assessment
+
+
+directives.register_directive("assessment", Assessment)
