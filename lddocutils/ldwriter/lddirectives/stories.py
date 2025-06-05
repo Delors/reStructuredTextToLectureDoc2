@@ -1,9 +1,8 @@
-from docutils import nodes, frontend
-from docutils.nodes import General, Element, inline, container, title, rubric
+from docutils.nodes import General, Element, inline, container, title, rubric, make_id
 from docutils.parsers.rst import Directive, directives, roles
 from docutils.parsers.rst.directives import unchanged_required, class_option, unchanged
 
-from lddocutils.ldwriter import LDTranslator
+from lddocutils.ldwriter import LDTranslator, make_classes
 
 class story(container):
     pass
@@ -22,7 +21,7 @@ class Story(Directive):
 
         text = "\n".join(self.content)
         node = story(rawsource=text)
-        node.attributes["classes"] += self.arguments
+        node.attributes["classes"] += make_classes(self.arguments)
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
@@ -30,10 +29,10 @@ class Story(Directive):
 
 def visit_story(self, node):
     self.body.append(
-        # When we explicitly set the class attribute, we will end up with 
-        # a class attribute in HTML that lists all classes twice! Hence, 
+        # When we explicitly set the class attribute, we will end up with
+        # a class attribute in HTML that lists all classes twice! Hence,
         # don't add: ", CLASS=" ".join(node.attributes["classes"]))"
-        self.starttag(node, "ld-story") 
+        self.starttag(node, "ld-story")
     )
 
 

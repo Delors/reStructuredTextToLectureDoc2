@@ -3,7 +3,7 @@ import json
 import textwrap
 
 from docutils import nodes, frontend
-from docutils.nodes import General, Element, inline, container, title, rubric
+from docutils.nodes import General, Element, inline, container, title, rubric,make_id
 from docutils.parsers.rst import Directive, directives, roles
 from docutils.parsers.rst.directives import unchanged_required, class_option, unchanged
 from docutils.writers import html5_polyglot
@@ -128,6 +128,9 @@ def encryptAESGCM(pwd, plaintext, iterationCount=ldPBKDF2IterationCount):
         + base64.b64encode(ciphertext + tag).decode("utf-8")
     )
 
+
+def make_classes(arguments : list[str]) -> list[str]:
+    return [make_id(clazz) for arg in arguments for clazz in arg.split()];
 
 class exercise(container):
     """Represents an exercise.
@@ -305,7 +308,8 @@ class Supplemental(Directive):
 
         text = "\n".join(self.content)
         node = stack(rawsource=text)
-        node.attributes["classes"] += ["supplemental"] + self.arguments
+        node.attributes["classes"] += ["supplemental"]
+        node.attributes["classes"] += make_classes(self.arguments)
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
@@ -333,7 +337,7 @@ class Scrollable(Directive):
         node = scrollable(rawsource=text)
         if "height" in self.options:
             node.attributes["height"] = self.options["height"]
-        node.attributes["classes"] += self.arguments
+        node.attributes["classes"] += make_classes(self.arguments)
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
@@ -359,7 +363,7 @@ class Module(Directive):
             )
         text = "\n".join(self.content)
         node = module(text,nodes.Text(text))
-        node.attributes["classes"] += ["module"] + self.arguments
+        node.attributes["classes"] += ["module"] + make_classes(self.arguments)
         if "class" in self.options:
             node.attributes["classes"] += self.options["class"]
         # self.state.nested_parse(self.content, self.content_offset, node)
@@ -950,5 +954,3 @@ import lddocutils.ldwriter.lddirectives.admonitions
 import lddocutils.ldwriter.lddirectives.decks
 import lddocutils.ldwriter.lddirectives.grids
 import lddocutils.ldwriter.lddirectives.stories
-
-

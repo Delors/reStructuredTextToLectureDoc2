@@ -3,7 +3,7 @@ from docutils.nodes import container
 
 # from docutils.parsers.rst.directives import unchanged_required, class_option, unchanged
 
-from lddocutils.ldwriter import LDTranslator
+from lddocutils.ldwriter import LDTranslator, make_classes
 
 
 class deck(container):
@@ -23,7 +23,7 @@ class Deck(Directive):
         node = deck(rawsource=text)
         if "deck" in self.arguments:
             raise self.error('"deck" is superfluous; it is automatically added.')
-        node.attributes["classes"] += self.arguments
+        node.attributes["classes"] += make_classes(self.arguments)
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -50,19 +50,22 @@ class Card(Directive):
 
         text = "\n".join(self.content)
         node = card(rawsource=text)
-        node.attributes["classes"] += self.arguments
+        node.attributes["classes"] += make_classes(self.arguments)
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
+
 
 def visit_deck(self, node):
     self.card_count.append(0)  # required to determine if a card is incremental
     starttag = self.starttag(node, "ld-deck")
     self.body.append(starttag)
 
+
 def depart_deck(self, node):
     self.card_count.pop()
     self.body.append("</ld-deck>")
+
 
 def visit_card(self, node):
     if len(self.card_count) == 0:
@@ -72,6 +75,7 @@ def visit_card(self, node):
         node.attributes["classes"] += ["incremental"]
     self.card_count.append(card_id + 1)
     self.body.append(self.starttag(node, "ld-card"))
+
 
 def depart_card(self, node):
     self.body.append("</ld-card>")
