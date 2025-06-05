@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.13
 
 # Author: Michael Eichberg (mail@michael-eichberg.de)
 # Copyright: This module has been placed in the public domain.
@@ -14,5 +14,3 @@ DESCRIPTION = ('Generates LectureDoc2 HTML documents from standalone '
                'reStructuredText sources.  ' + default_description)
 
 publish_cmdline(writer=Writer(), writer_name='html', description=DESCRIPTION)
-
-
