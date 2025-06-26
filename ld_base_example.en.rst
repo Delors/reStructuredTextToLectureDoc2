@@ -9,31 +9,31 @@
 
 .. |at| unicode:: 0x40
 
-.. |html-source| source::
-    :prefix: https://delors.github.io/
-    :suffix: .html 
+
 
 .. role:: gray
 .. role:: red
 .. role:: peripheral
 .. role:: obsolete
 .. role:: incremental
+.. role:: kbd
 
 
 :math:`LectureDoc^2` Tutorial
 =============================
 
-LectureDoc is an authoring system for creating lecture material; i. e., lecture slides, notes and exercises from a single document. 
+:author: *Prof. Dr. Michael Eichberg*
+:Version: 2.1
 
-A single LectureDoc document contains discussions of topis which are then used as templates for creating advanced slides as well as a standard document. LectureDoc is intended to be used in combination with rst2ld (reStructuredText to LectureDoc) which is a tool that converts reStructuredText documents into LectureDoc and makes authoring slides as easy as writing a text document. 
 
-This tutorial is written in reStructuredText (*rst* in the following) and can be used as a template for creating your own lecture slides. The *code* of this tutorial is available on GitHub: |html-source|.
+Introduction
+--------------
 
-*Prof. Dr. Michael Eichberg*
+LectureDoc is an authoring system for creating lecture material; i. e., lecture slides, notes and exercises from a single document.
 
-.. container:: footer-left gray
+A single LectureDoc document contains discussions of topis which are then used as templates for creating advanced slides as well as a standard document. LectureDoc is intended to be used in combination with rst2ld (reStructuredText to LectureDoc) which is a tool that converts reStructuredText documents into LectureDoc and makes authoring slides as easy as writing a text document.
 
-     :Version: 2.0
+This tutorial is written in reStructuredText (*rst* in the following) and can be used as a template for creating your own lecture slides. The *code* of this tutorial is available on GitHub: https://github.com/Delors/reStructuredTextToLectureDoc2/blob/main/ld_base_example.en.rst.
 
 
 
@@ -50,7 +50,7 @@ A basic slide consists of a (section) header and some reStructuredText content.
         Basics
         -----------
 
-        A basic slide consists of a (section) header 
+        A basic slide consists of a (section) header
         and some reStructuredText content.
 
 
@@ -63,7 +63,7 @@ Embed math equations using reStructuredText's default directive (``.. math::``) 
 
     .. grid::
 
-        .. cell:: 
+        .. cell::
 
             The following rst fragment:
 
@@ -86,7 +86,7 @@ Embed math equations using reStructuredText's default directive (``.. math::``) 
             Will render like this:
 
                 Computation in :math:`GF(2)`:
-                    
+
                 .. math::
 
                     \begin{matrix}
@@ -101,25 +101,7 @@ Embed math equations using reStructuredText's default directive (``.. math::``) 
 Creating Slides without a Title
 ---------------------------------
 
-A slide without a title can be created by explicitly creating an empty title.
-
-.. example:: 
-    :class: encapsulate-floats
-
-    .. note::
-
-        You have to add a space after the backslash (``\``)!
-
-    .. code:: rst
-        :class: copy-to-clipboard
-        :number-lines:
-
-        \ 
-        --
-
-
-
-Alternatively, you can use ``no-title`` in combination with the ``class`` directive if you want to include the slide in an index.
+You can use ``no-title`` in combination with the ``class`` directive to avoid that the title is shown on the slide/document. However, the title is still used for indexes.
 
 .. example::
 
@@ -144,14 +126,14 @@ Basic *appear* animations can be created using the (CSS) class ``incremental``\ 
     :class: incremental
 
     .. code:: rst
-        :class: copy-to-clipboard 
+        :class: copy-to-clipboard
         :number-lines:
 
         Animation
         ----------
 
-        Basic *appear* animations can be created using the (CSS) class 
-        ``incremental``. You can also define a corresponding custom role 
+        Basic *appear* animations can be created using the (CSS) class
+        ``incremental``. You can also define a corresponding custom role
         (``.. role:: incremental``) :incremental:`to animate parts of a text.`
 
         .. example::
@@ -159,19 +141,19 @@ Basic *appear* animations can be created using the (CSS) class ``incremental``\ 
 
             ...
 
-.. [#] Animation progress can be reset by pressing the ``r`` key.
+.. [#] Animation progress can be reset by pressing the :kbd:`r` key.
 
 
 
 Animation of Lists
 -------------------
 
-In case of (un-)ordered lists (``ol`` or ``ul`` in HTML) it is sufficient to associate the class ``incremental`` using the ``class`` directive with the list. It is also possible, to only specify the class attribute for the required list items.
+In case of (un-)ordered and definition lists (``ol`` or ``ul`` in HTML) it is sufficient to associate the class ``incremental-list`` using the ``class`` directive with the list. It is also possible, to only specify the ``incremental`` class attribute for the required list items.
 
 .. example::
 
     .. grid::
-        
+
         .. cell::
 
             The following code:
@@ -180,7 +162,7 @@ In case of (un-)ordered lists (``ol`` or ``ul`` in HTML) it is sufficient to ass
                 :class: copy-to-clipboard
                 :number-lines:
 
-                .. class:: incremental
+                .. class:: incremental-list
 
                 - this
                 - is
@@ -190,11 +172,11 @@ In case of (un-)ordered lists (``ol`` or ``ul`` in HTML) it is sufficient to ass
 
             Will render incrementally like this:
 
-                .. class:: incremental
+            .. class:: incremental-list
 
-                - this
-                - is
-                - a test
+            - this
+            - is
+            - a test
 
 
 
@@ -203,14 +185,14 @@ Slide Dimensions
 
 The slide dimensions can be controlled by specifying the corresponding meta information.
 If not specified, the dimension is set to :math:`1920 \times 1200` (default); i.e., a ratio of 16:10.
-    
+
 .. example::
-    :class: far-far-smaller 
-    
+    :class: far-far-smaller
+
     In HTML documents add the following meta tag:
 
     .. code:: html
-        :class: copy-to-clipboard 
+        :class: copy-to-clipboard
 
         <meta name="slide-dimensions" content="1600x1200">
 
@@ -239,15 +221,15 @@ Many functions in LectureDoc2 - e.g. persistence of the slide progress - require
             :description: LectureDoc2 Tutorial
             :author: Michael Eichberg
             :license: Released under the terms of the `2-Clause BSD license`.
-        
+
 
 
 Adding Supplemental Information
 ---------------------------------
 
-Adding information that should not be on the slides, but provide additional information/explanations, can be added using the ``supplemental`` directive. 
+Adding information that should not be on the slides, but provide additional information/explanations, can be added using the ``supplemental`` directive.
 
-.. example:: 
+.. example::
 
     .. code:: rst
         :class: copy-to-clipboard
@@ -281,7 +263,7 @@ Creating Sections
 
 Creating a slide which marks the beginning of a new section can be done using the ``new-section`` class.
 
-.. example:: 
+.. example::
     :class: far-far-smaller
 
     .. code:: rst
@@ -311,7 +293,7 @@ Slide transitions can be controlled using the ``transition-...`` classes\ [#]_:
 - ``transition-scale``
 - ``transition-flip``
 
-.. example:: 
+.. example::
     :class: far-far-smaller
 
     .. code:: rst
@@ -331,11 +313,11 @@ Slide transitions can be controlled using the ``transition-...`` classes\ [#]_:
 Adding Code
 --------------------------------
 
-Adding code can be done using reStructuredText's code directive. 
+Adding code can be done using reStructuredText's code directive.
 
 .. example::
-    
-    .. container:: two-columns 
+
+    .. container:: two-columns
 
         .. container:: column
 
@@ -367,17 +349,17 @@ Adding code can be done using reStructuredText's code directive.
 Links to External Resources
 ---------------------------
 
-LectureDoc2 supports links to external resources: 
+LectureDoc2 supports links to external resources:
  - https://github.com/Delors/LectureDoc2
  - `LectureDoc2 Sourcecode <https://github.com/Delors/LectureDoc2>`_
 
-.. example:: 
+.. example::
 
     .. code:: rst
         :class: copy-to-clipboard
         :number-lines:
 
-        LectureDoc2 supports links to external resources: 
+        LectureDoc2 supports links to external resources:
 
         - https://github.com/Delors/LectureDoc2
         - `LectureDoc2 Sourcecode <https://github.com/Delors/LectureDoc2>`_
@@ -387,14 +369,14 @@ LectureDoc2 supports links to external resources:
 Links to Internal Targets
 -------------------------
 
-LectureDoc2 supports links to external resources: 
+LectureDoc2 supports links to external resources:
 
 - The title of a slide can be used as a link target ➠ `Advanced Formatting`_
 - An element which is explicitly marked as a target can be used as a link target:
 
   ➠ `Link Target in Incremental Block`_
 
-.. example:: 
+.. example::
 
     .. grid::
 
@@ -423,11 +405,11 @@ LectureDoc2 supports links to external resources:
                 :class: copy-to-clipboard
                 :number-lines:
 
-                Links to internal targets: 
+                Links to internal targets:
 
                 - Link to slide: `Adv. Formatting`_
-                - Link to a marked-up element: 
-                
+                - Link to a marked-up element:
+
                   `Link Target in Block`_
 
 
@@ -438,7 +420,7 @@ Citations are fully supported in LectureDoc2.
 
 A reference to a book: [Martin2017]_ (Details are found in the bibliography (see next slide)).
 
-.. example:: 
+.. example::
 
     .. code:: rst
         :class: copy-to-clipboard
@@ -453,7 +435,7 @@ Bibliography
 - .. [Martin2017] Clean Architecture: A Craftsman's Guide to Software Structure and Design; Robert C. Martin, Addison-Wesley, 2017
 - ...
 
-.. example:: 
+.. example::
 
     .. code:: rst
         :class: copy-to-clipboard
@@ -463,10 +445,10 @@ Bibliography
 
 
 
-Advanced Formatting    
+Advanced Formatting
 ---------------------
 
-LectureDoc comes with a set of predefined (CSS) classes that can be used to format the slides. Some of these classes have explicit support by LectureDoc and will be rendered differently in the different situations (e.g., document view vs. slide view will render *stacked layouts* or *supplemental information* differently). 
+LectureDoc comes with a set of predefined (CSS) classes that can be used to format the slides. Some of these classes have explicit support by LectureDoc and will be rendered differently in the different situations (e.g., document view vs. slide view will render *stacked layouts* or *supplemental information* differently).
 
 .. class:: incremental
 
@@ -486,7 +468,7 @@ Stacked layouts
 
 Stacked layouts enables updating parts of a slide by putting the content into layers and then showing the layers incrementally.
 
-.. example:: 
+.. example::
 
     .. container:: two-columns smaller
 
@@ -500,17 +482,20 @@ Stacked layouts enables updating parts of a slide by putting the content into la
 
                 .. card:: overlay
 
-                    .. raw:: html
+                    xxxxxxxxxxxxxxxxx
+
+                    .. raw : : html
 
                         <svg width="600" height="80">
-                            <rect width="600" height="80" 
+                            <rect width="600" height="80"
                                   style="fill:rgb(0,0,255,0.25);stroke-width:1;stroke:rgb(0,0,0)" />
                         </svg>
 
-        .. container:: column 
+        .. container:: column
 
             .. code:: rst
-                :class: black copy-to-clipboard 
+                :number-lines:
+                :class: copy-to-clipboard
 
                 .. deck:: monospaced
 
@@ -520,28 +505,21 @@ Stacked layouts enables updating parts of a slide by putting the content into la
 
                   .. card:: overlay
 
-                    .. raw:: html
-
-                      <svg width="600" height="80">
-                      ⇥ ⇥<rect width="600" height="80" 
-                      ⇥ ⇥ ⇥ ⇥ ⇥style="fill:rgb(0,0,255,0.25);
-                      ⇥ ⇥ ⇥ ⇥ ⇥ ⇥ ⇥ ⇥ stroke-width:1;
-                      ⇥ ⇥ ⇥ ⇥ ⇥ ⇥ ⇥ ⇥ stroke:rgb(0,0,0)" />
-                      </svg>
+                    xxxxxxxxxxxxxxxxx
 
 
 Presenter-Notes
 ----------------
 
-Presenter notes can be added to a slide using the ``presenter-note`` directive. 
+Presenter notes can be added to a slide using the ``presenter-note`` directive.
 
-**A presenter note - including its presence - is only visible after entering the master password** (press ``m`` and then enter: ``123456``).
+**A presenter note - including its presence - is only visible after entering the master password** (press :kbd:`m` and then enter: ``123456``).
 
 .. presenter-note::
 
     This is a short presenter note. Presenter notes can contain complex content, e.g., images, code, or math formulae.
 
-.. example:: 
+.. example::
 
     .. code:: rst
         :class: copy-to-clipboard
@@ -561,7 +539,7 @@ Integrated Exercises
 
 Exercises can be integrated into the slide set.
 
-.. example:: 
+.. example::
 
     .. container:: two-columns
 
@@ -576,10 +554,10 @@ Exercises can be integrated into the slide set.
 
                     Solution: :math:`1,4142135624`.
 
-            To unlock the solution go to the document view and enter the password (sqrt).
-    
+            To unlock the solution go to the document view (press :kbd:`c`) and enter the password (sqrt).
+
         .. container:: column
-            
+
             .. code:: rst
                 :class: copy-to-clipboard
                 :number-lines:
@@ -593,9 +571,9 @@ Exercises can be integrated into the slide set.
 
                         Solution: :math:`1,4142135624`.
 
-If you have multiple exercises, you can define a master password (123456) to unlock all solutions at once (press ``m`` to open the dialog).
+If you have multiple exercises, you can define a master password (123456) to unlock all solutions at once (press :kbd:`m` to open the dialog).
 
-.. code:: rst 
+.. code:: rst
     :class: copy-to-clipboard
 
     .. meta::
@@ -616,7 +594,7 @@ Image in the Background (Hack)
 
 .. deck::
 
-    .. card:: 
+    .. card::
 
         .. image:: ld_base_example/tag_cloud.png
             :width: 100%
@@ -624,7 +602,7 @@ Image in the Background (Hack)
 
     .. card:: overlay
 
-        .. example:: 
+        .. example::
             :class: backdrop-blur margin-0-5em
 
             .. code:: rst
@@ -633,10 +611,10 @@ Image in the Background (Hack)
 
                 .. class:: padding-none no-title transition-scale
 
-                Image in the Background 
+                Image in the Background
                 ------------------------
 
-                .. deck:: 
+                .. deck::
 
                     .. card::
 
@@ -647,4 +625,3 @@ Image in the Background (Hack)
                     .. card:: overlay
 
                         Content on the slide...
-
