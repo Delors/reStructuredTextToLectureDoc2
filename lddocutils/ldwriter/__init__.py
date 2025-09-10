@@ -487,6 +487,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             'content="width=device-width, initial-scale=1.0" />\n'
         ]
 
+        # Global definitions that are preprended to the document; i.e., they are
+        # added before the template element which contains the document's content.
+        self.svg_style = None
+        self.svg_defs = None
+
+
         self.section_count = 0
         self.card_count = []
 
@@ -608,6 +614,17 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         else:
             title_slide_classes = node.document["classes"]
         title_slide_id = next(iter(node.ids))
+
+        if self.svg_defs:
+            self.body_prefix.append('<svg xmlns="http://www.w3.org/2000/svg" class="svg-global-defs"><defs>')
+            self.body_prefix.append( self.svg_defs)
+            self.body_prefix.append("</defs></svg>\n")
+
+        if self.svg_style:
+            self.body_prefix.append('<svg xmlns="http://www.w3.org/2000/svg" class="svg-global-style"><style>')
+            self.body_prefix.append(self.svg_style)
+            self.body_prefix.append("</style></svg>\n")
+
         self.body_prefix.append(
             self.starttag({}, "template")
         )
@@ -628,6 +645,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             else:
                 self.body.append("</ld-topic>\n")
 
+
         self.html_body.extend(
             self.body_prefix[1:]
             + self.body_pre_docinfo
@@ -644,6 +662,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             self.master_password = node.attributes["content"]
         elif node.attributes["name"] == "version":
             self.ld_version = node.attributes["content"]
+        elif node.attributes["name"] == "svg-defs":
+            self.svg_defs = node.attributes["content"]
+        elif node.attributes["name"] == "svg-style":
+            self.svg_style = node.attributes["content"]
         else:
             html5_polyglot.HTMLTranslator.visit_meta(self, node)
 

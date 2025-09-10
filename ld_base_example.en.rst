@@ -6,6 +6,25 @@
     :id: lecturedoc2-tutorial
     :slide-dimensions: 1920x1200
     :master-password: 123456
+    :svg-style:
+        .std-line {
+            stroke:rgb(0,0,0);
+            stroke-width:0.2ch;
+            stroke-dasharray: 1 1;
+        }
+    :svg-defs:
+        <marker id="arrow"
+            viewBox="0 0 10 10" refX="10" refY="5"
+            markerUnits="strokeWidth"
+            markerWidth="4" markerHeight="4"
+            orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" /></marker>
+        <g id="star">
+            <polygon
+                class="star"
+                points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9"
+                fill="gold"
+                style="transform: scale(0.05)"/></g>
 
 .. |at| unicode:: 0x40
 
@@ -17,6 +36,11 @@
 .. role:: obsolete
 .. role:: incremental
 .. role:: kbd
+.. role:: rst(code)
+   :language: rst
+.. role:: html(code)
+   :language: html
+
 
 
 :math:`LectureDoc^2` Tutorial
@@ -625,3 +649,112 @@ Image in the Background (Hack)
                     .. card:: overlay
 
                         Content on the slide...
+
+
+Inline SVGs
+-------------
+
+.. deck::
+
+    .. card::
+
+        Inline SVGs are fully supported by LectureDoc, but styles
+        and definitions that are used in multiple inline SVGs have to be centralized!
+
+        This is due to the copying of the slide templates which - if you use ids to reference definitions in the SVGs - makes them no longer unique. This is a violation of the spec and causes troubles in Chrome and Firefox.
+
+    .. card::
+
+        .. rubric:: Adding Shared Definitions
+
+        To add shared SVG definitions, use the :rst:`.. meta::` directive and the :rst:`:svg-defs:` property.
+
+        .. example::
+
+            .. code:: rst
+                :number-lines:
+                :class: copy-to-clipboard
+
+                :svg-defs:
+                    <marker id="arrow"
+                        viewBox="0 0 10 10" refX="10" refY="5"
+                        markerUnits="strokeWidth"
+                        markerWidth="4" markerHeight="4"
+                        orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" /></marker>
+                    <g id="star">
+                        <polygon
+                            class="star"
+                            points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9"
+                            fill="gold"
+                            style="transform: scale(0.05)"/></g>
+
+    .. card::
+
+        .. rubric:: Defining Shared Styles
+
+        To add shared SVG styles, use the :rst:`.. meta::` directive and the :rst:`:svg-style:` property.
+
+        .. example::
+
+            .. code:: rst
+                :number-lines:
+                :class: copy-to-clipboard
+
+                :svg-style:
+                    .std-line {
+                        stroke:rgb(0,0,0);
+                        stroke-width:0.2ch;
+                        stroke-dasharray: 1 1;
+                    }
+
+    .. card::
+
+        .. example::
+
+            Use of the previously defined class ``std-line`` (line 7), ``star`` (:html:`href="#star"` line 8) and ``arrow`` (:html:`marker-end="url(#arrow)"` line 11).
+
+            .. code:: html
+                :number-lines:
+                :class: copy-to-clipboard
+
+
+                <div    style="width: 90ch; height:16ch">
+                <svg    version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 48 8" font-size="0.75"  >
+                    <rect   width="4" height="1" x="8" y="3" rx="1" ry="1"
+                            style="fill:darkblue" />
+                    <line   x1="4" y1="3.5" x2="8" y2="3.5"
+                            class="std-line"
+                            marker-end="url(#arrow)"/>
+                    <rect   width="8" height="1" x="14" y="6" rx="1" ry="1"
+                            style="fill:darkorange" />
+                    <use    href="#star" x="21" y="6" />
+                </svg>
+                </div>
+
+        .. supplemental::
+
+            The example also demonstrates how to define an SVG whose size is completely dependent on the size of the surrounding font-size.
+
+    .. card::
+
+        .. example::
+
+            Rendered SVG
+
+            .. raw:: html
+
+                <div    style="width: 90ch; height:16ch">
+                <svg    version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 48 8" font-size="0.75"  >
+                    <rect   width="4" height="1" x="8" y="3" rx="1" ry="1"
+                            style="fill:darkblue" />
+                    <line   x1="12" y1="3.5" x2="14" y2="6.5"
+                            class="std-line"
+                            marker-end="url(#arrow)"/>
+                    <rect   width="8" height="1" x="14" y="6" rx="1" ry="1"
+                            style="fill:darkorange" />
+                    <use    href="#star" x="21" y="6" />
+                </svg>
+                </div>
