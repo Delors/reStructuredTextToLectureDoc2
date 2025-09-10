@@ -620,7 +620,7 @@ Image in the Background (Hack)
 
     .. card::
 
-        .. image:: ld_base_example/tag_cloud.png
+        .. image:: ld_base_example/tag_cloud.webp
             :width: 100%
             :align: center
 
@@ -642,7 +642,7 @@ Image in the Background (Hack)
 
                     .. card::
 
-                        .. image:: ld_base_example/tag_cloud.png
+                        .. image:: ld_base_example/tag_cloud.webp
                             :width: 100%
                             :align: center
 
