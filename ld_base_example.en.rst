@@ -758,3 +758,31 @@ Inline SVGs
                     <use    href="#star" x="21" y="6" />
                 </svg>
                 </div>
+
+
+
+Embedding Images
+-------------------
+
+In general, embeddings images is done using the image directive. However, due to the fact that we render the topic once as classical slides and once in a document-oriented way, it is important to understand how LectureDoc handles images.
+
+.. deck::
+
+    .. card::
+
+        .. rubric:: General Guidelines
+
+        In general an image should be designed/generated/created with its usage on a slide in mind. That is, an image should fit on a slide with a *logical resolution* of 1900 by 1080/1200 pixels. Hence, if text is found on the image it should not be smaller than 30px; ideally it should use the same font size as used by the slide. Those images should then be added to the document using the image directive. In this case it is optional to specify the width and/or height. Such images will be automatically scaled by LectureDoc when the content is shown in the document view. The scaling factor is determined by the ratio between the default font-size used for the document and the default font-size used for the slides.
+
+    .. card::
+
+        .. rubric:: HighDPI Images
+
+        As said, images are generally assumed to have a resolution that fits a slide. However, in many cases the source image may have a resolution that is (much) higher. In this case, it is possible to scale the image using the directive's width and/or height attribute. LectureDoc will then update the width and height attributes when shown in document mode.
+        This requires that the images' width and heights are given in pixels.
+
+    .. card::
+
+        .. rubric:: Images/SVGs With Font-size Dependent Sizing
+
+        SVGs where the size is (alread) dependent on the font-size should not specify any width or height attributes.
