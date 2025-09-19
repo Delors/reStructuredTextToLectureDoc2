@@ -411,7 +411,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
         # Get the settings from the document to make them easily accessible
         self.ld_path = self.document.settings.ld_path
-        self.ld_version = self.document.settings.ld_default_version
         self.ld_theme_path = self.document.settings.theme
         self.ld_passwords_file = self.document.settings.ld_passwords
 
@@ -464,7 +463,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         return required_modules
 
     def depart_document(self, node):
-        ld_path = self.ld_path + "/" + self.ld_version
+        ld_path = self.ld_path
 
         self.stylesheet = [self.ld_scripts_and_styles_template % {"ld_path": ld_path}]
         if self.ld_theme_path is not None:
