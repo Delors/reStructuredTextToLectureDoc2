@@ -45,11 +45,6 @@ class Writer(html5_polyglot.Writer):
         "LectureDoc2 Specific Options",
         "Configuration options used when generating LectureDoc2 lecture notes.",
         (
-             (
-                "Specifies the default version of LectureDoc2 that is to be used.",
-                ["--ld-default-version"],
-                {"choices": ["genesis","renaissance"], "default": "genesis"},
-            ),
             (
                 "Specifies the path to LectureDoc2.",
                 ["--ld-path"],
@@ -236,57 +231,6 @@ class Solution(Directive):
         return nodes
 
 
-# DEPRECATED in Renaissance
-class stack(container):
-    # Examples are in `docutils.nodes`
-    pass
-
-# DEPRECATED in Renaissance
-class Stack(Directive):
-
-    required_arguments = 0
-    final_argument_whitespace = True
-    optional_arguments = 1
-    has_content = True
-    option_spec = {}
-
-    def run(self):
-        self.assert_has_content()
-        text = "\n".join(self.content)
-        node = stack(rawsource=text)
-        if "stack" in self.arguments:
-            raise self.error('"stack" is superfluous; it is automatically added.')
-        node.attributes["classes"] += ["stack"] + self.arguments
-        # Parse the directive contents.
-        self.state.nested_parse(self.content, self.content_offset, node)
-        return [node]
-
-# DEPRECATED in Renaissance
-class layer(container):
-    pass
-
-# DEPRECATED in Renaissance
-class Layer(Directive):
-
-    required_arguments = 0
-    final_argument_whitespace = True
-    optional_arguments = 1
-    has_content = True
-    option_spec = {}
-
-    def run(self):
-        self.assert_has_content()
-        if "layer" in self.arguments:
-            raise self.error('"layer" is superfluous; it is automatically added.')
-
-        text = "\n".join(self.content)
-        node = layer(rawsource=text)
-        node.attributes["classes"] += ["layer"] + self.arguments
-        # Parse the directive contents.
-        self.state.nested_parse(self.content, self.content_offset, node)
-        return [node]
-
-
 class supplemental(container):
     pass
 
@@ -307,13 +251,12 @@ class Supplemental(Directive):
             )
 
         text = "\n".join(self.content)
-        node = stack(rawsource=text)
+        node = container(rawsource=text)
         node.attributes["classes"] += ["supplemental"]
         node.attributes["classes"] += make_classes(self.arguments)
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
-
 
 
 
@@ -452,20 +395,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     """ We need to ensure that MathJax is properly initialized; we will
         call it later to do the typesetting."""
 
-    ld_scripts_and_styles_template_genesis = """
-    <script src="%(ld_path)s/ld-core.js" type="module"></script>\n
-    <script src="%(ld_path)s/ld-components.js" type="module"></script>\n
-    <link rel="stylesheet" href="%(ld_path)s/ld.css" />\n
-    <link rel="stylesheet" href="%(ld_path)s/themes/DHBW/theme.css" />\n
-    <link rel="stylesheet" href="%(ld_path)s/ld-ui.css" />\n
-    """
-
-    ld_scripts_and_styles_template_renaissance = """
+    ld_scripts_and_styles_template = """
     <script src="%(ld_path)s/ld.js" type="module"></script>\n
     <link rel="stylesheet" href="%(ld_path)s/ld.css" />\n
     """
 
-    theme_template_renaissance = """
+    theme_template = """
     <!-- As of 2024 it is not yet possible to use "layer" with linked stylesheets
          <link rel="stylesheet" href="%(ld_path)s%(theme_path)s" layer="theme" />\n -->
          <style>@import url("%(ld_path)s%(theme_path)s") layer(theme)</style>
@@ -531,24 +466,17 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_document(self, node):
         ld_path = self.ld_path + "/" + self.ld_version
 
-        if self.ld_version == "genesis":
-            self.stylesheet = [self.ld_scripts_and_styles_template_genesis % {"ld_path": ld_path}]
-        elif self.ld_version == "renaissance":
-            self.stylesheet = [self.ld_scripts_and_styles_template_renaissance % {"ld_path": ld_path}]
-            if self.ld_theme_path is not None:
-                self.stylesheet.append(self.theme_template_renaissance % {"ld_path": ld_path, "theme_path": "/" + self.ld_theme_path})
-        else:
-            raise Exception("Unknown LectureDoc2 version: " + self.ld_version)
+        self.stylesheet = [self.ld_scripts_and_styles_template % {"ld_path": ld_path}]
+        if self.ld_theme_path is not None:
+            self.stylesheet.append(self.theme_template % {"ld_path": ld_path, "theme_path": "/" + self.ld_theme_path})
 
-        self.meta.append(f'<meta name="version" content="LD2 {self.ld_version.upper()}" />\n')
+        self.meta.append(f'<meta name="version" content="LD2 RENAISSANCE" />\n')
 
         passwords = []
         if len(self.exercises_passwords) > 0:
             passwords = [{"passwords": self.exercises_passwords}]
 
         if len(passwords) > 0:
-            if self.ld_version == "genesis" and self.master_password is not None:
-                passwords.insert(0,{"master password": self.master_password})
             passwordsJSON = json.dumps(passwords, indent=4)
         else:
             passwordsJSON = "[\n]"
@@ -561,8 +489,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 f'<meta name="exercises-passwords" content="{encryptedPWDs}" />\n',
             )
 
-            if self.ld_version != "genesis":
-                passwords.insert(0,{"master password": self.master_password})
+            passwords.insert(0,{"master password": self.master_password})
 
         if len(passwords) > 0 and self.ld_passwords_file is not None:
             with open(self.ld_passwords_file, "w") as passwordsFile:
@@ -609,10 +536,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.html_head.extend(self.head[1:])
         self.fragment.extend(self.body)
 
-        if self.ld_version == "genesis":
-            title_slide_classes = node.document["classes"] + ["ld-slide"]
-        else:
-            title_slide_classes = node.document["classes"]
+        title_slide_classes = node.document["classes"]
         title_slide_id = next(iter(node.ids))
 
         if self.svg_defs:
@@ -629,10 +553,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             self.starttag({}, "template")
         )
         self.body_suffix.insert(0,"</template>\n");
-        if self.ld_version == "genesis":
-            slide_tag = "div"
-        else:
-            slide_tag = "ld-topic"
+        slide_tag = "ld-topic"
         self.body_prefix.append(
             self.starttag({
                 "classes": title_slide_classes,
@@ -640,10 +561,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 slide_tag)
         )
         if not self.section_count:
-            if self.ld_version == "genesis":
-                self.body.append("</div>\n")
-            else:
-                self.body.append("</ld-topic>\n")
+            self.body.append("</ld-topic>\n")
 
 
         self.html_body.extend(
@@ -714,10 +632,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def visit_section(self, node):
         # The first section ends our title slide!
         if not self.section_count:
-            if self.ld_version == "genesis":
-                self.body.append("</div>\n")
-            else:
-                self.body.append("</ld-topic>\n")
+            self.body.append("</ld-topic>\n")
 
         self.section_count += 1
         self.section_level += 1
@@ -728,10 +643,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             if "hide-slide" in node.attributes["classes"]:
                 self.start_of_slide_to_hide = len(self.body)
             else:
-                if self.ld_version == "genesis":
-                    self.body.append(self.starttag(node, "div", CLASS="ld-slide"))
-                else:
-                    self.body.append(self.starttag(node, "ld-topic"))
+                self.body.append(self.starttag(node, "ld-topic"))
 
     def depart_section(self, node):
         self.section_level -= 1
@@ -739,10 +651,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             del self.body[self.start_of_slide_to_hide :]
             self.start_of_slide_to_hide = None
         else:
-            if self.section_level > 0 or self.ld_version == "genesis":
-                self.body.append("</div>")
-            else:
-                self.body.append("</ld-topic>")
+            self.body.append("</ld-topic>")
 
     def visit_subscript(self, node):
         self.body.append(self.starttag(node, "sub"))
@@ -755,18 +664,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def depart_superscript(self, node):
         self.body.append("</sup>")
-
-    def visit_stack(self, node): # [DEPRECATED] GENESIS
-        self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
-
-    def depart_stack(self, node): # [DEPRECATED] GENESIS
-        self.body.append("</div>")
-
-    def visit_layer(self, node): # [DEPRECATED] GENESIS
-        self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
-
-    def depart_layer(self, node): # [DEPRECATED] GENESIS
-        self.body.append("</div>")
 
     def visit_module(self, node):
         self.body.append(self.starttag(node, "div")) #, CLASS=" ".join(node.attributes["classes"])))
@@ -952,9 +849,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 #
 # Convenience directives which are "simple" shortcuts for containers with
 # respective classes:
-directives.register_directive("stack", Stack) # [DEPRECATED] GENESIS
-directives.register_directive("layer", Layer) # [DEPRECATED] GENESIS
-
 directives.register_directive("module", Module)
 
 directives.register_directive("supplemental", Supplemental)

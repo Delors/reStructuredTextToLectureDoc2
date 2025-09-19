@@ -33,7 +33,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. class:: vertical-title
 
@@ -65,7 +65,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
    
       .. class:: center-child-elements 
                  no-title
@@ -93,7 +93,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example (Solution in supplemental information)
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. exercise:: <Title>
 
@@ -120,7 +120,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       Table of Contents
       ------------------
@@ -137,7 +137,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    ``[#]_`` and ``.. [#]`` create footnotes.
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       Test\ [#]_
       -----------------
@@ -162,7 +162,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example   
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       ...
       Like described in [Eic24]_ ...
@@ -184,7 +184,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. code:: java
          :class: copy-to-clipboard
@@ -210,7 +210,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. supplemental:: 
 
@@ -269,7 +269,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       - Point 1
    
@@ -295,7 +295,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
    
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. container:: margin-top-1em 
                      line-above
@@ -330,7 +330,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. class:: transition-move-left
 
@@ -346,7 +346,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. class:: incremental
 
@@ -368,7 +368,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. container:: two-columns 
 
@@ -398,7 +398,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard 
+      :class: copy-to-clipboard 
 
       .. deck::
 
@@ -452,7 +452,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
 
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       :dhbw-red:`Red Text.`
        
@@ -477,7 +477,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
    
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
       
       .. class:: hide-slide
       
@@ -501,7 +501,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Example
    
    .. code:: rst
-      :class: smaller copy-to-clipboard
+      :class: copy-to-clipboard
       
       .. meta:: 
         :id: <unique id>
@@ -518,7 +518,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Template
 
    .. code:: rst
-      :class: far-smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. class:: cheat-sheet-8-columns
 
@@ -541,7 +541,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. rubric:: Template   
 
    .. code:: rst 
-      :class: far-smaller copy-to-clipboard
+      :class: copy-to-clipboard
 
       .. role:: incremental   
       .. role:: eng

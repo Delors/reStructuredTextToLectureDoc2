@@ -1,5 +1,4 @@
 .. meta::
-    :version: renaissance
     :author: Michael Eichberg
     :description: LectureDoc2 Tutorial
     :license: Released under the terms of the `2-Clause BSD license`.
@@ -211,7 +210,6 @@ The slide dimensions can be controlled by specifying the corresponding meta info
 If not specified, the dimension is set to :math:`1920 \times 1200` (default); i.e., a ratio of 16:10.
 
 .. example::
-    :class: far-far-smaller
 
     In HTML documents add the following meta tag:
 
@@ -288,7 +286,6 @@ Creating Sections
 Creating a slide which marks the beginning of a new section can be done using the ``new-section`` class.
 
 .. example::
-    :class: far-far-smaller
 
     .. code:: rst
         :class: black copy-to-clipboard
@@ -318,7 +315,6 @@ Slide transitions can be controlled using the ``transition-...`` classes\ [#]_:
 - ``transition-flip``
 
 .. example::
-    :class: far-far-smaller
 
     .. code:: rst
         :class: copy-to-clipboard
