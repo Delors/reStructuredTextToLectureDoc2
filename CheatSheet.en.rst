@@ -86,7 +86,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
 
    .. rubric:: Exercises and Solutions
 
-   Associate the class ``integrated-exercise`` with a slide to indicate that the slide contains an exercise.
+   Associate the class ``exercises`` with a slide to indicate that the slide contains an exercise.
 
    Use the directive ``.. exercise::`` to add an exercise. To add a solution use the custom directive ``.. solution::`` inside of an exercise block and specify the password (optional) using the attribute ``:pwd:``.
    
@@ -196,7 +196,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
 
    .. rubric:: Fade-out Content
 
-   Add the class ``faded-to-white`` to a container to whiten the content.
+   Add the class ``fade-out`` to a container to whiten the content.
    
 
      
@@ -400,18 +400,18 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
    .. code:: rst
       :class: smaller copy-to-clipboard 
 
-      .. stack::
+      .. deck::
 
-        .. layer:: clearfix
+        .. card:: clearfix
         
            .. image:: <p1.svg>
               :align: left
 
-        .. layer:: overlay
+        .. card:: overlay
         
            .. image:: <p2.svg>
 
-         .. layer:: incremental warning
+         .. card:: warning
 
             <Content>
 
