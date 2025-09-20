@@ -1,8 +1,7 @@
 .. meta::
-    :version: genesis
     :author: Michael Eichberg
-    :keywords: LectureDoc2, "Cheat Sheet", DHBW
-    :description lang=de: Cheat Sheet für die Generierung von Vorlesungsunterlagen mit LectureDoc2 im DHBW Corporate Design.
+    :keywords: LectureDoc2, "Cheat Sheet"
+    :description lang=de: Cheat Sheet für die Verwendung von LectureDoc2 in Kombination mit rst2ld.
     :id: ld2-dhbw-cheat-sheet
     :slide-dimensions: 2560x1440
 
@@ -424,7 +423,7 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
 
    .. rubric:: Semantic-based Text Markup
 
-   ``minor``: for less important text.
+   ``peripheral``: for less important text.
    ``obsolete``: for obsolete statements.
    ``ger``: to markup German Words.
    ``eng``: to markup English words.
