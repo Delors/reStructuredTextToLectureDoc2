@@ -3,7 +3,7 @@ import json
 import textwrap
 
 from docutils import nodes, frontend
-from docutils.nodes import General, Element, inline, container, title, rubric,make_id
+from docutils.nodes import General, Element, inline, container, title, rubric, make_id
 from docutils.parsers.rst import Directive, directives, roles
 from docutils.parsers.rst.directives import unchanged_required, class_option, unchanged
 from docutils.writers import html5_polyglot
@@ -17,8 +17,6 @@ from Crypto.Hash import SHA512, SHA256
 from Crypto.Random import get_random_bytes
 
 
-
-
 """
 Writer for LectureDoc2 HTML output.
 
@@ -28,10 +26,14 @@ https://github.com/docutils/docutils/blob/master/docutils/docutils/writers/s5_ht
 # Examples definitions of `nodes` are in `docutils.nodes`
 """
 
-def validate_modules_list(setting, value=None, option_parser=None,
-                         config_parser=None, config_section=None):
-    module_configurations = frontend.validate_comma_separated_list(setting, value, option_parser,config_parser,config_section)
-    modules = dict(map(lambda tc: tc.split(sep=" ",maxsplit=1) , module_configurations))
+
+def validate_modules_list(
+    setting, value=None, option_parser=None, config_parser=None, config_section=None
+):
+    module_configurations = frontend.validate_comma_separated_list(
+        setting, value, option_parser, config_parser, config_section
+    )
+    modules = dict(map(lambda tc: tc.split(sep=" ", maxsplit=1), module_configurations))
 
     return modules
 
@@ -55,7 +57,7 @@ class Writer(html5_polyglot.Writer):
                 ["--ld-passwords"],
                 {"metavar": "<URL>"},
             ),
-             (
+            (
                 "Specifies the css file which defines the custom theme. The file has to be specified relative to LectureDoc's main folder.",
                 ["--theme"],
                 {"metavar": "<URL>"},
@@ -63,8 +65,10 @@ class Writer(html5_polyglot.Writer):
             (
                 "Configures class-based modules.",
                 ["--modules"],
-                {'metavar': '<class_name dir[,class_name dir,...]>',
-                 'validator': validate_modules_list},
+                {
+                    "metavar": "<class_name dir[,class_name dir,...]>",
+                    "validator": validate_modules_list,
+                },
             ),
         ),
     )
@@ -124,8 +128,9 @@ def encryptAESGCM(pwd, plaintext, iterationCount=ldPBKDF2IterationCount):
     )
 
 
-def make_classes(arguments : list[str]) -> list[str]:
-    return [make_id(clazz) for arg in arguments for clazz in arg.split()];
+def make_classes(arguments: list[str]) -> list[str]:
+    return [make_id(clazz) for arg in arguments for clazz in arg.split()]
+
 
 class exercise(container):
     """Represents an exercise.
@@ -154,13 +159,14 @@ class Exercise(Directive):
             <solution content>
     """
 
-    optional_arguments = 1 # the optional title
+    optional_arguments = 1  # the optional title
     final_argument_whitespace = True
     has_content = True
     option_spec = {
         "formatted-title": unchanged_required,
         "name": unchanged_required,
-        "class": class_option}
+        "class": class_option,
+    }
 
     def run(self):
         self.assert_has_content()
@@ -176,27 +182,31 @@ class Exercise(Directive):
 
             if "formatted-title" in self.options:
                 exercise_formatted_title = self.options["formatted-title"]
-                textnodes, messages = self.state.inline_text(exercise_formatted_title,
-                                                            self.lineno)
-                title = nodes.rubric(exercise_title, '', *textnodes)
-                title.source, title.line = (
-                        self.state_machine.get_source_and_line(self.lineno))
+                textnodes, messages = self.state.inline_text(
+                    exercise_formatted_title, self.lineno
+                )
+                title = nodes.rubric(exercise_title, "", *textnodes)
+                title.source, title.line = self.state_machine.get_source_and_line(
+                    self.lineno
+                )
                 title.attributes["classes"] = ["ld-exercise-title"]
                 exercise_node += title
                 exercise_node += messages
             else:
                 title = nodes.rubric(text=exercise_title)
-                title.source, title.line = (
-                        self.state_machine.get_source_and_line(self.lineno))
+                title.source, title.line = self.state_machine.get_source_and_line(
+                    self.lineno
+                )
                 title.attributes["classes"] = ["ld-exercise-title"]
                 exercise_node += title
-
 
         self.state.nested_parse(self.content, self.content_offset, exercise_node)
         return [exercise_node]
 
 
-class solution(container): # TODO add ",part" to the base class (https://github.com/docutils/docutils/blob/master/docutils/docutils/nodes.py - line 1437)
+class solution(
+    container
+):  # TODO add ",part" to the base class (https://github.com/docutils/docutils/blob/master/docutils/docutils/nodes.py - line 1437)
     # Examples are in `docutils.nodes`
     pass
 
@@ -259,7 +269,6 @@ class Supplemental(Directive):
         return nodes
 
 
-
 class scrollable(container):
     pass
 
@@ -270,9 +279,7 @@ class Scrollable(Directive):
     final_argument_whitespace = True
     optional_arguments = 1
     has_content = True
-    option_spec = {
-        "height": unchanged_required
-    }
+    option_spec = {"height": unchanged_required}
 
     def run(self):
         self.assert_has_content()
@@ -301,11 +308,9 @@ class Module(Directive):
     def run(self):
         self.assert_has_content()
         if "module" in self.arguments:
-            raise self.error(
-                '"module" is superfluous; it is automatically added.'
-            )
+            raise self.error('"module" is superfluous; it is automatically added.')
         text = "\n".join(self.content)
-        node = module(text,nodes.Text(text))
+        node = module(text, nodes.Text(text))
         node.attributes["classes"] += ["module"] + make_classes(self.arguments)
         if "class" in self.options:
             node.attributes["classes"] += self.options["class"]
@@ -319,7 +324,7 @@ class source(inline):
 
 class Source(Directive):
 
-    optional_arguments = 1 # the optional file name otherwise the current file
+    optional_arguments = 1  # the optional file name otherwise the current file
     final_argument_whitespace = False
     has_content = False
     option_spec = {
@@ -360,7 +365,9 @@ class Source(Directive):
         return nodes
 
 
-class presenter_note(General, Element): pass
+class presenter_note(General, Element):
+    pass
+
 
 class PresenterNote(Directive):
 
@@ -368,11 +375,11 @@ class PresenterNote(Directive):
     final_argument_whitespace = True
     optional_arguments = 1
     has_content = True
-    option_spec = {'name': directives.unchanged}
+    option_spec = {"name": directives.unchanged}
 
     def run(self):
         self.assert_has_content()
-        text = '\n'.join(self.content)
+        text = "\n".join(self.content)
         try:
             if self.arguments:
                 classes = directives.class_option(self.arguments[0])
@@ -381,9 +388,10 @@ class PresenterNote(Directive):
         except ValueError:
             raise self.error(
                 'Invalid class attribute value for "%s" directive: "%s".'
-                % (self.name, self.arguments[0]))
+                % (self.name, self.arguments[0])
+            )
         node = presenter_note(text)
-        node['classes'].extend(classes)
+        node["classes"].extend(classes)
         self.add_name(node)
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -418,14 +426,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.meta = [
             '<meta charset="utf-8">\n',
             '<meta name="viewport" '
-            'content="width=device-width, initial-scale=1.0" />\n'
+            'content="width=device-width, initial-scale=1.0" />\n',
         ]
 
         # Global definitions that are preprended to the document; i.e., they are
         # added before the template element which contains the document's content.
         self.svg_style = None
         self.svg_defs = None
-
 
         self.section_count = 0
         self.card_count = []
@@ -448,10 +455,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.presenter_note_count = 0
 
     def visit_document(self, node):
-        super().visit_document(node);
-        pass;
+        super().visit_document(node)
+        pass
 
-    def analyze_classes(self,node):
+    def analyze_classes(self, node):
         required_modules = set()
         if hasattr(node, "attributes"):
             for cls in node.attributes["classes"]:
@@ -467,7 +474,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
         self.stylesheet = [self.ld_scripts_and_styles_template % {"ld_path": ld_path}]
         if self.ld_theme_path is not None:
-            self.stylesheet.append(self.theme_template % {"ld_path": ld_path, "theme_path": "/" + self.ld_theme_path})
+            self.stylesheet.append(
+                self.theme_template
+                % {"ld_path": ld_path, "theme_path": "/" + self.ld_theme_path}
+            )
 
         self.meta.append(f'<meta name="version" content="LD2 RENAISSANCE" />\n')
 
@@ -481,19 +491,21 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             passwordsJSON = "[\n]"
 
         if self.master_password is not None:
-            encryptedPWDs = encryptAESGCM(
-                self.master_password, passwordsJSON, 100000
-            )
+            encryptedPWDs = encryptAESGCM(self.master_password, passwordsJSON, 100000)
             self.meta.append(
                 f'<meta name="exercises-passwords" content="{encryptedPWDs}" />\n',
             )
 
-            passwords.insert(0,{"master password": self.master_password})
+            passwords.insert(0, {"master password": self.master_password})
 
         if len(passwords) > 0 and self.ld_passwords_file is not None:
             with open(self.ld_passwords_file, "w") as passwordsFile:
-                json.dump(passwords, passwordsFile,indent=2, ensure_ascii=False)
+                json.dump(passwords, passwordsFile, indent=2, ensure_ascii=False)
 
+        if len(self.exercises_passwords) > 0 and self.ld_passwords_file is not None:
+            with open(self.ld_passwords_file + ".md", "w") as passwordsFile:
+                for (key,value) in self.exercises_passwords:
+                    passwordsFile.write(f"- {key}: \t{value}\n")
 
         # let's search the DOM for classes that require special treatment
         # by JavaScript libraries, if we find any, we will add links to the
@@ -509,13 +521,17 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.head = self.meta[:] + self.head
         if self.math_header:
             if self.math_output == "mathjax":
-                self.head.append(textwrap.dedent("""\
+                self.head.append(
+                    textwrap.dedent(
+                        """\
                     <script>
                         window.MathJax = {
                             tex: { tags: 'ams' },
                             chtml: { displayAlign: 'center' /*left or center*/ }
                         };
-                    </script>\n"""))
+                    </script>\n"""
+                    )
+                )
                 self.head.extend(self.math_header)
             else:
                 self.stylesheet.extend(self.math_header)
@@ -524,8 +540,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             required_modules = self.analyze_classes(node)
             if len(required_modules) > 0:
                 self.stylesheet.append(
-                        f'\n    <!-- Modules added for specific classes used in the document: -->'
-                    )
+                    f"\n    <!-- Modules added for specific classes used in the document: -->"
+                )
                 for module in required_modules:
                     self.stylesheet.append(
                         f'\n    <script src="{module}" type="module"></script>'
@@ -539,29 +555,29 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         title_slide_id = next(iter(node.ids))
 
         if self.svg_defs:
-            self.body_prefix.append('<svg xmlns="http://www.w3.org/2000/svg" class="svg-global-defs"><defs>')
-            self.body_prefix.append( self.svg_defs)
+            self.body_prefix.append(
+                '<svg xmlns="http://www.w3.org/2000/svg" class="svg-global-defs"><defs>'
+            )
+            self.body_prefix.append(self.svg_defs)
             self.body_prefix.append("</defs></svg>\n")
 
         if self.svg_style:
-            self.body_prefix.append('<svg xmlns="http://www.w3.org/2000/svg" class="svg-global-style"><style>')
+            self.body_prefix.append(
+                '<svg xmlns="http://www.w3.org/2000/svg" class="svg-global-style"><style>'
+            )
             self.body_prefix.append(self.svg_style)
             self.body_prefix.append("</style></svg>\n")
 
-        self.body_prefix.append(
-            self.starttag({}, "template")
-        )
-        self.body_suffix.insert(0,"</template>\n");
+        self.body_prefix.append(self.starttag({}, "template"))
+        self.body_suffix.insert(0, "</template>\n")
         slide_tag = "ld-topic"
         self.body_prefix.append(
-            self.starttag({
-                "classes": title_slide_classes,
-                "ids": [title_slide_id] },
-                slide_tag)
+            self.starttag(
+                {"classes": title_slide_classes, "ids": [title_slide_id]}, slide_tag
+            )
         )
         if not self.section_count:
             self.body.append("</ld-topic>\n")
-
 
         self.html_body.extend(
             self.body_prefix[1:]
@@ -587,7 +603,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             html5_polyglot.HTMLTranslator.visit_meta(self, node)
 
     def visit_image(self, node):
-        if node.attributes["uri"].endswith(".svg") and not "icon" in node.attributes["classes"]:
+        if (
+            node.attributes["uri"].endswith(".svg")
+            and not "icon" in node.attributes["classes"]
+        ):
             # SVGs need to be embedded using an object tag to be displayed
             # correctly, when external fonts are referenced in the svg file.
             attributes = {
@@ -597,7 +616,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 "role": "img",
             }
             if "align" in node.attributes:
-                attributes["class"] += " align-"+node.attributes["align"]
+                attributes["class"] += " align-" + node.attributes["align"]
             if "alt" in node.attributes:
                 attributes["aria-label"] = node.attributes["alt"]
             if "width" in node.attributes:
@@ -609,7 +628,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             html5_polyglot.HTMLTranslator.visit_image(self, node)
 
     def depart_image(self, node):
-        if(node.attributes["uri"].endswith(".svg")):
+        if node.attributes["uri"].endswith(".svg"):
             self.body.append("</object>")
         else:
             html5_polyglot.HTMLTranslator.depart_image(self, node)
@@ -653,7 +672,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             self.body.append("</ld-topic>")
 
     def visit_subscript(self, node):
-        self.body.append(self.starttag(node, "sub"))
+        # self.body.append(self.starttag(node, "sub"))
+        self.body.append("<sub>")
 
     def depart_subscript(self, node):
         self.body.append("</sub>")
@@ -665,13 +685,17 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.body.append("</sup>")
 
     def visit_module(self, node):
-        self.body.append(self.starttag(node, "div")) #, CLASS=" ".join(node.attributes["classes"])))
+        self.body.append(
+            self.starttag(node, "div")
+        )  # , CLASS=" ".join(node.attributes["classes"])))
 
     def depart_module(self, node):
         self.body.append("</div>")
 
     def visit_supplemental(self, node):
-        self.body.append(self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"])))
+        self.body.append(
+            self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"]))
+        )
 
     def depart_supplemental(self, node):
         self.body.append("</div>")
@@ -688,18 +712,13 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         pass
 
     def visit_scrollable(self, node):
-        attributes = {
-            "class": " ".join(node.attributes["classes"])
-        }
+        attributes = {"class": " ".join(node.attributes["classes"])}
         if "height" in node.attributes:
             attributes["data-height"] = node.attributes["height"]
         self.body.append(self.starttag(node, "ld-scrollable", **attributes))
 
-
     def depart_scrollable(self, node):
         self.body.append("</ld-scrollable>")
-
-
 
     def visit_presenter_note(self, node):
         self.presenter_note_count += 1
@@ -708,7 +727,9 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             raise Exception("presenter notes require a master password")
 
         if self.start_of_presenter_note is not None:
-            raise Exception("presenter notes cannot be nested")  # TODO move to parsing phase!
+            raise Exception(
+                "presenter notes cannot be nested"
+            )  # TODO move to parsing phase!
 
         attributes = {
             "class": " ".join(node.attributes["classes"]),
@@ -719,8 +740,12 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def depart_presenter_note(self, node):
         end_of_presenter_note = len(self.body)
-        presenter_note_body = "".join(self.body[self.start_of_presenter_note : end_of_presenter_note + 1])
-        presenter_note_hash = hashlib.sha512(presenter_note_body.encode("utf-8")).digest()
+        presenter_note_body = "".join(
+            self.body[self.start_of_presenter_note : end_of_presenter_note + 1]
+        )
+        presenter_note_hash = hashlib.sha512(
+            presenter_note_body.encode("utf-8")
+        ).digest()
         # 2.
         del self.body[self.start_of_presenter_note :]
         self.start_of_presenter_note = None
@@ -735,7 +760,9 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             pwd, salt, dkLen=32, count=ldPBKDF2IterationCount, hmac_hash_module=SHA256
         )
         cipher = AES.new(aesKey, AES.MODE_GCM, nonce=iv, mac_len=16)
-        (ciphertext, tag) = cipher.encrypt_and_digest(presenter_note_body.encode("utf-8"))
+        (ciphertext, tag) = cipher.encrypt_and_digest(
+            presenter_note_body.encode("utf-8")
+        )
         # 4.
         self.body.append(
             base64.b64encode(str(ldPBKDF2IterationCount).encode("utf-8")).decode(
