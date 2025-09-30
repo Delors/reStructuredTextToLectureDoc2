@@ -668,8 +668,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if self.start_of_slide_to_hide is not None:
             del self.body[self.start_of_slide_to_hide :]
             self.start_of_slide_to_hide = None
+        elif self.section_level >= 1:
+            self.body.append("</div>\n")
         else:
-            self.body.append("</ld-topic>")
+            self.body.append("</ld-topic>\n")
 
     def visit_subscript(self, node):
         # self.body.append(self.starttag(node, "sub"))
