@@ -411,7 +411,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     theme_template = """
     <!-- As of 2024 it is not yet possible to use "layer" with linked stylesheets
          <link rel="stylesheet" href="%(ld_path)s%(theme_path)s" layer="theme" />\n -->
-         <style>@import url("%(ld_path)s%(theme_path)s") layer(theme)</style>
+         <style>@import url("%(ld_path)s%(theme_path)s") layer(theme);</style>
     """
 
     def __init__(self, *args):
