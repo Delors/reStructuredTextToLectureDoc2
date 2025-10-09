@@ -681,7 +681,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.body.append("</sub>")
 
     def visit_superscript(self, node):
-        self.body.append(self.starttag(node, "sup"))
+        # self.body.append(self.starttag(node, "sup")) # <= adds an extra space... :-()
+        self.body.append("<sup>")
 
     def depart_superscript(self, node):
         self.body.append("</sup>")
