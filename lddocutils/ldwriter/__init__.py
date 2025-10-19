@@ -785,6 +785,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     # Handling of exercises and solutions
     #
 
+    # FIXME Handling of exercise titles that have special chars (e.g. ')
+
     def visit_exercise(self, node):
         if self.start_of_exercise is not None:
             raise Exception("exercises cannot be nested")  # TODO move to parsing phase!
