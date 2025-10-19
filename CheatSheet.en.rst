@@ -1,7 +1,7 @@
 .. meta::
     :author: Michael Eichberg
     :keywords: LectureDoc2, "Cheat Sheet"
-    :description lang=de: Cheat Sheet für die Verwendung von LectureDoc2 in Kombination mit rst2ld.
+    :description lang=de: Cheat Sheet for LectureDoc2/rst2ld.
     :id: ld2-dhbw-cheat-sheet
     :slide-dimensions: 2560x1440
 
@@ -10,9 +10,9 @@
 
 .. THE FOLLOWING CHANGES THE OVERALL SLIDE LAYOUT   
 
-.. class:: cheat-sheet-8-columns 
+.. class:: cheat-sheet
 
-LectureDoc2 Cheat Sheet (DHBW Corporate Design)
+LectureDoc2 Cheat Sheet
 -------------------------------------------------------------
 
 .. container:: cheat-sheet-block
@@ -573,3 +573,184 @@ LectureDoc2 Cheat Sheet (DHBW Corporate Design)
       
 
 
+
+
+
+
+
+
+
+
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Useful Role and Substitution Definitions
+
+   .. rubric:: Template   
+
+   .. code:: rst 
+      :class: copy-to-clipboard
+
+      .. role:: incremental   
+      .. role:: eng
+      .. role:: ger
+      .. role:: peripheral
+      .. role:: obsolete
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
+      .. role:: shiny-green
+      .. role:: shiny-red 
+      .. role:: dark-red
+      .. role:: black
+
+      .. role:: raw-html(raw)
+         :format: html
+
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Useful Role and Substitution Definitions
+
+   .. rubric:: Template   
+
+   .. code:: rst 
+      :class: copy-to-clipboard
+
+      .. role:: incremental   
+      .. role:: eng
+      .. role:: ger
+      .. role:: peripheral
+      .. role:: obsolete
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
+      .. role:: shiny-green
+      .. role:: shiny-red 
+      .. role:: dark-red
+      .. role:: black
+
+      .. role:: raw-html(raw)
+         :format: html
+
+
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Useful Role and Substitution Definitions
+
+   .. rubric:: Template   
+
+   .. code:: rst 
+      :class: copy-to-clipboard
+
+      .. role:: incremental   
+      .. role:: eng
+      .. role:: ger
+      .. role:: peripheral
+      .. role:: obsolete
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
+      .. role:: shiny-green
+      .. role:: shiny-red 
+      .. role:: dark-red
+      .. role:: black
+
+      .. role:: raw-html(raw)
+         :format: html
+
+
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Useful Role and Substitution Definitions
+
+   .. rubric:: Template   
+
+   .. code:: rst 
+      :class: copy-to-clipboard
+
+      .. role:: incremental   
+      .. role:: eng
+      .. role:: ger
+      .. role:: peripheral
+      .. role:: obsolete
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
+      .. role:: shiny-green
+      .. role:: shiny-red 
+      .. role:: dark-red
+      .. role:: black
+
+      .. role:: raw-html(raw)
+         :format: html
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Useful Role and Substitution Definitions
+
+   .. rubric:: Template   
+
+   .. code:: rst 
+      :class: copy-to-clipboard
+
+      .. role:: incremental   
+      .. role:: eng
+      .. role:: ger
+      .. role:: peripheral
+      .. role:: obsolete
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
+      .. role:: shiny-green
+      .. role:: shiny-red 
+      .. role:: dark-red
+      .. role:: black
+
+      .. role:: raw-html(raw)
+         :format: html
+         
+.. container:: cheat-sheet-block
+
+   .. rubric:: Useful Role and Substitution Definitions
+
+   .. rubric:: Template   
+
+   .. code:: rst 
+      :class: copy-to-clipboard
+
+      .. role:: incremental   
+      .. role:: eng
+      .. role:: ger
+      .. role:: peripheral
+      .. role:: obsolete
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
+      .. role:: shiny-green
+      .. role:: shiny-red 
+      .. role:: dark-red
+      .. role:: black
+
+      .. role:: raw-html(raw)
+         :format: html
