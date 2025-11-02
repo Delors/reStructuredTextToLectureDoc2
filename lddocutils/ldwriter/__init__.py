@@ -897,6 +897,7 @@ directives.register_directive("source", Source)
 
 
 # Imported for the "side effects" of registering the directives
+import lddocutils.ldwriter.lddirectives.popover
 import lddocutils.ldwriter.lddirectives.admonitions
 import lddocutils.ldwriter.lddirectives.decks
 import lddocutils.ldwriter.lddirectives.grids
