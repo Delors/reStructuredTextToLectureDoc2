@@ -1,0 +1,2 @@
+docutils==0.22.3
+pycryptodome==3.23.0
