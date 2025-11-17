@@ -22,27 +22,43 @@ LectureDoc2 Cheat Sheet
    :Author: Michael Eichberg
    :Version: August 2024
 
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: SVGs
+
+   SVGs can easily be embedded and animated.
+
+   .. popover:: Examples
+
+      .. example::
+
+         .. code:: xml
+         
+            <svg>
+            </svg>
+
    
+
 .. container:: cheat-sheet-block
 
    .. rubric:: Vertical Titles
 
    Add the class ``vertical-title`` to rotate the title and to change the layout of the slide to a column-based layout. To get back to a row based layout add a container with the class ``width-100``.
 
-   .. rubric:: Example
+   .. popover:: Examples
 
-   .. code:: rst
-      :class: copy-to-clipboard
+      .. code:: rst
+         :class: copy-to-clipboard
 
-      .. class:: vertical-title
+         .. class:: vertical-title
 
-      <Slide Title>
-      ----------------
+         <Slide Title>
+         ----------------
 
-      .. container:: width-100
+         .. container:: width-100
 
-         <Row based content layout.>
-
+            <Row based content layout.>
 
 
 .. container:: cheat-sheet-block
@@ -53,27 +69,23 @@ LectureDoc2 Cheat Sheet
    
    To hide the title of a slide assign the class ``no-title``.
 
-   .. rubric:: Smaller Slide Titles
-
-   Use the class ``smaller-slide-title``.
-
    .. rubric:: Vertically Centered Content  
    
-   Use the class ``center-child-elements``.
+   Use the class ``center-content``.
 
-   .. rubric:: Example
+   .. popover:: Examples
 
-   .. code:: rst
-      :class: copy-to-clipboard
-   
-      .. class:: center-child-elements 
-                 no-title
-                 smaller-slide-title
+      .. code:: rst
+         :class: copy-to-clipboard
+      
+         .. class:: center-content
+                  no-title
 
-      Hidden on the slide! 
-      --------------------
+         Hidden on the slide! 
+         --------------------
 
-      <Slide Content>
+         <Slide Content>
+
 
 .. container:: cheat-sheet-block
 
