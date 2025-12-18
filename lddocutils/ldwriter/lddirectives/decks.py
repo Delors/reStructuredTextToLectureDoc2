@@ -1,7 +1,6 @@
 from docutils.parsers.rst import Directive, directives
 from docutils.nodes import container
-
-# from docutils.parsers.rst.directives import unchanged_required, class_option, unchanged
+from docutils.parsers.rst.directives import flag
 
 from lddocutils.ldwriter import LDTranslator, make_classes
 
@@ -38,7 +37,7 @@ class Card(Directive):
     final_argument_whitespace = True
     optional_arguments = 1
     has_content = True
-    option_spec = {}
+    option_spec = {"not-incremental": flag}
 
     def run(self):
         self.assert_has_content()
@@ -50,6 +49,11 @@ class Card(Directive):
 
         text = "\n".join(self.content)
         node = card(rawsource=text)
+
+        # Mark this card as non-incremental if the option is set.
+        if "not-incremental" in self.options:
+            node["not_incremental"] = True
+
         node.attributes["classes"] += make_classes(self.arguments)
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
@@ -71,7 +75,7 @@ def visit_card(self, node):
     if len(self.card_count) == 0:
         raise Exception("card directive must be nested in a deck directive")
     card_id = self.card_count.pop()
-    if card_id > 0:
+    if card_id > 0 and not node.attributes.get("not_incremental"):
         node.attributes["classes"] += ["incremental"]
     self.card_count.append(card_id + 1)
     self.body.append(self.starttag(node, "ld-card"))
