@@ -23,6 +23,141 @@ LectureDoc2 Cheat Sheet
    :Version: August 2024
 
 
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Admonitions
+
+   Standard reStructuredText admonitions: ``attention``, ``caution``, ``danger``, ``error``, ``hint``, ``important``, ``note``, ``tip`` and ``warning``
+   
+   LectureDoc2 specific admonitions: 
+   ``background``, ``definition``, ``proof``, ``theorem``, ``lemma``, ``conclusion``, ``observation``, ``remark``, ``summary``, ``legend``, ``repetition``, ``question``, ``answer``, ``remember``, ``deprecated``, ``assessment``, and ``example``.
+
+   .. popover:: Admonitions
+
+      .. grid::
+
+         .. cell:: width-25
+
+            .. admonition:: Generic Admonition with Custom Title
+
+               This is a generic admonition.
+
+            .. attention:: 
+               This is an attention admonition.
+
+            .. caution:: 
+               This is a caution admonition.
+
+            .. danger:: 
+               This is a danger admonition.
+
+            .. error:: 
+               This is an error admonition.
+
+            .. hint::
+               This is a hint admonition.
+
+            .. important::
+               This is an important admonition.
+
+            .. tip:: 
+               This is a tip admonition.
+
+            .. warning:: 
+               This is a warning admonition.
+
+         .. cell:: width-25
+
+            .. background::
+               This is a background admonition.
+
+            .. definition::
+               This is a definition admonition.
+
+            .. proof::
+               This is a proof admonition.
+
+            .. theorem::
+               This is a theorem admonition.
+
+            .. lemma::
+               This is a lemma admonition.
+
+            .. conclusion::
+               This is a conclusion admonition.
+
+            .. observation::
+               This is an observation admonition.
+
+            .. remark::
+               This is a remark admonition.
+
+            .. example::
+               This is an example admonition.
+
+         .. cell:: width-25               
+
+            .. summary::
+               This is a summary admonition.
+
+            .. legend::
+               This is a legend admonition.
+
+            .. repetition::
+               This is a repetition admonition.
+
+            .. question::
+               This is a question admonition.
+
+            .. answer::
+               This is an answer admonition.
+
+            .. remember::
+               This is a remember admonition.
+
+            .. deprecated::
+               This is a deprecated admonition.
+
+            .. assessment::
+               This is an assessment admonition.
+
+         .. cell:: width-25
+
+            .. rubric:: Support for Notes 
+
+            Text above the note.
+
+            .. note::
+
+               This is a note.
+
+            Notes are floated to the right w.r.t. the content that follows the note. 
+
+            .. tip::
+               :class: clear-float
+
+               This tip is shown below the **note** because the class ``clear-float`` is used to *clear the float* of the note.
+
+               .. example::
+
+                  .. code:: rst
+                     :class: copy-to-clipboard
+                     :number-lines:
+
+                     .. note::
+                        This is a note.
+
+                     .. tip::
+                        :class: clear-both
+
+                        This tip is shown ...
+
+            
+
+
+         
+
 .. container:: cheat-sheet-block
 
    .. rubric:: SVGs
