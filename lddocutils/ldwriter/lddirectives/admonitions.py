@@ -6,11 +6,9 @@ from docutils.nodes import Element, Admonition
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.directives.admonitions import BaseAdmonition
 
-# Example Admonition
 
 de.labels["example"] = "Beispiel"
 en.labels["example"] = "Example"
-
 class example(Admonition, Element):
     pass
 
@@ -20,12 +18,8 @@ class Example(BaseAdmonition):
 
 directives.register_directive("example", Example)
 
-
-# Background Admonition
-
 de.labels["background"] = "Hintergrund"
 en.labels["background"] = "Background"
-
 
 class background(Admonition, Element):
     pass
