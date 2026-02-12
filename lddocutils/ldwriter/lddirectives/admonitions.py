@@ -1,10 +1,94 @@
 #
 # Additional Admonitions (LD2 - Renaissance)
 
+from docutils import nodes
 from docutils.languages import en, de
-from docutils.nodes import Element, Admonition
+from docutils.nodes import General, Element, Admonition
 from docutils.parsers.rst import directives
+from docutils.parsers.rst import Directive
+from docutils.parsers.rst.roles import set_classes
 from docutils.parsers.rst.directives.admonitions import BaseAdmonition
+from lddocutils.ldwriter import LDTranslator
+
+"""Admonition with an optional title."""
+class TitledAdmonition(Directive):
+
+    optional_arguments = 1
+    final_argument_whitespace = True
+    option_spec = {'class': directives.class_option,
+                   'name': directives.unchanged}
+    has_content = True
+
+    node_class = None
+    """Subclasses must set this to the appropriate admonition node class."""
+
+    def run(self):
+        set_classes(self.options)
+        self.assert_has_content()
+        text = '\n'.join(self.content)
+        admonition_node = self.node_class(text, **self.options)
+        self.add_name(admonition_node)
+        admonition_node.source, admonition_node.line = \
+            self.state_machine.get_source_and_line(self.lineno)
+        if len(self.arguments) > 0:
+            title_text = self.arguments[0]
+            textnodes, messages = self.state.inline_text(title_text,
+                                                         self.lineno)
+            title = nodes.title(title_text, '', *textnodes)
+            title.source, title.line = (
+                    self.state_machine.get_source_and_line(self.lineno))
+            admonition_node += title
+            admonition_node += messages
+            #if 'classes' not in self.options:
+            #    admonition_node['classes'] += ['admonition-'
+            #                                   + nodes.make_id(title_text)]
+        self.state.nested_parse(self.content, self.content_offset,
+                                admonition_node)
+        return [admonition_node]
+
+
+de.labels["definition_admonition"] = "Definition"
+en.labels["definition_admonition"] = "Definition"
+
+class definition_admonition(General, Element):
+    pass
+
+class DefinitionAdmonition(TitledAdmonition):
+    node_class = definition_admonition
+
+# Custom HTML rendering for "definition" admonitions:
+def visit_definition_admonition(self, node):
+    # Open admonition container
+    self.body.append('<aside class="admonition definition">')
+
+    # Render title: "Definition: {optional title}"
+    label = getattr(self, "language", None).labels.get("definition_admonition", "Definition")
+    self.body.append('<p class="admonition-title">')
+    self.body.append(f"{label}")
+
+    # Extract optional title node and render its inline content
+    title_node = None
+    for i, child in enumerate(node.children):
+        if isinstance(child, nodes.title):
+            title_node = child
+            del node.children[i]  # prevent default title rendering
+            break
+
+    if title_node is not None:
+        self.body.append(": ")
+        for child in title_node.children:
+            child.walkabout(self)
+
+    self.body.append("</p>")
+
+def depart_definition_admonition(self, node):
+    # Close admonition container
+    self.body.append("</aside>")
+
+LDTranslator.visit_definition_admonition = visit_definition_admonition
+LDTranslator.depart_definition_admonition = depart_definition_admonition
+
+directives.register_directive("definition", DefinitionAdmonition)
 
 
 de.labels["example"] = "Beispiel"
@@ -25,12 +109,7 @@ class background(Admonition, Element):
     pass
 
 
-de.labels["definition"] = "Definition"
-en.labels["definition"] = "Definition"
 
-
-class definition(Admonition, Element):
-    pass
 
 
 de.labels["proof"] = "Beweis"
@@ -153,12 +232,6 @@ class Background(BaseAdmonition):
 directives.register_directive("background", Background)
 
 
-class Definition(BaseAdmonition):
-
-    node_class = definition
-
-
-directives.register_directive("definition", Definition)
 
 
 class Proof(BaseAdmonition):
@@ -271,3 +344,6 @@ class Assessment(BaseAdmonition):
 
 
 directives.register_directive("assessment", Assessment)
+
+
+

@@ -73,6 +73,11 @@ LectureDoc2 Cheat Sheet
                This is a background admonition.
 
             .. definition::
+
+               This is a definition admonition.
+
+            .. definition:: A Definition with a very long title that spans multiple lines
+
                This is a definition admonition.
 
             .. proof::
@@ -90,13 +95,13 @@ LectureDoc2 Cheat Sheet
             .. observation::
                This is an observation admonition.
 
+         .. cell:: width-25               
+
             .. remark::
                This is a remark admonition.
 
             .. example::
                This is an example admonition.
-
-         .. cell:: width-25               
 
             .. summary::
                This is a summary admonition.
@@ -116,13 +121,13 @@ LectureDoc2 Cheat Sheet
             .. remember::
                This is a remember admonition.
 
+         .. cell:: width-25
+
             .. deprecated::
                This is a deprecated admonition.
 
             .. assessment::
                This is an assessment admonition.
-
-         .. cell:: width-25
 
             .. rubric:: Support for Notes 
 
