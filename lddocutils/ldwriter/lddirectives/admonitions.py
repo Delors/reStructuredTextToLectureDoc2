@@ -8,7 +8,7 @@ from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
 from docutils.parsers.rst.roles import set_classes
 from docutils.parsers.rst.directives.admonitions import BaseAdmonition
-from lddocutils.ldwriter import LDTranslator
+from lddocutils.ldwriter import LDTranslator, make_classes
 
 """Admonition with an optional title."""
 class TitledAdmonition(Directive):
@@ -58,12 +58,13 @@ class DefinitionAdmonition(TitledAdmonition):
 
 # Custom HTML rendering for "definition" admonitions:
 def visit_definition_admonition(self, node):
-    # Open admonition container
-    self.body.append('<aside class="admonition definition">')
+    classes = ["admonition", "definition"] + node.get("classes", [])
+    class_attr = " ".join(make_classes(classes))
+    self.body.append(f'<aside class="{class_attr}">')
 
     # Render title: "Definition: {optional title}"
     label = getattr(self, "language", None).labels.get("definition_admonition", "Definition")
-    self.body.append('<p class="admonition-title">')
+    self.body.append('<p class="admonition-title"><span>')
     self.body.append(f"{label}")
 
     # Extract optional title node and render its inline content
@@ -79,7 +80,7 @@ def visit_definition_admonition(self, node):
         for child in title_node.children:
             child.walkabout(self)
 
-    self.body.append("</p>")
+    self.body.append("</span></p>")
 
 def depart_definition_admonition(self, node):
     # Close admonition container
