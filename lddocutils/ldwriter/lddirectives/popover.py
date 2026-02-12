@@ -8,8 +8,6 @@ from lddocutils.ldwriter import LDTranslator, make_classes
 class popover(nodes.General, nodes.Element):
     pass
 
-
-
 def class_option(argument):
     return directives.class_option(argument)
 
