@@ -303,7 +303,10 @@ class Module(Directive):
     final_argument_whitespace = True
     optional_arguments = 1
     has_content = True
-    option_spec = {"class": class_option}
+    option_spec = {
+        "class": class_option,
+        "scope": lambda arg: directives.choice(arg, ("slide", "document", "all")),
+    }
 
     def run(self):
         self.assert_has_content()
@@ -314,6 +317,10 @@ class Module(Directive):
         node.attributes["classes"] += ["module"] + make_classes(self.arguments)
         if "class" in self.options:
             node.attributes["classes"] += self.options["class"]
+        scope = self.options.get("scope", "all").lower()
+        if scope not in {"slide", "document", "all"}:
+            raise self.error('scope must be "slide", "document", or "all"')            
+        node.attributes["scope"] = scope
         # self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
 
@@ -688,9 +695,14 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.body.append("</sup>")
 
     def visit_module(self, node):
+        # TODO replace by ld-module element!
+        attributes = {"class": " ".join(node.attributes["classes"])}
+        if "scope" in node.attributes:
+            attributes["data-ld-module-scope"] = node.attributes["scope"]
         self.body.append(
-            self.starttag(node, "div")
-        )  # , CLASS=" ".join(node.attributes["classes"])))
+            self.starttag(node, "div", **attributes)
+        ) 
+
 
     def depart_module(self, node):
         self.body.append("</div>")
