@@ -2,13 +2,14 @@
     :author: Michael Eichberg
     :keywords: LectureDoc2, "Cheat Sheet"
     :description lang=de: Cheat Sheet for LectureDoc2/rst2ld.
-    :id: ld2-dhbw-cheat-sheet
+    :id: ld2-cheat-sheet
     :slide-dimensions: 2560x1440
 
-.. role:: red
+.. include:: ../docutils.shared.defs
 
 
-.. THE FOLLOWING CHANGES THE OVERALL SLIDE LAYOUT   
+
+.. SETTING THE CLASS TO CHEAT-SHEET CHANGES THE OVERALL SLIDE LAYOUT
 
 .. class:: cheat-sheet
 
@@ -20,7 +21,7 @@ LectureDoc2 Cheat Sheet
    .. rubric:: Information
    
    :Author: Michael Eichberg
-   :Version: August 2024
+   :Version: Work in Progress
 
 
 
@@ -33,7 +34,7 @@ LectureDoc2 Cheat Sheet
    LectureDoc2 specific admonitions: 
    ``background``, ``definition``, ``proof``, ``theorem``, ``lemma``, ``conclusion``, ``observation``, ``remark``, ``summary``, ``legend``, ``repetition``, ``question``, ``answer``, ``remember``, ``deprecated``, ``assessment``, and ``example``.
 
-   .. popover:: Admonitions
+   .. popover:: Examples
 
       .. grid::
 
@@ -153,12 +154,23 @@ LectureDoc2 Cheat Sheet
                      .. note::
                         This is a note.
 
+                     Text that is left of the note.
+
                      .. tip::
-                        :class: clear-both
+                        :class: clear-float
 
                         This tip is shown ...
 
-            
+   .. popover:: Code  
+
+      .. rubric:: Most basic Example
+
+      .. code:: rst
+         :class: copy-to-clipboard
+
+         .. definition:: A Definition with a very long title that spans multiple lines
+
+               This is a definition admonition.
 
 
          
