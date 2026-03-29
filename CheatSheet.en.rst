@@ -19,7 +19,7 @@ LectureDoc2 Cheat Sheet
 .. container:: cheat-sheet-block
 
    .. rubric:: Information
-   
+
    :Author: Michael Eichberg
    :Version: Work in Progress
 
@@ -30,8 +30,8 @@ LectureDoc2 Cheat Sheet
    .. rubric:: Admonitions
 
    Standard reStructuredText admonitions: ``attention``, ``caution``, ``danger``, ``error``, ``hint``, ``important``, ``note``, ``tip`` and ``warning``
-   
-   LectureDoc2 specific admonitions: 
+
+   LectureDoc2 specific admonitions:
    ``background``, ``definition``, ``proof``, ``theorem``, ``lemma``, ``conclusion``, ``observation``, ``remark``, ``summary``, ``legend``, ``repetition``, ``question``, ``answer``, ``remember``, ``deprecated``, ``assessment``, and ``example``.
 
    .. popover:: Examples
@@ -44,16 +44,16 @@ LectureDoc2 Cheat Sheet
 
                This is a generic admonition.
 
-            .. attention:: 
+            .. attention::
                This is an attention admonition.
 
-            .. caution:: 
+            .. caution::
                This is a caution admonition.
 
-            .. danger:: 
+            .. danger::
                This is a danger admonition.
 
-            .. error:: 
+            .. error::
                This is an error admonition.
 
             .. hint::
@@ -62,10 +62,10 @@ LectureDoc2 Cheat Sheet
             .. important::
                This is an important admonition.
 
-            .. tip:: 
+            .. tip::
                This is a tip admonition.
 
-            .. warning:: 
+            .. warning::
                This is a warning admonition.
 
          .. cell:: width-25
@@ -96,7 +96,7 @@ LectureDoc2 Cheat Sheet
             .. observation::
                This is an observation admonition.
 
-         .. cell:: width-25               
+         .. cell:: width-25
 
             .. remark::
                This is a remark admonition.
@@ -130,15 +130,16 @@ LectureDoc2 Cheat Sheet
             .. assessment::
                This is an assessment admonition.
 
-            .. rubric:: Support for Notes 
+            .. rubric:: Support for Notes
 
             Text above the note.
 
             .. note::
+                :class: width-25
 
-               This is a note.
+                This is a note.
 
-            Notes are floated to the right w.r.t. the content that follows the note. 
+            Notes are floated to the right w.r.t. the content that follows the note. Often, notes are explicitly sized using the ``:class: width-<Percentage>`` option.
 
             .. tip::
                :class: clear-float
@@ -152,6 +153,8 @@ LectureDoc2 Cheat Sheet
                      :number-lines:
 
                      .. note::
+                        :class: width-40
+
                         This is a note.
 
                      Text that is left of the note.
@@ -161,7 +164,7 @@ LectureDoc2 Cheat Sheet
 
                         This tip is shown ...
 
-   .. popover:: Code  
+   .. popover:: Code
 
       .. rubric:: Most basic Example
 
@@ -173,24 +176,161 @@ LectureDoc2 Cheat Sheet
                This is a definition admonition.
 
 
-         
-
 .. container:: cheat-sheet-block
 
    .. rubric:: SVGs
 
-   SVGs can easily be embedded and animated.
+   SVGs can easily be embedded directly in RST documents. Direct embedding has the advantage that animation is then possible.
 
-   .. popover:: Examples
+   .. popover:: Sizing of SVGs
 
-      .. example::
+        **External SVGs**
 
-         .. code:: xml
-         
-            <svg>
-            </svg>
+        *Usage: slide view and document view*
 
-   
+        In general, SVGs should be designed with the slide view in mind. They will automatically be scaled in the document view based on the font-ratio between the base font size used in the slide view and the base font size used in the document view.
+
+        *Usage: document view only*
+
+        SVGs shown only in the document view (e.g. solutions to exercises) should be designed with the document view in mind and hence should use the base font size of the document view as the foundation.
+
+        **Embedded SVGs**
+
+        They should be designed independent of any specific size and only use relative sizing. This ensures that they look beautiful in all contexts.
+
+        :peripheral:`(See the respective example for more details.)`
+
+   .. popover:: Basic Example
+
+        .. example::
+
+            .. raw:: html
+                :class: center-content
+
+                <div style="width: 5ch; height: 5ch;">
+                <svg    viewBox="0 0 5 5"
+                        font-size="2"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.5" y="0.5" width="4" height="4" fill="darkblue"/>
+                    <text x="0.75" y="3" fill="white">SVG</text>
+                </svg>
+                </div>
+
+            .. code:: rst
+                :number-lines:
+                :class: copy-to-clipboard
+
+                .. raw:: html
+
+                    <div style="width: 5ch; height: 5ch;">
+                    <svg    viewBox="0 0 5 5"
+                            font-size="2"
+                            version="1.1"
+                            xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.5" y="0.5" width="4" height="4" fill="darkblue"/>
+                        <text x="0.75" y="3" fill="white">SVG</text>
+                    </svg>
+                    </div>
+
+
+   .. popover:: Markers and Styles
+
+        **Embedded SVGs Only**
+
+        .. important::
+
+            A single SVG in an rst source file, will be found at least three times in the HTML: In the document view, the slide view, and the lighttable view.
+
+        .. attention::
+
+            :IDs: If an SVG uses ``id``\ s, they are no longer unique which may cause rendering issues (in particular with Firefox). Therefore SVG elements with ids (typically markers) need to be defined using shared definitions.
+
+            :Styles: Note that all styles defined in an SVG are global and affect all elements. Therefore, it is recommended to define them once using the ``:svg-defs:`` meta information tag.
+
+        Shared definitions in LD-rst documents:
+
+        .. example::
+
+            .. code:: rst
+                :number-lines:
+                :class: copy-to-clipboard
+
+                .. meta::
+                    <other meta information>
+                    :svg-style:
+                        g.graph {
+                            circle{
+                                fill: var(--current-fg-color);
+                                stroke-width: 0.2;
+
+                                &.red { fill: red;}
+                                &.green { fill: green; }
+                                &.blue { fill: blue; }
+                                &.start-node {
+                                    fill: none;
+                                    stroke: red;
+                                    stroke-width: 0.3;
+                                }
+                            }
+                        }
+                    :svg-defs:
+                        <marker
+                            id="arrow"
+                            viewBox="0 0 2 2"
+                            refX="1.8"
+                            refY="1"
+                            markerUnits="strokeWidth"
+                            markerWidth="6"
+                            markerHeight="6"
+                            orient="auto-start-reverse">
+                            <path class="arrow-head" d="M 0 0 L 2 1 L 0 2 z" fill="context-stroke" />
+                        </marker>
+
+
+
+   .. popover:: Font-size dependent SVGs
+
+        LectureDoc generally distinguishes between the slide view and the document view. Both views represent the content in similar ways, but the slide view is optimized for presentation and generally uses a much larger font size (e.g., 48px) while the document view uses a smaller font size (e.g., 14px or 16px). Hence, it is recommended to draw an SVG uusing a font-size of 1 (no unit!) and to put the SVG in a fixed sized container where the size of the container depends on the font-size.
+
+        .. example::
+
+            .. grid::
+
+                .. cell:: width-20
+
+                    .. raw:: html
+                        :class: center-content
+
+                        <div style="width: 5ch; height: 5ch;">
+                        <svg    viewBox="0 0 5 5"
+                                font-size="1"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg">
+                            <rect x="0.5" y="0.5" width="4" height="4" fill="darkblue"/>
+                            <text x="1.75" y="3" fill="white">SVG</text>
+                        </svg>
+                        </div>
+
+                .. cell::  width-80
+
+                    .. code:: rst
+                        :number-lines:
+                        :class: copy-to-clipboard
+
+                        .. raw:: html
+
+                            <div style="width: 5ch; height: 5ch;">
+                            <svg    viewBox="0 0 5 5"
+                                    font-size="1"
+                                    version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0.5" y="0.5" width="4" height="4" fill="darkblue"/>
+                                <text x="1.75" y="3" fill="white">SVG</text>
+                            </svg>
+                            </div>
+
+
 
 .. container:: cheat-sheet-block
 
@@ -215,25 +355,25 @@ LectureDoc2 Cheat Sheet
 
 .. container:: cheat-sheet-block
 
-   .. rubric:: Slide Tweaks 
-      
+   .. rubric:: Slide Tweaks
+
    .. rubric:: Slide without Title
-   
+
    To hide the title of a slide assign the class ``no-title``.
 
-   .. rubric:: Vertically Centered Content  
-   
+   .. rubric:: Vertically Centered Content
+
    Use the class ``center-content``.
 
    .. popover:: Examples
 
       .. code:: rst
          :class: copy-to-clipboard
-      
+
          .. class:: center-content
                   no-title
 
-         Hidden on the slide! 
+         Hidden on the slide!
          --------------------
 
          <Slide Content>
@@ -252,7 +392,7 @@ LectureDoc2 Cheat Sheet
    Associate the class ``exercises`` with a slide to indicate that the slide contains an exercise.
 
    Use the directive ``.. exercise::`` to add an exercise. To add a solution use the custom directive ``.. solution::`` inside of an exercise block and specify the password (optional) using the attribute ``:pwd:``.
-   
+
    .. rubric:: Example (Solution in supplemental information)
 
    .. code:: rst
@@ -263,7 +403,7 @@ LectureDoc2 Cheat Sheet
          <Description of the exercise.>
 
          .. solution:: <Title>
-            :pwd: 1234 
+            :pwd: 1234
 
             <Solution>
 
@@ -275,7 +415,7 @@ LectureDoc2 Cheat Sheet
          :master-password: <Master-password>
 
 .. container:: cheat-sheet-block
-   
+
    .. rubric:: Table of Contents
 
    A navigable table of contents can be created using standard ``rst`` techniques.
@@ -294,7 +434,7 @@ LectureDoc2 Cheat Sheet
 
 
 .. container:: cheat-sheet-block
-   
+
    .. rubric:: Footnotes
 
    ``[#]_`` and ``.. [#]`` create footnotes.
@@ -318,11 +458,11 @@ LectureDoc2 Cheat Sheet
 
 .. container:: cheat-sheet-block
 
-   .. rubric:: References 
+   .. rubric:: References
 
    Use standard rst references.
 
-   .. rubric:: Example   
+   .. rubric:: Example
 
    .. code:: rst
       :class: copy-to-clipboard
@@ -333,8 +473,8 @@ LectureDoc2 Cheat Sheet
 
       References
       -----------
-      
-      .. [Eic24] LectureDoc2; 2024 
+
+      .. [Eic24] LectureDoc2; 2024
 
 
 
@@ -360,22 +500,22 @@ LectureDoc2 Cheat Sheet
    .. rubric:: Fade-out Content
 
    Add the class ``fade-out`` to a container to whiten the content.
-   
 
-     
+
+
 
 .. container:: cheat-sheet-block
 
    .. rubric:: Supplemental Information
 
-   Use the directive ``supplemental`` for respective information. 
+   Use the directive ``supplemental`` for respective information.
 
    .. rubric:: Example
 
    .. code:: rst
       :class: copy-to-clipboard
 
-      .. supplemental:: 
+      .. supplemental::
 
          <Text>
 
@@ -404,7 +544,7 @@ LectureDoc2 Cheat Sheet
 
 
    .. rubric:: Animation
-   
+
    ``incremental`` (and ``wobble``).
 
    ``highlight-line-on-hover`` (always usable), ``highlight-on-hover`` (explicit column or row headers are not supported) or ``highlight-identical-cells``
@@ -418,10 +558,10 @@ LectureDoc2 Cheat Sheet
    .. class:: list-with-explanations
 
    - ``list-with-explanations`` renders text paragraphs of list items less pronounced.
-  
+
      (As shown here.)
    - Use ``impressive`` to make the list more impressive:
-    
+
    .. class:: impressive
 
    -  Add ``negative-list`` to use "❗️" for bullet points.
@@ -435,10 +575,10 @@ LectureDoc2 Cheat Sheet
       :class: copy-to-clipboard
 
       - Point 1
-   
+
       .. class:: negative-list list-with-explanations
       - Point 2
-        Some on-slide explanation. 
+        Some on-slide explanation.
 
       .. class:: positive-list
       - Point 3
@@ -456,11 +596,11 @@ LectureDoc2 Cheat Sheet
    ``rounded-corners`` the corners will be rounded.
 
    .. rubric:: Example
-   
+
    .. code:: rst
       :class: copy-to-clipboard
 
-      .. container:: margin-top-1em 
+      .. container:: margin-top-1em
                      line-above
                      padding-top-1em
                      box-shadow
@@ -489,7 +629,7 @@ LectureDoc2 Cheat Sheet
 
    Available slide transitions:
    ``transition-move-left``, ``transition-scale``, ``transition-fade``, ``transition-move-to-top``
-   
+
    .. rubric:: Example
 
    .. code:: rst
@@ -501,9 +641,9 @@ LectureDoc2 Cheat Sheet
       ----------------
 
 .. container:: cheat-sheet-block
-   
+
    .. rubric:: Revealing Slide Content
-   
+
    All elements with the class ``incremental`` are revealed incrementally.
 
    .. rubric:: Example
@@ -513,9 +653,9 @@ LectureDoc2 Cheat Sheet
 
       .. class:: incremental
 
-      - Item 1 - Part 1 
+      - Item 1 - Part 1
         :incremental:`Item 1 - Part 2`
-      - Item 2 
+      - Item 2
 
 
 
@@ -533,18 +673,18 @@ LectureDoc2 Cheat Sheet
    .. code:: rst
       :class: copy-to-clipboard
 
-      .. container:: two-columns 
+      .. container:: two-columns
 
          .. container:: column no-separator
-      
+
             <Column 1>
-      
-         .. container:: column 
-      
+
+         .. container:: column
+
             <Column 2>
 
    Add ``no-default-width`` to the root container for content based column widths. Use class ``no-separator`` on the left column to remove the separator.
-   
+
 
 
 
@@ -556,22 +696,22 @@ LectureDoc2 Cheat Sheet
 
    .. rubric:: Images in Stacked Layouts
 
-   To avoid that a parent element of a floating element is collapsed add the class ``clearfix`` to the parent element; i. e., when a layer just contains a floating image. 
+   To avoid that a parent element of a floating element is collapsed add the class ``clearfix`` to the parent element; i. e., when a layer just contains a floating image.
 
    .. rubric:: Example
 
    .. code:: rst
-      :class: copy-to-clipboard 
+      :class: copy-to-clipboard
 
       .. deck::
 
         .. card:: clearfix
-        
+
            .. image:: <p1.svg>
               :align: left
 
         .. card:: overlay
-        
+
            .. image:: <p2.svg>
 
          .. card:: warning
@@ -602,10 +742,10 @@ LectureDoc2 Cheat Sheet
 .. container:: cheat-sheet-block
 
    .. rubric:: Colors (``roles``)
-   
+
    .. rubric:: Font Colors
 
-   ``red``, ``gray``, ``light-gray``, ``blue``, ``green``, ``orange``, ``black``, ``shiny-green``, ``shiny-red``, ``dark-red``
+   ``red``, ``gray``, ``light-gray``, ``blue``, ``green``,  ``black``, ``white``, ``shiny-green``, ``shiny-red``
 
    .. rubric:: Background Colors
 
@@ -618,13 +758,13 @@ LectureDoc2 Cheat Sheet
       :class: copy-to-clipboard
 
       :dhbw-red:`Red Text.`
-       
-   
+
+
 
 
 
 .. container:: cheat-sheet-block
-   
+
    .. rubric:: Fine-grained Control (Try to avoid!)
 
    ``margin-none``, ``margin-0-5em``, ``margin-1em``, ``margin-top-1em``, ``margin-top-2em``, ``margin-bottom-1em``, ``margin-bottom-2em``, ``margin-right-1em``, ``margin-left-1em``, ``padding-none``, ``padding-0-5em``, ``padding-1em``, ``padding-top-1em``, ``padding-top-2em``
@@ -638,12 +778,12 @@ LectureDoc2 Cheat Sheet
    Use ``hide-slide`` to exempt it from slide generation.
 
    .. rubric:: Example
-   
+
    .. code:: rst
       :class: copy-to-clipboard
-      
+
       .. class:: hide-slide
-      
+
       <Hidden Slide >
       -----------------
 
@@ -658,15 +798,15 @@ LectureDoc2 Cheat Sheet
    ``id`` The unique identifier for the slide set. Required to store the current state of the presentation.
 
    ``slide-dimensions`` the slides dimension (default: "1920x1200").
-   
+
    ``first-slide`` Determines the first slide that is shown (e.g., <Slide Number> or "last-viewed").
 
    .. rubric:: Example
-   
+
    .. code:: rst
       :class: copy-to-clipboard
-      
-      .. meta:: 
+
+      .. meta::
         :id: <unique id>
         :slide-dimensions: 2560x1440
         :first-slide: last-viewed
@@ -676,7 +816,7 @@ LectureDoc2 Cheat Sheet
 
    .. rubric:: Cheat Sheets with LD\ :sup:`2`
 
-   A cheat-sheet is a slide with the class ``cheat-sheet-8-columns``. 
+   A cheat-sheet is a slide with the class ``cheat-sheet-8-columns``.
 
    .. rubric:: Template
 
@@ -691,7 +831,7 @@ LectureDoc2 Cheat Sheet
          .. container:: cheat-sheet-block
 
             .. rubric:: <TOPIC>
-   
+
             .. rubric:: <SUB-TOPIC>
 
 
@@ -701,12 +841,12 @@ LectureDoc2 Cheat Sheet
 
    .. rubric:: Useful Role and Substitution Definitions
 
-   .. rubric:: Template   
+   .. rubric:: Template
 
-   .. code:: rst 
+   .. code:: rst
       :class: copy-to-clipboard
 
-      .. role:: incremental   
+      .. role:: incremental
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
@@ -718,7 +858,7 @@ LectureDoc2 Cheat Sheet
       .. role:: green
       .. role:: orange
       .. role:: shiny-green
-      .. role:: shiny-red 
+      .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
 
@@ -733,8 +873,8 @@ LectureDoc2 Cheat Sheet
 
       `DocUtils (rst reStructuredText) <https://docutils.sourceforge.io/docs/index.html>`_
 
-      `Example Slide Sets <http://www.michael-eichberg.de/teaching.html>`_ 
-      
+      `Example Slide Sets <http://www.michael-eichberg.de/teaching.html>`_
+
 
 
 
@@ -750,12 +890,12 @@ LectureDoc2 Cheat Sheet
 
    .. rubric:: Useful Role and Substitution Definitions
 
-   .. rubric:: Template   
+   .. rubric:: Template
 
-   .. code:: rst 
+   .. code:: rst
       :class: copy-to-clipboard
 
-      .. role:: incremental   
+      .. role:: incremental
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
@@ -767,7 +907,7 @@ LectureDoc2 Cheat Sheet
       .. role:: green
       .. role:: orange
       .. role:: shiny-green
-      .. role:: shiny-red 
+      .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
 
@@ -779,12 +919,12 @@ LectureDoc2 Cheat Sheet
 
    .. rubric:: Useful Role and Substitution Definitions
 
-   .. rubric:: Template   
+   .. rubric:: Template
 
-   .. code:: rst 
+   .. code:: rst
       :class: copy-to-clipboard
 
-      .. role:: incremental   
+      .. role:: incremental
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
@@ -796,37 +936,7 @@ LectureDoc2 Cheat Sheet
       .. role:: green
       .. role:: orange
       .. role:: shiny-green
-      .. role:: shiny-red 
-      .. role:: dark-red
-      .. role:: black
-
-      .. role:: raw-html(raw)
-         :format: html
-
-
-
-.. container:: cheat-sheet-block
-
-   .. rubric:: Useful Role and Substitution Definitions
-
-   .. rubric:: Template   
-
-   .. code:: rst 
-      :class: copy-to-clipboard
-
-      .. role:: incremental   
-      .. role:: eng
-      .. role:: ger
-      .. role:: peripheral
-      .. role:: obsolete
-      .. role:: red
-      .. role:: gray
-      .. role:: light-gray
-      .. role:: blue
-      .. role:: green
-      .. role:: orange
-      .. role:: shiny-green
-      .. role:: shiny-red 
+      .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
 
@@ -839,12 +949,12 @@ LectureDoc2 Cheat Sheet
 
    .. rubric:: Useful Role and Substitution Definitions
 
-   .. rubric:: Template   
+   .. rubric:: Template
 
-   .. code:: rst 
+   .. code:: rst
       :class: copy-to-clipboard
 
-      .. role:: incremental   
+      .. role:: incremental
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
@@ -856,7 +966,37 @@ LectureDoc2 Cheat Sheet
       .. role:: green
       .. role:: orange
       .. role:: shiny-green
-      .. role:: shiny-red 
+      .. role:: shiny-red
+      .. role:: dark-red
+      .. role:: black
+
+      .. role:: raw-html(raw)
+         :format: html
+
+
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Useful Role and Substitution Definitions
+
+   .. rubric:: Template
+
+   .. code:: rst
+      :class: copy-to-clipboard
+
+      .. role:: incremental
+      .. role:: eng
+      .. role:: ger
+      .. role:: peripheral
+      .. role:: obsolete
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
+      .. role:: shiny-green
+      .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
 
@@ -867,12 +1007,12 @@ LectureDoc2 Cheat Sheet
 
    .. rubric:: Useful Role and Substitution Definitions
 
-   .. rubric:: Template   
+   .. rubric:: Template
 
-   .. code:: rst 
+   .. code:: rst
       :class: copy-to-clipboard
 
-      .. role:: incremental   
+      .. role:: incremental
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
@@ -884,23 +1024,23 @@ LectureDoc2 Cheat Sheet
       .. role:: green
       .. role:: orange
       .. role:: shiny-green
-      .. role:: shiny-red 
+      .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
 
       .. role:: raw-html(raw)
          :format: html
-         
+
 .. container:: cheat-sheet-block
 
    .. rubric:: Useful Role and Substitution Definitions
 
-   .. rubric:: Template   
+   .. rubric:: Template
 
-   .. code:: rst 
+   .. code:: rst
       :class: copy-to-clipboard
 
-      .. role:: incremental   
+      .. role:: incremental
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
@@ -912,7 +1052,7 @@ LectureDoc2 Cheat Sheet
       .. role:: green
       .. role:: orange
       .. role:: shiny-green
-      .. role:: shiny-red 
+      .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
 
