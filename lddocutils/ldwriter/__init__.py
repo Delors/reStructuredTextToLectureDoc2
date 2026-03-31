@@ -1,21 +1,19 @@
-from itertools import batched
-import json
-import textwrap
-
-from docutils import nodes, frontend
-from docutils.nodes import General, Element, inline, container, title, rubric, make_id
-from docutils.parsers.rst import Directive, directives, roles
-from docutils.parsers.rst.directives import unchanged_required, class_option, unchanged
-from docutils.writers import html5_polyglot
-
-import os
 import base64
 import hashlib
-from Crypto.Cipher import AES
-from Crypto.Protocol.KDF import PBKDF2
-from Crypto.Hash import SHA512, SHA256
-from Crypto.Random import get_random_bytes
+import json
+import os
+import textwrap
+from itertools import batched
 
+from Crypto.Cipher import AES
+from Crypto.Hash import SHA256, SHA512
+from Crypto.Protocol.KDF import PBKDF2
+from Crypto.Random import get_random_bytes
+from docutils import frontend, nodes
+from docutils.nodes import Element, General, container, inline, make_id, rubric, title
+from docutils.parsers.rst import Directive, directives, roles
+from docutils.parsers.rst.directives import class_option, unchanged, unchanged_required
+from docutils.writers import html5_polyglot
 
 """
 Writer for LectureDoc2 HTML output.
@@ -39,7 +37,6 @@ def validate_modules_list(
 
 
 class Writer(html5_polyglot.Writer):
-
     supported = ("html", "xhtml")
     """Formats this writer supports."""
 
@@ -212,7 +209,6 @@ class solution(
 
 
 class Solution(Directive):
-
     has_content = True
     option_spec = {"pwd": unchanged_required, "class": class_option}
 
@@ -246,7 +242,6 @@ class supplemental(container):
 
 
 class Supplemental(Directive):
-
     required_arguments = 0
     final_argument_whitespace = True
     optional_arguments = 1
@@ -274,7 +269,6 @@ class scrollable(container):
 
 
 class Scrollable(Directive):
-
     required_arguments = 0
     final_argument_whitespace = True
     optional_arguments = 1
@@ -298,7 +292,6 @@ class module(container):
 
 
 class Module(Directive):
-
     required_arguments = 0
     final_argument_whitespace = True
     optional_arguments = 1
@@ -319,7 +312,7 @@ class Module(Directive):
             node.attributes["classes"] += self.options["class"]
         scope = self.options.get("scope", "all").lower()
         if scope not in {"slide", "document", "all"}:
-            raise self.error('scope must be "slide", "document", or "all"')            
+            raise self.error('scope must be "slide", "document", or "all"')
         node.attributes["scope"] = scope
         # self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -330,7 +323,6 @@ class source(inline):
 
 
 class Source(Directive):
-
     optional_arguments = 1  # the optional file name otherwise the current file
     final_argument_whitespace = False
     has_content = False
@@ -377,7 +369,6 @@ class presenter_note(General, Element):
 
 
 class PresenterNote(Directive):
-
     required_arguments = 0
     final_argument_whitespace = True
     optional_arguments = 1
@@ -405,7 +396,6 @@ class PresenterNote(Directive):
 
 
 class LDTranslator(html5_polyglot.HTMLTranslator):
-
     mathjax_script = '<script type="text/javascript" src="%s"></script>\n'
     """ We need to ensure that MathJax is properly initialized; we will
         call it later to do the typesetting."""
@@ -511,7 +501,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
         if len(self.exercises_passwords) > 0 and self.ld_passwords_file is not None:
             with open(self.ld_passwords_file + ".md", "w") as passwordsFile:
-                for (key,value) in self.exercises_passwords:
+                for key, value in self.exercises_passwords:
                     passwordsFile.write(f"- {key}: \t{value}\n")
 
         # let's search the DOM for classes that require special treatment
@@ -699,10 +689,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         attributes = {"class": " ".join(node.attributes["classes"])}
         if "scope" in node.attributes:
             attributes["data-ld-module-scope"] = node.attributes["scope"]
-        self.body.append(
-            self.starttag(node, "div", **attributes)
-        ) 
-
+        self.body.append(self.starttag(node, "div", **attributes))
 
     def depart_module(self, node):
         self.body.append("</div>")
@@ -909,8 +896,9 @@ directives.register_directive("source", Source)
 
 
 # Imported for the "side effects" of registering the directives
-import lddocutils.ldwriter.lddirectives.popover
 import lddocutils.ldwriter.lddirectives.admonitions
+import lddocutils.ldwriter.lddirectives.code
 import lddocutils.ldwriter.lddirectives.decks
 import lddocutils.ldwriter.lddirectives.grids
+import lddocutils.ldwriter.lddirectives.popover
 import lddocutils.ldwriter.lddirectives.stories
