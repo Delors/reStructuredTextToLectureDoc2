@@ -331,10 +331,92 @@ LectureDoc2 Cheat Sheet
                             </div>
 
 
+.. container:: cheat-sheet-block
+
+    .. rubric:: Code Blocks
+
+    Use the standard ``.. code::`` directive to create a code block.
+
+    .. popover:: Numbering Lines
+
+        LD2 extends the standard reStructuredText :rst:`code` directive to ensure proper alginment of subsequent line numbers if a listing is split up in multiple code blocks or if multiple listings are shown on a single slide.
+
+        .. grid::
+
+            .. cell::
+
+                .. code:: java
+                    :line-number-digits: 2
+                    :class: head no-margin
+
+                    void main() {
+                        // 1. Create and initialize a heap
+                        var heap = new Heap<String>(String.class, 5);
+                        heap.insertAll("dies", "ist", "ein", "test");
+
+
+                .. code:: java
+                    :number-lines: 5
+                    :class: tail incremental-code
+
+                        // 2. Remove elements and print them
+                        while (heap.nonEmpty()) {
+                            String s = heap.remove();
+                            IO.println(s);
+                        }
+                    }
+
+                **The classes:** ``head``, ``tail``, and ``snippet``
+
+                To controll the rendering of the line numbers, a code block that represents only the start of a code should get the class ``head`` and a code block that represents only the end of a code should get the class ``tail``, and a code block that is neither the start nor the end of a code block should get the class ``snippet``
+
+            .. cell::
+
+                .. code:: rst
+                    :number-lines:
+                    :class: copy-to-clipboard
+
+                    .. code:: java
+                        :line-number-digits: 2
+                        :class: head no-margin
+
+                        void main() {
+                            // 1. Create and initialize a heap
+                            var heap = new Heap<String>(String.class, 5);
+                            heap.insertAll("dies", "ist", "ein", "test");
+
+
+                    .. code:: pascal
+                        :number-lines: 5
+                        :class: tail incremental-code
+
+                            // 2. Remove elements and print them
+                            while (heap.nonEmpty()) {
+                                String s = heap.remove();
+                                IO.println(s);
+                            }
+                        }
+
+    .. popover:: Copy to Clipboard
+
+        Add ``copy-to-clipboard`` to a code block to enable copying code to the clipboard.
+
+        .. rubric:: Example
+
+        .. code:: rst
+           :class: copy-to-clipboard
+
+            .. code:: java
+                :class: copy-to-clipboard
+
+                public static void main(...)
+
+
+
 
 .. container:: cheat-sheet-block
 
-   .. rubric:: Vertical Titles
+   .. rubric:: Vertical Titles TODO
 
    Add the class ``vertical-title`` to rotate the title and to change the layout of the slide to a column-based layout. To get back to a row based layout add a container with the class ``width-100``.
 
@@ -478,21 +560,6 @@ LectureDoc2 Cheat Sheet
 
 
 
-.. container:: cheat-sheet-block
-
-   .. rubric:: Copy to Clipboard
-
-   Add ``copy-to-clipboard`` to a code block to enable copying code to the clipboard.
-
-   .. rubric:: Example
-
-   .. code:: rst
-      :class: copy-to-clipboard
-
-      .. code:: java
-         :class: copy-to-clipboard
-
-         public static void main(...)
 
 
 .. container:: cheat-sheet-block
