@@ -7,7 +7,17 @@ from docutils.nodes import Admonition, Element, General
 from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.directives.admonitions import BaseAdmonition
 from docutils.parsers.rst.roles import set_classes
+from docutils.writers._html_base import SimpleListChecker
 from lddocutils.ldwriter import LDTranslator, make_classes
+
+
+def _raise_node_found(self, node):
+    raise nodes.NodeFound
+
+
+def _noop(self, node):
+    pass
+
 
 """Admonition with an optional title."""
 
@@ -97,7 +107,7 @@ de.labels["definition_admonition"] = "Definition"
 en.labels["definition_admonition"] = "Definition"
 
 
-class definition_admonition(Admonition, Element):
+class definition_admonition(General, Element):
     pass
 
 
@@ -117,6 +127,8 @@ LDTranslator.visit_definition_admonition = visit_definition_admonition
 LDTranslator.depart_definition_admonition = depart_definition_admonition
 
 directives.register_directive("definition", DefinitionAdmonition)
+SimpleListChecker.visit_definition_admonition = _raise_node_found
+SimpleListChecker.depart_definition_admonition = _noop
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -127,7 +139,7 @@ de.labels["example"] = "Beispiel"
 en.labels["example"] = "Example"
 
 
-class example(Admonition, Element):
+class example(General, Element):
     pass
 
 
@@ -147,6 +159,8 @@ LDTranslator.visit_example = visit_example
 LDTranslator.depart_example = depart_example
 
 directives.register_directive("example", Example)
+SimpleListChecker.visit_example = _raise_node_found
+SimpleListChecker.depart_example = _noop
 
 
 # ──────────────────────────────────────────────────────────────────────
