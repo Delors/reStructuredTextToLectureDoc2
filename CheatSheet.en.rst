@@ -99,12 +99,19 @@ LectureDoc2 Cheat Sheet
          .. cell:: width-25
 
             .. remark::
+
                This is a remark admonition.
 
             .. example::
+
+               This is an example admonition.
+
+            .. example:: With a title
+
                This is an example admonition.
 
             .. summary::
+
                This is a summary admonition.
 
             .. legend::
@@ -412,6 +419,38 @@ LectureDoc2 Cheat Sheet
                 public static void main(...)
 
 
+.. container:: cheat-sheet-block
+
+   .. rubric:: Supplemental Information
+
+   Use the :rst:`supplemental` directive for information that should not be directly shown on the slide, but should be integrated in the document. If the supplemental information is considered regular information in the document view - i. e., it should not be distinguishable from the main content - use the optional option :rst:`:embed-in-document-flow:`
+
+   .. popover:: Example
+
+        .. example::
+
+            .. grid::
+
+                .. cell:: width-50
+
+                    .. code:: rst
+                        :class: copy-to-clipboard
+
+                        .. supplemental::
+                            :embed-in-document-flow:
+
+                            <Supplemental Information>
+
+
+                .. cell:: width-50
+
+                        .. supplemental::
+                            :embed-in-document-flow:
+
+                            This is supplemental information.
+
+
+
 
 
 .. container:: cheat-sheet-block
@@ -571,20 +610,8 @@ LectureDoc2 Cheat Sheet
 
 
 
-.. container:: cheat-sheet-block
 
-   .. rubric:: Supplemental Information
 
-   Use the directive ``supplemental`` for respective information.
-
-   .. rubric:: Example
-
-   .. code:: rst
-      :class: copy-to-clipboard
-
-      .. supplemental::
-
-         <Text>
 
 .. container:: cheat-sheet-block
 

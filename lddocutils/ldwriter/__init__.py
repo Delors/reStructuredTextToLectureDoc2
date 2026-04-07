@@ -12,7 +12,12 @@ from Crypto.Random import get_random_bytes
 from docutils import frontend, nodes
 from docutils.nodes import Element, General, container, inline, make_id, rubric, title
 from docutils.parsers.rst import Directive, directives, roles
-from docutils.parsers.rst.directives import class_option, unchanged, unchanged_required
+from docutils.parsers.rst.directives import (
+    class_option,
+    flag,
+    unchanged,
+    unchanged_required,
+)
 from docutils.writers import html5_polyglot
 
 """
@@ -246,7 +251,7 @@ class Supplemental(Directive):
     final_argument_whitespace = True
     optional_arguments = 1
     has_content = True
-    option_spec = {}
+    option_spec = {"embed-in-document-flow": flag}
 
     def run(self):
         self.assert_has_content()
@@ -256,9 +261,10 @@ class Supplemental(Directive):
             )
 
         text = "\n".join(self.content)
-        node = container(rawsource=text)
-        node.attributes["classes"] += ["supplemental"]
+        node = supplemental(rawsource=text)
         node.attributes["classes"] += make_classes(self.arguments)
+        if "embed-in-document-flow" in self.options:
+            node["embed_in_document_flow"] = True
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
@@ -695,12 +701,18 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.body.append("</div>")
 
     def visit_supplemental(self, node):
-        self.body.append(
-            self.starttag(node, "div", CLASS=" ".join(node.attributes["classes"]))
-        )
+        classes = node.attributes.get("classes", [])
+        attrs = ""
+        if classes:
+            attrs += f' class="{" ".join(classes)}"'
+        if node.get("ids"):
+            attrs += f' id="{node["ids"][0]}"'
+        if node.get("embed_in_document_flow", False):
+            attrs += " embed-in-document-flow"
+        self.body.append(f"<ld-supplemental{attrs}>")
 
     def depart_supplemental(self, node):
-        self.body.append("</div>")
+        self.body.append("</ld-supplemental>")
 
     def visit_source(self, node):
         source = node.attributes["resolved_path"]
@@ -899,6 +911,7 @@ directives.register_directive("source", Source)
 import lddocutils.ldwriter.lddirectives.admonitions
 import lddocutils.ldwriter.lddirectives.code
 import lddocutils.ldwriter.lddirectives.decks
+import lddocutils.ldwriter.lddirectives.global_information
 import lddocutils.ldwriter.lddirectives.grids
 import lddocutils.ldwriter.lddirectives.popover
 import lddocutils.ldwriter.lddirectives.stories
