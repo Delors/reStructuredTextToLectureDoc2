@@ -54,7 +54,7 @@ def _repad_line_numbers(node, min_digits):
             except ValueError:
                 pass
     width = max(min_digits, len(str(last_num)))
-    fmt = f"%{width}d "
+    fmt = f"%{width}d"
 
     for child in node.children:
         if isinstance(child, nodes.inline) and "ln" in child.get("classes", []):
