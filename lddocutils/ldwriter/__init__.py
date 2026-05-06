@@ -747,7 +747,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
         attributes = {
             "class": " ".join(node.attributes["classes"]),
-            "data-encrypted": "true",  # ENCRYPTED is a boolean attribute
+            "encrypted": "",  # ENCRYPTED is a boolean attribute
         }
         self.body.append(self.starttag(node, "ld-presenter-note", **attributes))
         self.start_of_presenter_note = len(self.body)
