@@ -310,16 +310,18 @@ class Module(Directive):
     def run(self):
         self.assert_has_content()
         if "module" in self.arguments:
-            raise self.error('"module" is superfluous; it is automatically added.')
+            raise self.error('"module" is superfluous')
         text = "\n".join(self.content)
         node = module(text, nodes.Text(text))
-        node.attributes["classes"] += ["module"] + make_classes(self.arguments)
+        if len(self.arguments) != 0:
+            node.attributes["name"] = self.arguments[0]
         if "class" in self.options:
             node.attributes["classes"] += self.options["class"]
         scope = self.options.get("scope", "all").lower()
         if scope not in {"slide", "document", "all"}:
             raise self.error('scope must be "slide", "document", or "all"')
         node.attributes["scope"] = scope
+        # We just take the content as is!
         # self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
 
@@ -463,10 +465,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def analyze_classes(self, node):
         required_modules = set()
-        if hasattr(node, "attributes"):
-            for cls in node.attributes["classes"]:
-                if cls in self.settings.modules:
-                    required_modules.add(self.settings.modules[cls])
+        if isinstance(node, module):
+            module_name = node.attributes.get("name")
+            if module_name in self.settings.modules:
+                required_modules.add(self.settings.modules[module_name])
         if hasattr(node, "children"):
             for child in node.children:
                 required_modules.update(self.analyze_classes(child))
@@ -542,9 +544,7 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if hasattr(self.settings, "modules"):
             required_modules = self.analyze_classes(node)
             if len(required_modules) > 0:
-                self.stylesheet.append(
-                    f"\n    <!-- Modules added for specific classes used in the document: -->"
-                )
+                self.stylesheet.append(f"\n    <!-- Used Modules -->")
                 for module in required_modules:
                     self.stylesheet.append(
                         f'\n    <script src="{module}" type="module"></script>'
@@ -691,14 +691,15 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.body.append("</sup>")
 
     def visit_module(self, node):
-        # TODO replace by ld-module element!
         attributes = {"class": " ".join(node.attributes["classes"])}
+        if "name" in node.attributes:
+            attributes["name"] = node.attributes["name"]
         if "scope" in node.attributes:
-            attributes["data-ld-module-scope"] = node.attributes["scope"]
-        self.body.append(self.starttag(node, "div", **attributes))
+            attributes["scope"] = node.attributes["scope"]
+        self.body.append(self.starttag(node, "ld-module", **attributes))
 
     def depart_module(self, node):
-        self.body.append("</div>")
+        self.body.append("</ld-module>")
 
     def visit_supplemental(self, node):
         classes = node.attributes.get("classes", [])
