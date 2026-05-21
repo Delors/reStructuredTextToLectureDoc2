@@ -434,6 +434,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             'content="width=device-width, initial-scale=1.0" />\n',
         ]
 
+        self.required_modules = set()
+
         # Global definitions that are preprended to the document; i.e., they are
         # added before the template element which contains the document's content.
         self.svg_style = None
@@ -463,16 +465,16 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         super().visit_document(node)
         pass
 
-    def analyze_classes(self, node):
-        required_modules = set()
+    def add_required_module(self, moduleName):
+        if moduleName in self.settings.modules:
+            self.required_modules.add(self.settings.modules[moduleName])
+
+    def determine_required_modules(self, node):
         if isinstance(node, module):
-            module_name = node.attributes.get("name")
-            if module_name in self.settings.modules:
-                required_modules.add(self.settings.modules[module_name])
+            self.add_required_module(node.attributes.get("name"))
         if hasattr(node, "children"):
             for child in node.children:
-                required_modules.update(self.analyze_classes(child))
-        return required_modules
+                self.determine_required_modules(child)
 
     def depart_document(self, node):
         ld_path = self.ld_path
@@ -542,10 +544,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
                 self.stylesheet.extend(self.math_header)
 
         if hasattr(self.settings, "modules"):
-            required_modules = self.analyze_classes(node)
-            if len(required_modules) > 0:
+            self.determine_required_modules(node)
+            if len(self.required_modules) > 0:
                 self.stylesheet.append(f"\n    <!-- Used Modules -->")
-                for module in required_modules:
+                for module in self.required_modules:
                     self.stylesheet.append(
                         f'\n    <script src="{module}" type="module"></script>'
                     )
@@ -602,6 +604,8 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             self.svg_defs = node.attributes["content"]
         elif node.attributes["name"] == "svg-style":
             self.svg_style = node.attributes["content"]
+        elif node.attributes["name"] == "module":
+            self.add_required_module(node.attributes["content"])
         else:
             html5_polyglot.HTMLTranslator.visit_meta(self, node)
 
