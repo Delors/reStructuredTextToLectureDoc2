@@ -3,9 +3,8 @@
 
 from docutils import nodes
 from docutils.languages import de, en
-from docutils.nodes import Admonition, Element, General
+from docutils.nodes import Element, General
 from docutils.parsers.rst import Directive, directives
-from docutils.parsers.rst.directives.admonitions import BaseAdmonition
 from docutils.parsers.rst.roles import set_classes
 from docutils.writers._html_base import SimpleListChecker
 from lddocutils.ldwriter import LDTranslator, make_classes
@@ -19,10 +18,9 @@ def _noop(self, node):
     pass
 
 
-"""Admonition with an optional title."""
-
-
 class TitledAdmonition(Directive):
+    """Admonition with an optional title."""
+
     optional_arguments = 1
     final_argument_whitespace = True
     option_spec = {"class": directives.class_option, "name": directives.unchanged}
@@ -49,9 +47,6 @@ class TitledAdmonition(Directive):
             )
             admonition_node += title
             admonition_node += messages
-            # if 'classes' not in self.options:
-            #    admonition_node['classes'] += ['admonition-'
-            #                                   + nodes.make_id(title_text)]
         self.state.nested_parse(self.content, self.content_offset, admonition_node)
         return [admonition_node]
 
@@ -65,8 +60,8 @@ def _visit_titled_admonition(self, node, label_key, theme):
     """Render the opening markup for a titled admonition.
 
     *label_key* is the key used to look up the localised label in
-    ``self.language.labels`` (e.g. ``"definition_admonition"``).
-    *css_class* is the admonition-specific data-theme name
+    ``self.language.labels`` (e.g. ``"definition"``).
+    *theme* is the admonition-specific data-theme name
     (e.g. ``"definition"``).
     """
     classes = ["admonition"] + node.get("classes", [])
@@ -100,325 +95,65 @@ def _depart_titled_admonition(self, node):
 
 
 # ──────────────────────────────────────────────────────────────────────
-# Definition admonition
+# Factory for registering admonitions
 # ──────────────────────────────────────────────────────────────────────
 
-de.labels["definition"] = "Definition"
-en.labels["definition"] = "Definition"
 
-
-class definition_admonition(General, Element):
-    pass
-
-
-class DefinitionAdmonition(TitledAdmonition):
-    node_class = definition_admonition
-
-
-def visit_definition_admonition(self, node):
-    _visit_titled_admonition(self, node, "definition", "definition")
-
-
-def depart_definition_admonition(self, node):
-    _depart_titled_admonition(self, node)
-
-
-LDTranslator.visit_definition_admonition = visit_definition_admonition
-LDTranslator.depart_definition_admonition = depart_definition_admonition
-
-directives.register_directive("definition", DefinitionAdmonition)
-SimpleListChecker.visit_definition_admonition = _raise_node_found
-SimpleListChecker.depart_definition_admonition = _noop
-
-
-# ──────────────────────────────────────────────────────────────────────
-# Example admonition (with optional title, same pattern as definition)
-# ──────────────────────────────────────────────────────────────────────
-
-de.labels["example"] = "Beispiel"
-en.labels["example"] = "Example"
-
-
-class example(General, Element):
-    pass
-
-
-class Example(TitledAdmonition):
-    node_class = example
-
-
-def visit_example(self, node):
-    _visit_titled_admonition(self, node, "example", "example")
-
-
-def depart_example(self, node):
-    _depart_titled_admonition(self, node)
-
-
-LDTranslator.visit_example = visit_example
-LDTranslator.depart_example = depart_example
-
-directives.register_directive("example", Example)
-SimpleListChecker.visit_example = _raise_node_found
-SimpleListChecker.depart_example = _noop
-
-
-# ───────────────────────────────────────────────────────────────────────
-# Discussion admonition (with optional title, same pattern as definition)
-# ───────────────────────────────────────────────────────────────────────
-
-de.labels["discussion"] = "Diskussion"
-en.labels["discussion"] = "Discussion"
-
-
-class discussion(General, Element):
-    pass
-
-
-class Discussion(TitledAdmonition):
-    node_class = discussion
-
-
-def visit_discussion(self, node):
-    _visit_titled_admonition(self, node, "discussion", "discussion")
-
-
-def depart_discussion(self, node):
-    _depart_titled_admonition(self, node)
-
-
-LDTranslator.visit_discussion = visit_discussion
-LDTranslator.depart_discussion = depart_discussion
-
-directives.register_directive("discussion", Discussion)
-SimpleListChecker.visit_discussion = _raise_node_found
-SimpleListChecker.depart_discussion = _noop
-
-
-# ──────────────────────────────────────────────────────────────────────
-# Remaining admonitions (no optional title)
-# ──────────────────────────────────────────────────────────────────────
-
-de.labels["background"] = "Hintergrund"
-en.labels["background"] = "Background"
-
-
-class background(Admonition, Element):
-    pass
-
-
-de.labels["proof"] = "Beweis"
-en.labels["proof"] = "Proof"
-
-
-class proof(Admonition, Element):
-    pass
-
-
-de.labels["theorem"] = "Satz"
-en.labels["theorem"] = "Theorem"
-
-
-class theorem(Admonition, Element):
-    pass
-
-
-de.labels["lemma"] = "Lemma"
-en.labels["lemma"] = "Lemma"
-
-
-class conclusion(Admonition, Element):
-    pass
-
-
-de.labels["conclusion"] = "Schlussfolgerung"
-en.labels["conclusion"] = "Conclusion"
-
-
-class lemma(Admonition, Element):
-    pass
-
-
-de.labels["observation"] = "Beobachtung"
-en.labels["observation"] = "Observation"
-
-
-class observation(Admonition, Element):
-    pass
-
-
-de.labels["remark"] = "Bemerkung"
-en.labels["remark"] = "Remark"
-
-
-class remark(Admonition, Element):
-    pass
-
-
-de.labels["summary"] = "Zusammenfassung"
-en.labels["summary"] = "Summary"
-
-
-class summary(Admonition, Element):
-    pass
-
-
-de.labels["legend"] = "Legende"
-en.labels["legend"] = "Legend"
-
-
-class legend(Admonition, Element):
-    pass
-
-
-de.labels["repetition"] = "Wiederholung"
-en.labels["repetition"] = "Repetition"
-
-
-class repetition(Admonition, Element):
-    pass
-
-
-de.labels["question"] = "Frage"
-en.labels["question"] = "Question"
-
-
-class question(Admonition, Element):
-    pass
-
-
-de.labels["answer"] = "Antwort"
-en.labels["answer"] = "Answer"
-
-
-class answer(Admonition, Element):
-    pass
-
-
-de.labels["remember"] = "Zur Erinnerung"
-en.labels["remember"] = "Remember"
-
-
-class remember(Admonition, Element):
-    pass
-
-
-de.labels["deprecated"] = "Veraltet"
-en.labels["deprecated"] = "Deprecated"
-
-
-class deprecated(Admonition, Element):
-    pass
-
-
-de.labels["assessment"] = "Bewertung"
-en.labels["assessment"] = "Assessment"
-
-
-class assessment(Admonition, Element):
-    pass
-
-
-class Background(BaseAdmonition):
-    node_class = background
-
-
-directives.register_directive("background", Background)
-
-
-class Proof(BaseAdmonition):
-    node_class = proof
-
-
-directives.register_directive("proof", Proof)
-
-
-class Theorem(BaseAdmonition):
-    node_class = theorem
-
-
-directives.register_directive("theorem", Theorem)
-
-
-class Lemma(BaseAdmonition):
-    node_class = lemma
-
-
-directives.register_directive("lemma", Lemma)
-
-
-class Conclusion(BaseAdmonition):
-    node_class = conclusion
-
-
-directives.register_directive("conclusion", Conclusion)
-
-
-class Observation(BaseAdmonition):
-    node_class = observation
-
-
-directives.register_directive("observation", Observation)
-
-
-class Remark(BaseAdmonition):
-    node_class = remark
-
-
-directives.register_directive("remark", Remark)
-
-
-class Summary(BaseAdmonition):
-    node_class = summary
-
-
-directives.register_directive("summary", Summary)
-
-
-class Legend(BaseAdmonition):
-    node_class = legend
-
-
-directives.register_directive("legend", Legend)
-
-
-class Repetition(BaseAdmonition):
-    node_class = repetition
-
-
-directives.register_directive("repetition", Repetition)
-
-
-class Question(BaseAdmonition):
-    node_class = question
-
-
-directives.register_directive("question", Question)
-
-
-class Answer(BaseAdmonition):
-    node_class = answer
-
-
-directives.register_directive("answer", Answer)
-
-
-class Remember(BaseAdmonition):
-    node_class = remember
-
-
-directives.register_directive("remember", Remember)
-
-
-class Deprecated(BaseAdmonition):
-    node_class = deprecated
-
-
-directives.register_directive("deprecated", Deprecated)
-
-
-class Assessment(BaseAdmonition):
-    node_class = assessment
-
-
-directives.register_directive("assessment", Assessment)
+def _register_titled_admonition(directive_name, label_key, theme, label_de, label_en):
+    """Create node class, directive class, visit/depart methods and wire everything up."""
+    de.labels[label_key] = label_de
+    en.labels[label_key] = label_en
+
+    # Node class (e.g. class definition(General, Element): pass)
+    node_cls = type(directive_name, (General, Element), {})
+    globals()[directive_name] = node_cls
+
+    # Directive class (e.g. class Definition(TitledAdmonition): node_class = definition)
+    dir_cls_name = directive_name.capitalize()
+    dir_cls = type(dir_cls_name, (TitledAdmonition,), {"node_class": node_cls})
+    globals()[dir_cls_name] = dir_cls
+
+    # Translator visit/depart methods
+    def _visit(self, node):
+        _visit_titled_admonition(self, node, label_key, theme)
+
+    def _depart(self, node):
+        _depart_titled_admonition(self, node)
+
+    visit_name = f"visit_{directive_name}"
+    depart_name = f"depart_{directive_name}"
+    setattr(LDTranslator, visit_name, _visit)
+    setattr(LDTranslator, depart_name, _depart)
+
+    # Register RST directive
+    directives.register_directive(directive_name, dir_cls)
+
+    # SimpleListChecker wiring
+    setattr(SimpleListChecker, visit_name, _raise_node_found)
+    setattr(SimpleListChecker, depart_name, _noop)
+
+
+_ADMONITIONS = [
+    # (directive_name, label_key, theme, label_de, label_en)
+    ("definition", "definition", "definition", "Definition", "Definition"),
+    ("example", "example", "example", "Beispiel", "Example"),
+    ("discussion", "discussion", "discussion", "Diskussion", "Discussion"),
+    ("background", "background", "background", "Hintergrund", "Background"),
+    ("proof", "proof", "proof", "Beweis", "Proof"),
+    ("theorem", "theorem", "theorem", "Satz", "Theorem"),
+    ("lemma", "lemma", "lemma", "Lemma", "Lemma"),
+    ("conclusion", "conclusion", "conclusion", "Schlussfolgerung", "Conclusion"),
+    ("observation", "observation", "observation", "Beobachtung", "Observation"),
+    ("remark", "remark", "remark", "Bemerkung", "Remark"),
+    ("summary", "summary", "summary", "Zusammenfassung", "Summary"),
+    ("legend", "legend", "legend", "Legende", "Legend"),
+    ("repetition", "repetition", "repetition", "Wiederholung", "Repetition"),
+    ("question", "question", "question", "Frage", "Question"),
+    ("answer", "answer", "answer", "Antwort", "Answer"),
+    ("remember", "remember", "remember", "Zur Erinnerung", "Remember"),
+    ("deprecated", "deprecated", "deprecated", "Veraltet", "Deprecated"),
+    ("assessment", "assessment", "assessment", "Bewertung", "Assessment"),
+]
+
+for _spec in _ADMONITIONS:
+    _register_titled_admonition(*_spec)
