@@ -61,20 +61,20 @@ class TitledAdmonition(Directive):
 # ──────────────────────────────────────────────────────────────────────
 
 
-def _visit_titled_admonition(self, node, label_key, css_class):
+def _visit_titled_admonition(self, node, label_key, theme):
     """Render the opening markup for a titled admonition.
 
     *label_key* is the key used to look up the localised label in
     ``self.language.labels`` (e.g. ``"definition_admonition"``).
-    *css_class* is the admonition-specific CSS class name
+    *css_class* is the admonition-specific data-theme name
     (e.g. ``"definition"``).
     """
-    classes = ["admonition", css_class] + node.get("classes", [])
+    classes = ["admonition"] + node.get("classes", [])
     class_attr = " ".join(make_classes(classes))
-    self.body.append(f'<aside class="{class_attr}">')
+    self.body.append(f'<aside class="{class_attr}" data-theme="{theme}">')
 
     # Render title: "Label: {optional title}"
-    label = getattr(self, "language", None).labels.get(label_key, css_class.title())
+    label = getattr(self, "language", None).labels.get(label_key, theme.title())
     self.body.append('<p class="admonition-title"><span>')
     self.body.append(f"{label}")
 
@@ -103,8 +103,8 @@ def _depart_titled_admonition(self, node):
 # Definition admonition
 # ──────────────────────────────────────────────────────────────────────
 
-de.labels["definition_admonition"] = "Definition"
-en.labels["definition_admonition"] = "Definition"
+de.labels["definition"] = "Definition"
+en.labels["definition"] = "Definition"
 
 
 class definition_admonition(General, Element):
@@ -116,7 +116,7 @@ class DefinitionAdmonition(TitledAdmonition):
 
 
 def visit_definition_admonition(self, node):
-    _visit_titled_admonition(self, node, "definition_admonition", "definition")
+    _visit_titled_admonition(self, node, "definition", "definition")
 
 
 def depart_definition_admonition(self, node):
@@ -161,6 +161,38 @@ LDTranslator.depart_example = depart_example
 directives.register_directive("example", Example)
 SimpleListChecker.visit_example = _raise_node_found
 SimpleListChecker.depart_example = _noop
+
+
+# ───────────────────────────────────────────────────────────────────────
+# Discussion admonition (with optional title, same pattern as definition)
+# ───────────────────────────────────────────────────────────────────────
+
+de.labels["discussion"] = "Diskussion"
+en.labels["discussion"] = "Discussion"
+
+
+class discussion(General, Element):
+    pass
+
+
+class Discussion(TitledAdmonition):
+    node_class = discussion
+
+
+def visit_discussion(self, node):
+    _visit_titled_admonition(self, node, "discussion", "discussion")
+
+
+def depart_discussion(self, node):
+    _depart_titled_admonition(self, node)
+
+
+LDTranslator.visit_discussion = visit_discussion
+LDTranslator.depart_discussion = depart_discussion
+
+directives.register_directive("discussion", Discussion)
+SimpleListChecker.visit_discussion = _raise_node_found
+SimpleListChecker.depart_discussion = _noop
 
 
 # ──────────────────────────────────────────────────────────────────────
