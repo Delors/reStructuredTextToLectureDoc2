@@ -646,6 +646,20 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
             html5_polyglot.HTMLTranslator.depart_image(self, node)
 
     def visit_title(self, node):
+        if isinstance(node.parent, nodes.Admonition):
+            for cls in node.parent.get("classes", []):
+                if cls in self._STANDARD_ADMONITIONS:
+                    self.body.append(
+                        self.starttag(
+                            node,
+                            "p",
+                            "",
+                            CLASS="admonition-title",
+                            **{"data-theme": cls + "-header"},
+                        )
+                    )
+                    self.context.append("</p>\n")
+                    return
         html5_polyglot.HTMLTranslator.visit_title(self, node)
 
     # Standard admonition types whose class should be moved to data-theme
