@@ -584,6 +584,11 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         if not self.section_count:
             self.body.append("</ld-topic>\n")
 
+        body_tag = self.body_prefix[0]
+        self.body_prefix[0] = body_tag.replace(
+            "<body", '<body data-theme="<light-dark>"', 1
+        )
+
         self.html_body.extend(
             self.body_prefix[1:]
             + self.body_pre_docinfo
