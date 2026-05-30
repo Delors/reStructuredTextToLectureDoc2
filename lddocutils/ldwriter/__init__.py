@@ -648,6 +648,27 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def visit_title(self, node):
         html5_polyglot.HTMLTranslator.visit_title(self, node)
 
+    # Standard admonition types whose class should be moved to data-theme
+    _STANDARD_ADMONITIONS = frozenset((
+        "attention", "caution", "danger", "error", "hint",
+        "important", "note", "tip", "warning",
+    ))
+
+    def visit_admonition(self, node):
+        """Override to move the admonition type from class to data-theme."""
+        classes = [cls for cls in node.get("classes", []) if cls != "admonition"]
+        theme = None
+        for cls in classes:
+            if cls in self._STANDARD_ADMONITIONS:
+                theme = cls
+                classes.remove(cls)
+                break
+        class_attr = " ".join(make_classes(["admonition"] + classes))
+        if theme:
+            self.body.append(f'<aside class="{class_attr}" data-theme="{theme}">')
+        else:
+            self.body.append(f'<aside class="{class_attr}">')
+
     def visit_subtitle(self, node):
         if isinstance(node.parent, nodes.section):
             level = self.section_level + self.initial_header_level - 1
