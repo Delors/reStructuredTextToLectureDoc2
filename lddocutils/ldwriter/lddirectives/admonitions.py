@@ -70,7 +70,7 @@ def _visit_titled_admonition(self, node, label_key, theme):
 
     # Render title: "Label: {optional title}"
     label = getattr(self, "language", None).labels.get(label_key, theme.title())
-    self.body.append('<p class="admonition-title"><span>')
+    self.body.append(f'<p class="admonition-title" data-theme="{theme}-header"><span>')
     self.body.append(f"{label}")
 
     # Extract optional title node and render its inline content
