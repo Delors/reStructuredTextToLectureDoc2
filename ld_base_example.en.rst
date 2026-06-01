@@ -32,7 +32,7 @@
 .. role:: gray
 .. role:: red
 .. role:: peripheral
-.. role:: obsolete
+.. role:: s
 .. role:: incremental
 .. role:: kbd
 .. role:: rst(code)
@@ -474,7 +474,7 @@ LectureDoc comes with a set of predefined (CSS) classes that can be used to form
 
 - :red:`red`
 - :peripheral:`peripheral`
-- :obsolete:`obsolete`
+- :s:`obsolete`
 
 .. container:: incremental
 

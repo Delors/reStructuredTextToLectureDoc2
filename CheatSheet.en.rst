@@ -500,6 +500,7 @@ LectureDoc2 Cheat Sheet
                 .. cell:: width-50
 
                     .. code:: rst
+                        :class: copy-to-clipboard
 
                         .. compound::
                             :theme: muted
@@ -601,7 +602,7 @@ LectureDoc2 Cheat Sheet
 
                 .. rubric:: Relative Colors
 
-                The following relative colors are defined and are expected to work in every theme. In particular the semantically named colors are guaranteed to be readable on a theme's background.
+                The following relative colors are defined and are expected to work in every theme.
 
                 - danger-color
                 - warning-color
@@ -616,6 +617,8 @@ LectureDoc2 Cheat Sheet
             .. cell:: width-33
 
                 .. rubric:: Other Colors
+
+                The following relative colors will work in most themes.
 
                 - text-1-color
                 - text-2-color
@@ -1036,11 +1039,6 @@ LectureDoc2 Cheat Sheet
 
    ``red``, ``gray``, ``light-gray``, ``blue``, ``green``,  ``black``, ``white``, ``shiny-green``, ``shiny-red``
 
-   .. rubric:: Background Colors
-
-   ``red-background``, ``dhbw-gray-background``, ``dhbw-light-gray-background``, ``white-background``, ``blue-background``, ``light-green-background``, ``green-background``, ``yellow-background``
-
-
    .. rubric:: Example
 
    .. code:: rst
@@ -1139,7 +1137,7 @@ LectureDoc2 Cheat Sheet
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
-      .. role:: obsolete
+      .. role:: s
       .. role:: red
       .. role:: gray
       .. role:: light-gray
@@ -1188,7 +1186,7 @@ LectureDoc2 Cheat Sheet
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
-      .. role:: obsolete
+      .. role:: s
       .. role:: red
       .. role:: gray
       .. role:: light-gray
@@ -1217,37 +1215,7 @@ LectureDoc2 Cheat Sheet
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
-      .. role:: obsolete
-      .. role:: red
-      .. role:: gray
-      .. role:: light-gray
-      .. role:: blue
-      .. role:: green
-      .. role:: orange
-      .. role:: shiny-green
-      .. role:: shiny-red
-      .. role:: dark-red
-      .. role:: black
-
-      .. role:: raw-html(raw)
-         :format: html
-
-
-
-.. container:: cheat-sheet-block
-
-   .. rubric:: Useful Role and Substitution Definitions
-
-   .. rubric:: Template
-
-   .. code:: rst
-      :class: copy-to-clipboard
-
-      .. role:: incremental
-      .. role:: eng
-      .. role:: ger
-      .. role:: peripheral
-      .. role:: obsolete
+      .. role:: s
       .. role:: red
       .. role:: gray
       .. role:: light-gray
@@ -1277,7 +1245,37 @@ LectureDoc2 Cheat Sheet
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
-      .. role:: obsolete
+      .. role:: s
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
+      .. role:: shiny-green
+      .. role:: shiny-red
+      .. role:: dark-red
+      .. role:: black
+
+      .. role:: raw-html(raw)
+         :format: html
+
+
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Useful Role and Substitution Definitions
+
+   .. rubric:: Template
+
+   .. code:: rst
+      :class: copy-to-clipboard
+
+      .. role:: incremental
+      .. role:: eng
+      .. role:: ger
+      .. role:: peripheral
+      .. role:: s
       .. role:: red
       .. role:: gray
       .. role:: light-gray
@@ -1305,7 +1303,7 @@ LectureDoc2 Cheat Sheet
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
-      .. role:: obsolete
+      .. role:: s
       .. role:: red
       .. role:: gray
       .. role:: light-gray
@@ -1333,7 +1331,7 @@ LectureDoc2 Cheat Sheet
       .. role:: eng
       .. role:: ger
       .. role:: peripheral
-      .. role:: obsolete
+      .. role:: s
       .. role:: red
       .. role:: gray
       .. role:: light-gray
