@@ -597,22 +597,42 @@ LectureDoc2 Cheat Sheet
                 .. rubric:: Theme Colors
 
                 - primary-color
-                - secondary-color or accent-color
+                - .. container:: accent-color
+
+                    secondary-color or accent-color
                 - background-color
 
                 .. rubric:: Relative Colors
 
                 The following relative colors are defined and are expected to work in every theme.
 
-                - danger-color
-                - warning-color
-                - success-color
-                - hint-color
-                - info-color
-                - link-color
-                - meta-color
-                - muted-color
-                - smallprint-color
+                - .. container:: danger
+
+                    danger-color
+                - .. container:: warning
+
+                    warning-color
+                - .. container:: success
+
+                    success-color
+                - .. container:: hint
+
+                    hint-color
+                - .. container:: info
+
+                    info-color
+                - .. container:: link
+
+                    link-color
+                - .. container:: meta
+
+                    meta-color
+                - .. container:: muted
+
+                    muted-color
+                - .. container:: smallprint
+
+                    smallprint-color
 
             .. cell:: width-33
 
@@ -620,18 +640,42 @@ LectureDoc2 Cheat Sheet
 
                 The following relative colors will work in most themes.
 
-                - text-1-color
-                - text-2-color
-                - text-3-color
-                - text-4-color
-                - text-5-color
-                - text-6-color
-                - text-7-color
-                - text-8-color
-                - text-9-color
-                - text-10-color
-                - text-11-color
-                - text-12-color
+                - .. container:: text-1-color
+
+                    text-1-color
+                - .. container:: text-2-color
+
+                    text-2-color
+                - .. container:: text-3-color
+
+                    text-3-color
+                - .. container:: text-4-color
+
+                    text-4-color
+                - .. container:: text-5-color
+
+                    text-5-color
+                - .. container:: text-6-color
+
+                    text-6-color
+                - .. container:: text-7-color
+
+                    text-7-color
+                - .. container:: text-8-color
+
+                    text-8-color
+                - .. container:: text-9-color
+
+                    text-9-color
+                - .. container:: text-10-color
+
+                    text-10-color
+                - .. container:: text-11-color
+
+                    text-11-color
+                - .. container:: text-12-color
+
+                    text-12-color
 
             .. cell:: width-33
 
