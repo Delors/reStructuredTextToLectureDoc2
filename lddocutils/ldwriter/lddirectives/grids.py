@@ -61,7 +61,10 @@ class Cell(Directive):
     optional_arguments = 1
     final_argument_whitespace = True
     has_content = True
-    option_spec = {"align": unchanged_required}
+    option_spec = {
+        "align": unchanged_required,
+        "theme": directives.unchanged_required,
+    }
 
     def run(self):
         # TODO check that cells are the only children of grid nodes
@@ -73,6 +76,8 @@ class Cell(Directive):
             node.attributes["classes"] = make_classes(self.arguments)
         if "align" in self.options:
             node.attributes["align"] = self.options["align"]
+        if "theme" in self.options:
+            node.attributes["theme"] = self.options["theme"]
         self.state.nested_parse(self.content, self.content_offset, node)
         nodes = [node]
         return nodes
@@ -88,6 +93,8 @@ def visit_cell(self, node):
         # "class": " ".join(node.attributes["classes"]),
         "style": style
     }
+    if "theme" in node.attributes:
+        attributes["data-theme"] = node.attributes["theme"]
     starttag = self.starttag(node, "ld-cell", **attributes)
     self.body.append(starttag)
 
