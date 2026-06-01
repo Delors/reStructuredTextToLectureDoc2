@@ -38,106 +38,51 @@ LectureDoc2 Cheat Sheet
 
       .. grid::
 
-         .. cell:: width-25
+        .. cell:: width-25
+
+            .. rubric:: Severity Related Admonitions – Ranked by Severity
+
+            .. danger::
+
+                Immediate risk with severe consequences.
+
+            .. warning::
+
+                Could cause severe consequence.
+
+            .. caution::
+
+                Could have some negative consequence.
+
+            .. important::
+
+                Key information.
+
+            .. attention::
+
+               General notice.
+
+            .. rubric:: General Admonitions
 
             .. admonition:: Generic Admonition with Custom Title
 
                This is a generic admonition.
 
-            .. attention::
-               This is an attention admonition.
+            .. tip::
 
-            .. caution::
-               This is a caution admonition.
-
-            .. danger::
-               This is a danger admonition.
-
-            .. error::
-               This is an error admonition.
+                A tip is a proactive, value-adding advice.
 
             .. hint::
-               This is a hint admonition.
 
-            .. important::
-               This is an important admonition.
-
-            .. tip::
-               This is a tip admonition.
-
-            .. warning::
-               This is a warning admonition.
-
-         .. cell:: width-25
-
-            .. background::
-               This is a background admonition.
-
-            .. definition::
-
-               This is a definition admonition.
-
-            .. definition:: A Definition with a very long title that spans multiple lines
-
-               This is a definition admonition.
-
-            .. proof::
-               This is a proof admonition.
-
-            .. theorem::
-               This is a theorem admonition.
-
-            .. lemma::
-               This is a lemma admonition.
-
-            .. conclusion::
-               This is a conclusion admonition.
-
-            .. observation::
-               This is an observation admonition.
-
-         .. cell:: width-25
-
-            .. remark::
-
-               This is a remark admonition.
-
-            .. example::
-
-               This is an example admonition.
-
-            .. example:: With a title
-
-               This is an example admonition.
-
-            .. summary::
-
-               This is a summary admonition.
-
-            .. legend::
-               This is a legend admonition.
-
-            .. repetition::
-               This is a repetition admonition.
-
-            .. question::
-               This is a question admonition.
-
-            .. answer::
-               This is an answer admonition.
-
-            .. remember::
-               This is a remember admonition.
-
-         .. cell:: width-25
+                A hint is a reactive, guiding nudge. ("Do this, when you are stuck.")
 
             .. deprecated::
+
                This is a deprecated admonition.
 
-            .. assessment::
-               This is an assessment admonition.
+        .. cell:: width-25
 
-            .. rubric:: Support for Notes
+            .. rubric:: Support for (Side-)Notes
 
             Text above the note.
 
@@ -170,6 +115,97 @@ LectureDoc2 Cheat Sheet
                         :class: clear-float
 
                         This tip is shown ...
+
+            .. background::
+
+               This is a background admonition.
+
+            .. rubric:: Technical Admonition
+
+            .. error::
+
+                This is an error admonition.
+
+
+        .. cell:: width-25
+
+            .. rubric:: Math Related
+
+            .. definition::
+
+               This is a definition admonition.
+
+            .. definition:: A Definition with a very long title that spans multiple lines, in particular if the message is deliberately very long and is totally useless contentwise
+
+               This is a definition admonition.
+
+            .. proof::
+
+               This is a proof admonition.
+
+            .. theorem::
+
+               This is a theorem admonition.
+
+            .. lemma::
+
+               This is a lemma admonition.
+
+            .. conclusion::
+
+               This is a conclusion admonition.
+
+
+            .. rubric:: Special Information
+
+            .. repetition::
+
+               This is a repetition admonition.
+
+
+        .. cell:: width-25
+
+            .. observation::
+
+               This is an observation admonition.
+
+            .. question::
+
+               This is a question admonition.
+
+            .. answer::
+
+               This is an answer admonition.
+
+            .. example::
+
+               This is an example admonition.
+
+            .. example:: With a title
+
+               This is an example admonition.
+
+            .. summary::
+
+               This is a summary admonition.
+
+            .. legend::
+
+               This is a legend admonition.
+
+            .. remark::
+
+               This is a remark admonition.
+
+            .. remember::
+
+               This is a remember admonition.
+
+            .. assessment::
+
+               This is an assessment admonition.
+
+
 
    .. popover:: Code
 
