@@ -209,14 +209,14 @@ LectureDoc2 Cheat Sheet
 
    .. popover:: Code
 
-      .. rubric:: Most basic Example
+      .. example:: Most basic Example
 
-      .. code:: rst
-         :class: copy-to-clipboard
+        .. code:: rst
+            :class: copy-to-clipboard
 
-         .. definition:: A Definition with a very long title that spans multiple lines
+            .. definition:: A Definition with a very long title that spans multiple lines
 
-               This is a definition admonition.
+                This is a definition admonition.
 
 
 .. container:: cheat-sheet-block
@@ -444,24 +444,54 @@ LectureDoc2 Cheat Sheet
 
         Add ``copy-to-clipboard`` to a code block to enable copying code to the clipboard.
 
-        .. rubric:: Example
+        .. example::
 
-        .. code:: rst
-           :class: copy-to-clipboard
-
-            .. code:: java
+            .. code:: rst
                 :class: copy-to-clipboard
 
-                public static void main(...)
+                .. code:: java
+                    :class: copy-to-clipboard
+
+                    public static void main(...)
 
 
 .. container:: cheat-sheet-block
 
    .. rubric:: Supplemental Information
 
-   Use the :rst:`supplemental` directive for information that should not be directly shown on the slide, but should be integrated in the document. If the supplemental information is considered regular information in the document view - i. e., it should not be distinguishable from the main content - use the optional option :rst:`:embed-in-document-flow:`
+   Use the :rst:`supplemental` directive for information that should not be directly shown on the slide, but should be integrated in the document. If the supplemental information is considered regular information in the document view – i.e., it should not be distinguishable from the main content – use the optional option :rst:`:embed-in-document-flow:`
 
    .. popover:: Example
+
+        .. example::
+
+            .. code:: rst
+                :class: copy-to-clipboard
+
+                .. supplemental::
+                    :embed-in-document-flow:
+
+                    <Supplemental Information>
+
+
+
+            .. supplemental::
+                :embed-in-document-flow:
+
+                This is supplemental information.
+
+
+.. container:: cheat-sheet-block
+
+    .. rubric:: Colors and Theming
+
+    In LD2 the compound directive has the additional option :rst:`:theme:` which can be used to set the theme for a compound.
+
+    .. remark:: Admonitions and Theming
+
+        When you use of the defined admonitions, the corresponding theme is automatically selected.
+
+    .. popover:: Compound Direcive Example
 
         .. example::
 
@@ -470,22 +500,151 @@ LectureDoc2 Cheat Sheet
                 .. cell:: width-50
 
                     .. code:: rst
-                        :class: copy-to-clipboard
 
-                        .. supplemental::
-                            :embed-in-document-flow:
+                        .. compound::
+                            :theme: muted
 
-                            <Supplemental Information>
+                            Muted information.
 
 
                 .. cell:: width-50
 
-                        .. supplemental::
-                            :embed-in-document-flow:
+                    .. compound::
+                        :theme: muted
 
-                            This is supplemental information.
+                        Muted information.
 
 
+    .. popover:: List of Themes
+
+        Visually identical themes are grouped.
+
+        .. grid::
+
+            .. cell:: width-33
+
+                .. rubric:: Standard Themes
+
+                -   <light-dark>
+
+                    **The default theme which changes based on the browser preferences.**
+                -   light
+                -   dark
+
+                .. rubric:: Revertiy Related Themes
+
+                - danger-header
+                - warning-header
+                - danger
+                - warning or caution-header or important-header
+                - caution
+                - attention-header
+
+                .. rubric:: Math Related Themes
+
+                - definition-header or proof-header or theorem-header or lemma-header or conclusion-header
+
+                .. rubric:: Note Related Themes
+
+                - background-header or note-header or muted
+                - deprecated or muted-dark
+
+            .. cell:: width-33
+
+                .. rubric:: Special Information Related Themes
+
+                - example-header or example-dark
+                - example
+                - tip-header
+                - tip
+                - tip-medium
+                - tip-dark
+                - hint-header
+                - hint
+                - observation-header
+                - observation
+
+                - question-header
+                - question
+                - answer-header
+                - answer
+                - success
+                - success-dark
+
+                - info
+
+                - repetition-header
+                - summary-header
+                - assessment-header
+                - legend-header
+                - remark-header
+                - remember-header
+
+            .. cell:: width-33
+
+                .. rubric:: Color Related Themes
+
+                - emphasized
+                - accent
+
+    .. popover:: Colors
+
+        .. grid::
+
+            .. cell:: width-33
+
+                .. rubric:: Theme Colors
+
+                - primary-color
+                - secondary-color or accent-color
+                - background-color
+
+                .. rubric:: Relative Colors
+
+                The following relative colors are defined and are expected to work in every theme. In particular the semantically named colors are guaranteed to be readable on a theme's background.
+
+                - danger-color
+                - warning-color
+                - success-color
+                - hint-color
+                - info-color
+                - link-color
+                - meta-color
+                - muted-color
+                - smallprint-color
+
+            .. cell:: width-33
+
+                .. rubric:: Other Colors
+
+                - text-1-color
+                - text-2-color
+                - text-3-color
+                - text-4-color
+                - text-5-color
+                - text-6-color
+                - text-7-color
+                - text-8-color
+                - text-9-color
+                - text-10-color
+                - text-11-color
+                - text-12-color
+
+            .. cell:: width-33
+
+                .. rubric:: Hard-wired Colors
+
+                -   symbol-background-color
+
+                    Sets the background color.
+                -   symbol-color
+
+                .. rubric:: Special Purpose Colors
+
+                :info:`These colors are not available via CSS classes.`
+
+                - shadow-color  (basically the primary color with 0.5 opacity)
+                - border-color  (basically the primary color with 0.75 opacity)
 
 
 
