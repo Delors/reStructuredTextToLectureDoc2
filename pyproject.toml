@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rst2ld"
+version = "0.1.0"
+description = "reStructuredText to LectureDoc2 writer and directives"
+readme = "readme.rst"
+requires-python = ">=3.13"
+dependencies = [
+    "docutils==0.22.3",
+    "pycryptodome==3.23.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+]
+
+[project.scripts]
+rst2ld = "rst2ld:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["lddocutils*"]

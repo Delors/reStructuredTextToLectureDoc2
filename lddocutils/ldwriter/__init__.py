@@ -759,6 +759,15 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     def depart_supplemental(self, node):
         self.body.append("</ld-supplemental>")
 
+    def visit_compound(self, node):
+        attributes = {"class": "compound"}
+        if "theme" in node.attributes:
+            attributes["data-theme"] = node.attributes["theme"]
+        self.body.append(self.starttag(node, "div", **attributes))
+
+    def depart_compound(self, node):
+        self.body.append("</div>\n")
+
     def visit_source(self, node):
         source = node.attributes["resolved_path"]
         if "suffix" in node.attributes:
@@ -954,9 +963,17 @@ directives.register_directive("source", Source)
 
 # Imported for the "side effects" of registering the directives
 import lddocutils.ldwriter.lddirectives.admonitions
+
 import lddocutils.ldwriter.lddirectives.code
+
+import lddocutils.ldwriter.lddirectives.compound
+
 import lddocutils.ldwriter.lddirectives.decks
+
 import lddocutils.ldwriter.lddirectives.global_information
+
 import lddocutils.ldwriter.lddirectives.grids
+
 import lddocutils.ldwriter.lddirectives.popover
+
 import lddocutils.ldwriter.lddirectives.stories

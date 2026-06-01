@@ -13,4 +13,10 @@ from lddocutils.ldwriter import Writer
 DESCRIPTION = ('Generates LectureDoc2 HTML documents from standalone '
                'reStructuredText sources.  ' + default_description)
 
-publish_cmdline(writer=Writer(), writer_name='html', description=DESCRIPTION)
+
+def main():
+    publish_cmdline(writer=Writer(), writer_name='html', description=DESCRIPTION)
+
+
+if __name__ == '__main__':
+    main()
