@@ -485,13 +485,13 @@ LectureDoc2 Cheat Sheet
 
     .. rubric:: Colors and Theming
 
-    In LD2 the compound directive has the additional option :rst:`:theme:` which can be used to set the theme for a compound.
+    In LD2 the compound and cell directives have the additional :rst:`:theme:` option which can be used to explicitly set the theme for a compound or cell.
 
     .. remark:: Admonitions and Theming
 
         When you use of the defined admonitions, the corresponding theme is automatically selected.
 
-    .. popover:: Compound Direcive Example
+    .. popover:: Compound Directive Example
 
         .. example::
 
@@ -889,35 +889,59 @@ LectureDoc2 Cheat Sheet
 
 .. container:: cheat-sheet-block
 
-   .. rubric:: Lists
+    .. rubric:: Lists
 
-   .. class:: list-with-explanations
+    .. class:: list-with-explanations
 
-   - ``list-with-explanations`` renders text paragraphs of list items less pronounced.
+    -   ``list-with-explanations``
 
-     (As shown here.)
-   - Use ``impressive`` to make the list more impressive:
+        renders text paragraphs of list items less pronounced.
 
-   .. class:: impressive
+    -    Add ``negative-list`` to use "✗" for bullet points.
 
-   -  Add ``negative-list`` to use "❗️" for bullet points.
-
-   -  Add ``positive-list`` to use "✓" for bullet points.
+    -    Add ``positive-list`` to use "✓" for bullet points.
 
 
-   .. rubric:: Example
+    .. popover:: Example
 
-   .. code:: rst
-      :class: copy-to-clipboard
+        .. example::
 
-      - Point 1
+            .. grid::
 
-      .. class:: negative-list list-with-explanations
-      - Point 2
-        Some on-slide explanation.
+                .. cell::
 
-      .. class:: positive-list
-      - Point 3
+                    .. rubric:: Code
+
+                    .. code:: rst
+                        :class: copy-to-clipboard
+
+                        - Point 1
+
+                        .. class:: negative-list list-with-explanations
+
+                        -   Point 2
+
+                            Some on-slide explanation.
+
+                        .. class:: positive-list
+
+                        - Point 3
+
+                .. cell::
+
+                    .. rubric:: Result
+
+                    -   Point 1
+
+                    .. class:: negative-list list-with-explanations
+
+                    -   Point 2
+
+                        Some on-slide explanation.
+
+                    .. class:: positive-list
+
+                    -   Point 3
 
 
 
@@ -1079,9 +1103,9 @@ LectureDoc2 Cheat Sheet
 
    .. rubric:: Colors (``roles``)
 
-   .. rubric:: Font Colors
+   .. rubric:: Semantic-based Font Colors
 
-   ``red``, ``gray``, ``light-gray``, ``blue``, ``green``,  ``black``, ``white``, ``shiny-green``, ``shiny-red``
+   ``info``, ``success``, ``danger``, ``fail`` / ``warning``, ``hint``, ``tip``,  ``meta``, ``muted``,  ``smallprint``, ``link-color``, ``accent-color``
 
    .. rubric:: Example
 
@@ -1188,7 +1212,6 @@ LectureDoc2 Cheat Sheet
       .. role:: blue
       .. role:: green
       .. role:: orange
-      .. role:: shiny-green
       .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
@@ -1237,7 +1260,6 @@ LectureDoc2 Cheat Sheet
       .. role:: blue
       .. role:: green
       .. role:: orange
-      .. role:: shiny-green
       .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
@@ -1266,37 +1288,6 @@ LectureDoc2 Cheat Sheet
       .. role:: blue
       .. role:: green
       .. role:: orange
-      .. role:: shiny-green
-      .. role:: shiny-red
-      .. role:: dark-red
-      .. role:: black
-
-      .. role:: raw-html(raw)
-         :format: html
-
-
-
-.. container:: cheat-sheet-block
-
-   .. rubric:: Useful Role and Substitution Definitions
-
-   .. rubric:: Template
-
-   .. code:: rst
-      :class: copy-to-clipboard
-
-      .. role:: incremental
-      .. role:: eng
-      .. role:: ger
-      .. role:: peripheral
-      .. role:: s
-      .. role:: red
-      .. role:: gray
-      .. role:: light-gray
-      .. role:: blue
-      .. role:: green
-      .. role:: orange
-      .. role:: shiny-green
       .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
@@ -1326,7 +1317,35 @@ LectureDoc2 Cheat Sheet
       .. role:: blue
       .. role:: green
       .. role:: orange
-      .. role:: shiny-green
+      .. role:: shiny-red
+      .. role:: dark-red
+      .. role:: black
+
+      .. role:: raw-html(raw)
+         :format: html
+
+
+
+.. container:: cheat-sheet-block
+
+   .. rubric:: Useful Role and Substitution Definitions
+
+   .. rubric:: Template
+
+   .. code:: rst
+      :class: copy-to-clipboard
+
+      .. role:: incremental
+      .. role:: eng
+      .. role:: ger
+      .. role:: peripheral
+      .. role:: s
+      .. role:: red
+      .. role:: gray
+      .. role:: light-gray
+      .. role:: blue
+      .. role:: green
+      .. role:: orange
       .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
@@ -1354,7 +1373,6 @@ LectureDoc2 Cheat Sheet
       .. role:: blue
       .. role:: green
       .. role:: orange
-      .. role:: shiny-green
       .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
@@ -1382,7 +1400,6 @@ LectureDoc2 Cheat Sheet
       .. role:: blue
       .. role:: green
       .. role:: orange
-      .. role:: shiny-green
       .. role:: shiny-red
       .. role:: dark-red
       .. role:: black
