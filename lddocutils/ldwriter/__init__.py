@@ -852,6 +852,16 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     # FIXME Handling of exercise titles that have special chars (e.g. ')
 
+    def visit_rubric(self, node):
+        self.body.append(self.starttag(node, "p", "", CLASS="rubric"))
+        if "ld-exercise-title" in node.get("classes", []):
+            self.body.append("<span>")
+
+    def depart_rubric(self, node):
+        if "ld-exercise-title" in node.get("classes", []):
+            self.body.append("</span>")
+        self.body.append("</p>\n")
+
     def visit_exercise(self, node):
         if self.start_of_exercise is not None:
             raise Exception("exercises cannot be nested")  # TODO move to parsing phase!
