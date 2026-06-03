@@ -187,7 +187,11 @@ class Exercise(Directive):
                 textnodes, messages = self.state.inline_text(
                     exercise_formatted_title, self.lineno
                 )
-                title = nodes.rubric(exercise_title, "", *textnodes)
+                inline = nodes.inline()
+                for child in textnodes:
+                    inline += child
+                title = nodes.rubric()
+                title += inline
                 title.source, title.line = self.state_machine.get_source_and_line(
                     self.lineno
                 )
@@ -195,7 +199,9 @@ class Exercise(Directive):
                 exercise_node += title
                 exercise_node += messages
             else:
-                title = nodes.rubric(text=exercise_title)
+                inline = nodes.inline(text=exercise_title)
+                title = nodes.rubric()
+                title += inline
                 title.source, title.line = self.state_machine.get_source_and_line(
                     self.lineno
                 )
@@ -851,16 +857,6 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
     #
 
     # FIXME Handling of exercise titles that have special chars (e.g. ')
-
-    def visit_rubric(self, node):
-        self.body.append(self.starttag(node, "p", "", CLASS="rubric"))
-        if "ld-exercise-title" in node.get("classes", []):
-            self.body.append("<span>")
-
-    def depart_rubric(self, node):
-        if "ld-exercise-title" in node.get("classes", []):
-            self.body.append("</span>")
-        self.body.append("</p>\n")
 
     def visit_exercise(self, node):
         if self.start_of_exercise is not None:
