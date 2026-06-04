@@ -14,7 +14,9 @@ class Deck(Directive):
     optional_arguments = 1
     final_argument_whitespace = True
     has_content = True
-    option_spec = {}
+    option_spec = {
+        "theme": directives.unchanged_required,
+    }
 
     def run(self):
         self.assert_has_content()
@@ -23,6 +25,8 @@ class Deck(Directive):
         if "deck" in self.arguments:
             raise self.error('"deck" is superfluous; it is automatically added.')
         node.attributes["classes"] += make_classes(self.arguments)
+        if "theme" in self.options:
+            node.attributes["theme"] = self.options["theme"]
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -37,7 +41,10 @@ class Card(Directive):
     final_argument_whitespace = True
     optional_arguments = 1
     has_content = True
-    option_spec = {"not-incremental": flag}
+    option_spec = {
+        "not-incremental": flag,
+        "theme": directives.unchanged_required,
+    }
 
     def run(self):
         self.assert_has_content()
@@ -54,6 +61,9 @@ class Card(Directive):
         if "not-incremental" in self.options:
             node["not_incremental"] = True
 
+        if "theme" in self.options:
+            node.attributes["theme"] = self.options["theme"]
+
         node.attributes["classes"] += make_classes(self.arguments)
         # Parse the directive contents.
         self.state.nested_parse(self.content, self.content_offset, node)
@@ -62,7 +72,10 @@ class Card(Directive):
 
 def visit_deck(self, node):
     self.card_count.append(0)  # required to determine if a card is incremental
-    starttag = self.starttag(node, "ld-deck")
+    attributes = {}
+    if "theme" in node.attributes:
+        attributes["data-theme"] = node.attributes["theme"]
+    starttag = self.starttag(node, "ld-deck", **attributes)
     self.body.append(starttag)
 
 
@@ -78,7 +91,10 @@ def visit_card(self, node):
     if card_id > 0 and not node.attributes.get("not_incremental"):
         node.attributes["classes"] += ["incremental"]
     self.card_count.append(card_id + 1)
-    self.body.append(self.starttag(node, "ld-card"))
+    attributes = {}
+    if "theme" in node.attributes:
+        attributes["data-theme"] = node.attributes["theme"]
+    self.body.append(self.starttag(node, "ld-card", **attributes))
 
 
 def depart_card(self, node):
