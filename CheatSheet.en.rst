@@ -532,7 +532,7 @@ LectureDoc2 Cheat Sheet
                 -   light
                 -   dark
 
-                .. rubric:: Revertiy Related Themes
+                .. rubric:: Severity Related Themes
 
                 - danger-header
                 - warning-header
@@ -1052,7 +1052,7 @@ LectureDoc2 Cheat Sheet
 
    .. rubric:: Stacked Layouts
 
-   Stacked layouts are based on nested layers. Each layer - except of the first one - needs to have the class ``incremental`` and/or the class ``overlay`` for transparent layers. :red:`(Up to 10 layers are supported.)` To turn off the numbering of opaque layers use ``.no-number``.
+   Stacked layouts are based on nested layers. Each layer - except of the first one - needs to have the class ``incremental`` and/or the class ``overlay`` for transparent layers. :info:`(Up to 30 layers are supported.)` To turn off the numbering of opaque layers use ``.no-number``.
 
    .. rubric:: Images in Stacked Layouts
 
