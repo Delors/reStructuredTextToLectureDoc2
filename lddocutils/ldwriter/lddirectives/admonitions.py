@@ -66,7 +66,8 @@ def _visit_titled_admonition(self, node, label_key, theme):
     """
     classes = ["admonition"] + node.get("classes", [])
     class_attr = " ".join(make_classes(classes))
-    self.body.append(f'<aside class="{class_attr}" data-theme="{theme}">')
+    id_attr = f' id="{node["ids"][0]}"' if node.get("ids") else ""
+    self.body.append(f'<aside class="{class_attr}"{id_attr} data-theme="{theme}">')
 
     # Render title: "Label: {optional title}"
     label = getattr(self, "language", None).labels.get(label_key, theme.title())
