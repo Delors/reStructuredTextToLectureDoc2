@@ -27,9 +27,9 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:align:`
+        * - :info:`:align:`
           - ``auto`` (default), ``center``, ``start``, ``end``
-        * - :option:`:theme:`
+        * - :info:`:theme:`
           - Any theme name (emitted as ``data-theme``)
 
     .. code:: rst
@@ -57,11 +57,11 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:theme:` *(deck)*
+        * - :info:`:theme:` *(deck)*
           - Any theme name (emitted as ``data-theme`` on ``<ld-deck>``)
-        * - :option:`:theme:` *(card)*
+        * - :info:`:theme:` *(card)*
           - Any theme name (emitted as ``data-theme`` on ``<ld-card>``)
-        * - :option:`:not-incremental:` *(card)*
+        * - :info:`:not-incremental:` *(card)*
           - Flag; prevents the card from being shown incrementally
 
     .. code:: rst
@@ -88,7 +88,7 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:theme:`
+        * - :info:`:theme:`
           - Any theme name (emitted as ``data-theme``)
 
     .. code:: rst
@@ -111,17 +111,17 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:formatted-title:`
+        * - :info:`:formatted-title:`
           - Inline markup supported (e.g. ``**bold**``)
-        * - :option:`:symbol:`
+        * - :info:`:symbol:`
           - Single character symbol (e.g. ``λ``)
-        * - :option:`:type:`
+        * - :info:`:type:`
           - ``cheat-sheet`` (default) or ``slide``
-        * - :option:`:embed:`
+        * - :info:`:embed:`
           - Flag; embed in document flow
-        * - :option:`:class:`
+        * - :info:`:class:`
           - CSS class(es)
-        * - :option:`:name:`
+        * - :info:`:name:`
           - Reference name
 
     .. code:: rst
@@ -142,7 +142,7 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:embed-in-document-flow:`
+        * - :info:`:embed-in-document-flow:`
           - Flag; makes content indistinguishable from main content in document view
 
     .. code:: rst
@@ -161,7 +161,7 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:name:`
+        * - :info:`:name:`
           - Reference name
 
     .. code:: rst
@@ -179,9 +179,9 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:class:`
+        * - :info:`:class:`
           - CSS class(es)
-        * - :option:`:scope:`
+        * - :info:`:scope:`
           - ``slide``, ``document``, or ``all`` (default)
 
     .. code:: rst
@@ -200,11 +200,11 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:prefix:`
+        * - :info:`:prefix:`
           - Text to prepend to the resolved path
-        * - :option:`:suffix:`
+        * - :info:`:suffix:`
           - Text to append to the resolved path
-        * - :option:`:path:`
+        * - :info:`:path:`
           - ``relative`` (default) or ``absolute``
 
     .. code:: rst
@@ -226,11 +226,11 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:formatted-title:`
+        * - :info:`:formatted-title:`
           - Inline markup supported
-        * - :option:`:name:`
+        * - :info:`:name:`
           - Reference name
-        * - :option:`:class:`
+        * - :info:`:class:`
           - CSS class(es)
 
     .. code:: rst
@@ -248,9 +248,9 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:pwd:`
+        * - :info:`:pwd:`
           - Password (min. 3 chars); auto-generated if omitted
-        * - :option:`:class:`
+        * - :info:`:class:`
           - CSS class(es)
 
     .. code:: rst
@@ -273,9 +273,9 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:class:`
+        * - :info:`:class:`
           - CSS class(es)
-        * - :option:`:name:`
+        * - :info:`:name:`
           - Reference name
 
     .. rubric:: Custom Admonitions
@@ -316,7 +316,7 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:height:`
+        * - :info:`:height:`
           - CSS height value (e.g. ``300px``, ``10em``)
 
     .. code:: rst
@@ -335,7 +335,7 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:class:`
+        * - :info:`:class:`
           - CSS class(es) for the trigger button
 
     .. code:: rst
@@ -356,7 +356,7 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:line-number-digits:`
+        * - :info:`:line-number-digits:`
           - Integer 1–4; minimum padding width for line numbers
 
     Implicitly enables ``:number-lines:`` when set.
@@ -368,5 +368,3 @@ LectureDoc2 Custom Directives Cheat Sheet
             :line-number-digits: 2
 
             public static void main(...) { }
-
-
