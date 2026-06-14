@@ -43,7 +43,8 @@ Title
    :class: my-class another-class
 """
         html = publish_html(rst)
-        assert '<div style="width: 200px; height: 200px;" class="my-class another-class">' in html
+        assert 'class="my-class another-class"' in html
+        assert 'style="width: 200px; height: 200px;"' in html
         assert svg_content in html
 
     def test_include_svg_with_name(self, publish_html, tmp_path):
@@ -63,7 +64,7 @@ Title
 """
         html = publish_html(rst)
         assert 'id="my-diagram"' in html
-        assert '<div style="width: 100%; height: 100%;"' in html
+        assert 'style="width: 100%; height: 100%;"' in html
         assert svg_content in html
 
     def test_include_svg_with_class_and_name(self, publish_html, tmp_path):
@@ -85,7 +86,51 @@ Title
         html = publish_html(rst)
         assert 'id="figure-1"' in html
         assert 'class="diagram"' in html
-        assert '<div style="width: 400px; height: 400px;"' in html
+        assert 'style="width: 400px; height: 400px;"' in html
+        assert svg_content in html
+
+    def test_include_svg_with_alt(self, publish_html, tmp_path):
+        """The :alt: option is emitted as an aria-label on the wrapping div."""
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>'
+        svg_file = tmp_path / "rect.svg"
+        svg_file.write_text(svg_content, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :width: 100px
+   :height: 100px
+   :alt: A small rectangle
+"""
+        html = publish_html(rst)
+        assert 'aria-label="A small rectangle"' in html
+        assert 'style="width: 100px; height: 100px;"' in html
+        assert svg_content in html
+
+    def test_include_svg_with_all_options(self, publish_html, tmp_path):
+        """All options (width, height, class, name, alt) can be used together."""
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 10,10"/></svg>'
+        svg_file = tmp_path / "poly.svg"
+        svg_file.write_text(svg_content, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :width: 200px
+   :height: 200px
+   :class: diagram
+   :name: figure-2
+   :alt: A simple polygon
+"""
+        html = publish_html(rst)
+        assert 'id="figure-2"' in html
+        assert 'class="diagram"' in html
+        assert 'aria-label="A simple polygon"' in html
+        assert 'style="width: 200px; height: 200px;"' in html
         assert svg_content in html
 
     def test_include_svg_missing_width_raises_error(self, publish_html, tmp_path):
@@ -167,4 +212,4 @@ Title
         ).decode("utf-8")
 
         assert svg_content in html
-        assert '<div style="width: 250px; height: 150px;">' in html
+        assert 'style="width: 250px; height: 150px;"' in html

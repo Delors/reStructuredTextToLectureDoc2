@@ -51,6 +51,7 @@ class IncludeSVG(Directive):
         "height": unchanged_required,
         "class": class_option,
         "name": unchanged,
+        "alt": unchanged,
     }
 
     def run(self):
@@ -82,6 +83,9 @@ class IncludeSVG(Directive):
         if "name" in self.options:
             self.add_name(node)
 
+        if "alt" in self.options:
+            node["alt"] = self.options["alt"]
+
         node.source, node.line = self.state_machine.get_source_and_line(self.lineno)
 
         return [node]
@@ -95,6 +99,8 @@ class IncludeSVG(Directive):
 def visit_include_svg(self, node):
     style = f"width: {node['width']}; height: {node['height']};"
     attributes = {"style": style}
+    if "alt" in node:
+        attributes["aria-label"] = node["alt"]
     self.body.append(self.starttag(node, "div", **attributes))
     self.body.append(node["svg_content"])
 

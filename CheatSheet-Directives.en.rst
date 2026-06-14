@@ -230,6 +230,8 @@ LectureDoc2 Custom Directives Cheat Sheet
           - CSS class(es) on the wrapping div
         * - :option:`:name:`
           - Reference name (emitted as ``id`` on the wrapping div)
+        * - :option:`:alt:`
+          - Accessible description (emitted as ``aria-label`` on the wrapping div)
 
     .. code:: rst
         :class: copy-to-clipboard
@@ -239,6 +241,7 @@ LectureDoc2 Custom Directives Cheat Sheet
             :height: 300px
             :class: diagram
             :name: figure-1
+            :alt: A diagram showing the system architecture
 
 
 .. container:: cheat-sheet-block
