@@ -1,0 +1,170 @@
+"""Tests for the ``include-svg`` directive."""
+
+import os
+import pytest
+from docutils.utils import SystemMessage
+
+
+class TestIncludeSVGDirective:
+    """Comprehensive tests for the include-svg directive."""
+
+    def test_basic_include_svg(self, publish_html, tmp_path):
+        """Basic directive with width and height renders correctly."""
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100"/></svg>'
+        svg_file = tmp_path / "diagram.svg"
+        svg_file.write_text(svg_content, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :width: 500px
+   :height: 300px
+"""
+        html = publish_html(rst)
+        assert '<div style="width: 500px; height: 300px;">' in html
+        assert svg_content in html
+        assert "</div>" in html
+
+    def test_include_svg_with_class(self, publish_html, tmp_path):
+        """The :class: option is emitted on the wrapping div."""
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40"/></svg>'
+        svg_file = tmp_path / "circle.svg"
+        svg_file.write_text(svg_content, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :width: 200px
+   :height: 200px
+   :class: my-class another-class
+"""
+        html = publish_html(rst)
+        assert '<div style="width: 200px; height: 200px;" class="my-class another-class">' in html
+        assert svg_content in html
+
+    def test_include_svg_with_name(self, publish_html, tmp_path):
+        """The :name: option is emitted as an id on the wrapping div."""
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg"><text x="10" y="20">Hello</text></svg>'
+        svg_file = tmp_path / "text.svg"
+        svg_file.write_text(svg_content, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :width: 100%
+   :height: 100%
+   :name: my-diagram
+"""
+        html = publish_html(rst)
+        assert 'id="my-diagram"' in html
+        assert '<div style="width: 100%; height: 100%;"' in html
+        assert svg_content in html
+
+    def test_include_svg_with_class_and_name(self, publish_html, tmp_path):
+        """Both :class: and :name: can be used together."""
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="100" y2="100"/></svg>'
+        svg_file = tmp_path / "line.svg"
+        svg_file.write_text(svg_content, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :width: 400px
+   :height: 400px
+   :class: diagram
+   :name: figure-1
+"""
+        html = publish_html(rst)
+        assert 'id="figure-1"' in html
+        assert 'class="diagram"' in html
+        assert '<div style="width: 400px; height: 400px;"' in html
+        assert svg_content in html
+
+    def test_include_svg_missing_width_raises_error(self, publish_html, tmp_path):
+        """Omitting the required :width: option raises a SystemMessage error."""
+        svg_file = tmp_path / "diagram.svg"
+        svg_file.write_text("<svg></svg>", encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :height: 300px
+"""
+        with pytest.raises(SystemMessage):
+            publish_html(rst)
+
+    def test_include_svg_missing_height_raises_error(self, publish_html, tmp_path):
+        """Omitting the required :height: option raises a SystemMessage error."""
+        svg_file = tmp_path / "diagram.svg"
+        svg_file.write_text("<svg></svg>", encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :width: 500px
+"""
+        with pytest.raises(SystemMessage):
+            publish_html(rst)
+
+    def test_include_svg_missing_file_raises_error(self, publish_html, tmp_path):
+        """Referencing a non-existent SVG file raises a hard error."""
+        missing_file = tmp_path / "nonexistent.svg"
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {missing_file}
+   :width: 500px
+   :height: 300px
+"""
+        with pytest.raises(SystemMessage):
+            publish_html(rst)
+
+    def test_include_svg_relative_path(self, publish_html, tmp_path):
+        """The filename is resolved relative to the source document."""
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="50" rx="40" ry="20"/></svg>'
+        svg_file = tmp_path / "images" / "shape.svg"
+        svg_file.parent.mkdir()
+        svg_file.write_text(svg_content, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: images/shape.svg
+   :width: 250px
+   :height: 150px
+"""
+        # We need to set the source document path to the tmp_path so relative
+        # resolution works. publish_html doesn't set a source path, so we use
+        # publish_string directly with a source_path override.
+        from docutils.core import publish_string
+        from lddocutils.ldwriter import Writer
+
+        html = publish_string(
+            source=rst,
+            writer=Writer(),
+            settings_overrides={
+                "ld_path": "ld",
+                "theme": "",
+                "ld_passwords": "",
+                "halt_level": 3,
+                "source_path": str(tmp_path / "doc.rst"),
+            },
+        ).decode("utf-8")
+
+        assert svg_content in html
+        assert '<div style="width: 250px; height: 150px;">' in html

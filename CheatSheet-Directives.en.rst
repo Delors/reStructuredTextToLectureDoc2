@@ -215,6 +215,32 @@ LectureDoc2 Custom Directives Cheat Sheet
             :path: absolute
 
 
+    .. rubric:: Include SVG
+
+    ``.. include-svg:: <filename>``
+
+    .. list-table::
+        :class: compact
+
+        * - :option:`:width:`
+          - Required; CSS width value (e.g. ``500px``, ``100%``)
+        * - :option:`:height:`
+          - Required; CSS height value (e.g. ``300px``, ``100%``)
+        * - :option:`:class:`
+          - CSS class(es) on the wrapping div
+        * - :option:`:name:`
+          - Reference name (emitted as ``id`` on the wrapping div)
+
+    .. code:: rst
+        :class: copy-to-clipboard
+
+        .. include-svg:: my_diagram.svg
+            :width: 500px
+            :height: 300px
+            :class: diagram
+            :name: figure-1
+
+
 .. container:: cheat-sheet-block
 
     .. rubric:: Exercise Directives

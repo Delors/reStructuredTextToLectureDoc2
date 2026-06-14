@@ -982,4 +982,6 @@ import lddocutils.ldwriter.lddirectives.grids
 
 import lddocutils.ldwriter.lddirectives.popover
 
+import lddocutils.ldwriter.lddirectives.include_svg
+
 import lddocutils.ldwriter.lddirectives.stories
