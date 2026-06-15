@@ -222,15 +222,15 @@ LectureDoc2 Custom Directives Cheat Sheet
     .. list-table::
         :class: compact
 
-        * - :option:`:width:`
+        * - :rst:`:width:`
           - Required; CSS width value (e.g. ``500px``, ``100%``)
-        * - :option:`:height:`
+        * - :rst:`:height:`
           - Required; CSS height value (e.g. ``300px``, ``100%``)
-        * - :option:`:class:`
+        * - :rst:`:class:`
           - CSS class(es) on the wrapping div
-        * - :option:`:name:`
+        * - :rst:`:name:`
           - Reference name (emitted as ``id`` on the wrapping div)
-        * - :option:`:alt:`
+        * - :rst:`:alt:`
           - Accessible description (emitted as ``aria-label`` on the wrapping div)
 
     .. code:: rst
