@@ -23,7 +23,7 @@ Title
    :height: 300px
 """
         html = publish_html(rst)
-        assert '<div style="width: 500px; height: 300px;">' in html
+        assert 'style="width: 500px; height: 300px;"' in html
         assert svg_content in html
         assert "</div>" in html
 
@@ -213,3 +213,160 @@ Title
 
         assert svg_content in html
         assert 'style="width: 250px; height: 150px;"' in html
+
+    def test_include_svg_global(self, publish_html, tmp_path):
+        """The :global: option prepends the SVG inside <ld-svg-globals>."""
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg" id="global-defs"><defs><linearGradient id="g"/></defs></svg>'
+        svg_file = tmp_path / "global.svg"
+        svg_file.write_text(svg_content, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :global:
+
+Some content.
+"""
+        html = publish_html(rst)
+        assert "<ld-svg-globals>" in html
+        assert "</ld-svg-globals>" in html
+        assert svg_content in html
+        assert html.index("<ld-svg-globals>") < html.index("<template")
+
+    def test_include_svg_global_deduplication(self, publish_html, tmp_path):
+        """The same :global: SVG referenced twice is included only once."""
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg" id="once"><symbol id="s"/></svg>'
+        svg_file = tmp_path / "once.svg"
+        svg_file.write_text(svg_content, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :global:
+
+.. include-svg:: {svg_file}
+   :global:
+"""
+        html = publish_html(rst)
+        assert html.count(svg_content) == 1
+        assert html.count("<ld-svg-globals>") == 1
+
+    def test_include_svg_global_multiple_files(self, publish_html, tmp_path):
+        """Multiple different :global: SVGs are included in order."""
+        svg_a = '<svg xmlns="http://www.w3.org/2000/svg" id="a"><symbol id="sa"/></svg>'
+        svg_b = '<svg xmlns="http://www.w3.org/2000/svg" id="b"><symbol id="sb"/></svg>'
+        file_a = tmp_path / "a.svg"
+        file_b = tmp_path / "b.svg"
+        file_a.write_text(svg_a, encoding="utf-8")
+        file_b.write_text(svg_b, encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {file_a}
+   :global:
+
+.. include-svg:: {file_b}
+   :global:
+"""
+        html = publish_html(rst)
+        assert html.index(svg_a) < html.index(svg_b)
+
+    def test_include_svg_global_with_width_raises_error(self, publish_html, tmp_path):
+        """:global: combined with :width: raises an error."""
+        svg_file = tmp_path / "global.svg"
+        svg_file.write_text("<svg></svg>", encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :global:
+   :width: 100px
+"""
+        with pytest.raises(SystemMessage):
+            publish_html(rst)
+
+    def test_include_svg_global_with_height_raises_error(self, publish_html, tmp_path):
+        """:global: combined with :height: raises an error."""
+        svg_file = tmp_path / "global.svg"
+        svg_file.write_text("<svg></svg>", encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :global:
+   :height: 100px
+"""
+        with pytest.raises(SystemMessage):
+            publish_html(rst)
+
+    def test_include_svg_global_with_alt_raises_error(self, publish_html, tmp_path):
+        """:global: combined with :alt: raises an error."""
+        svg_file = tmp_path / "global.svg"
+        svg_file.write_text("<svg></svg>", encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :global:
+   :alt: A global SVG
+"""
+        with pytest.raises(SystemMessage):
+            publish_html(rst)
+
+    def test_include_svg_global_with_name_raises_error(self, publish_html, tmp_path):
+        """:global: combined with :name: raises an error."""
+        svg_file = tmp_path / "global.svg"
+        svg_file.write_text("<svg></svg>", encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :global:
+   :name: my-global
+"""
+        with pytest.raises(SystemMessage):
+            publish_html(rst)
+
+    def test_include_svg_global_with_class_raises_error(self, publish_html, tmp_path):
+        """:global: combined with :class: raises an error."""
+        svg_file = tmp_path / "global.svg"
+        svg_file.write_text("<svg></svg>", encoding="utf-8")
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {svg_file}
+   :global:
+   :class: my-global
+"""
+        with pytest.raises(SystemMessage):
+            publish_html(rst)
+
+    def test_include_svg_global_missing_file_raises_error(self, publish_html, tmp_path):
+        """A missing :global: SVG file raises a hard error."""
+        missing_file = tmp_path / "missing.svg"
+
+        rst = f"""
+Title
+=====
+
+.. include-svg:: {missing_file}
+   :global:
+"""
+        with pytest.raises(SystemMessage):
+            publish_html(rst)

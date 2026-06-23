@@ -1,8 +1,11 @@
 #
 # Include SVG Directive (LD2 - Renaissance)
 #
-# Embeds the raw content of an SVG file directly into the HTML output,
-# wrapped in a <div> with inline width/height styles.
+# Embeds the raw content of an SVG file directly into the HTML output.
+#
+# In normal mode the SVG is wrapped in a <div> with inline width/height styles.
+# In global mode the SVG is collected and prepended once (before <template>)
+# inside a single <ld-svg-globals> element, together with svg-defs/svg-style.
 #
 # Usage::
 #
@@ -11,17 +14,28 @@
 #         :height: 300px
 #         :class: my-class
 #         :name: my-diagram
+#         :alt: A diagram
+#
+#     .. include-svg:: my_global_symbols.svg
+#         :global:
 #
 # Generated HTML::
 #
-#     <div style="width: 500px; height: 300px;" class="my-class" id="my-diagram">
+#     <div style="width: 500px; height: 300px;" class="my-class" id="my-diagram"
+#          aria-label="A diagram">
 #       <svg ...>...</svg>
 #     </div>
+#
+#     <ld-svg-globals>
+#       <svg class="svg-global-defs"><defs>...</defs></svg>
+#       <svg class="svg-global-style"><style>...</style></svg>
+#       <svg ...>...</svg>
+#     </ld-svg-globals>
 
 from docutils import nodes
 from docutils.nodes import Element, General
 from docutils.parsers.rst import Directive, directives
-from docutils.parsers.rst.directives import class_option, unchanged, unchanged_required
+from docutils.parsers.rst.directives import class_option, flag, unchanged, unchanged_required
 from docutils.writers._html_base import SimpleListChecker
 from lddocutils.ldwriter import LDTranslator, make_classes
 
@@ -52,25 +66,52 @@ class IncludeSVG(Directive):
         "class": class_option,
         "name": unchanged,
         "alt": unchanged,
+        "global": flag,
     }
 
-    def run(self):
-        if "width" not in self.options:
-            raise self.error("The :width: option is required.")
-        if "height" not in self.options:
-            raise self.error("The :height: option is required.")
-
+    def _resolve_svg_path(self):
         filename = self.state_machine.document["source"]
         relative_curdir = os.path.dirname(filename)
-        svg_path = os.path.join(relative_curdir, self.arguments[0])
+        return os.path.join(relative_curdir, self.arguments[0])
 
+    def _read_svg(self, svg_path):
         try:
             with open(svg_path, "r", encoding="utf-8") as f:
-                svg_content = f.read()
+                return f.read()
         except FileNotFoundError:
             raise self.error(f"SVG file not found: {svg_path}")
         except IOError as e:
             raise self.error(f"Could not read SVG file {svg_path}: {e}")
+
+    def _collect_global_svg(self, svg_path, svg_content):
+        document = self.state_machine.document
+        if "include_svg_globals" not in document:
+            document["include_svg_globals"] = []
+        document["include_svg_globals"].append((svg_path, svg_content))
+
+    def run(self):
+        svg_path = self._resolve_svg_path()
+        svg_content = self._read_svg(svg_path)
+
+        if "global" in self.options:
+            forbidden = [
+                opt
+                for opt in ("width", "height", "alt", "name", "class")
+                if opt in self.options
+            ]
+            if forbidden:
+                formatted = ", ".join(f":{opt}:" for opt in forbidden)
+                raise self.error(
+                    f"The :global: option cannot be combined with {formatted}."
+                )
+
+            self._collect_global_svg(svg_path, svg_content)
+            return []
+
+        if "width" not in self.options:
+            raise self.error("The :width: option is required.")
+        if "height" not in self.options:
+            raise self.error("The :height: option is required.")
 
         node = include_svg()
         node["svg_content"] = svg_content

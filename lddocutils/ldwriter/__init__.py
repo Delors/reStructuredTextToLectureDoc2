@@ -447,6 +447,11 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         self.svg_style = None
         self.svg_defs = None
 
+        # Global SVGs collected from the include-svg directive with :global:.
+        # Kept as a list for order and a set of paths for deduplication.
+        self.svg_globals = []
+        self.svg_globals_seen = set()
+
         self.section_count = 0
         self.card_count = []
 
@@ -469,7 +474,10 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
 
     def visit_document(self, node):
         super().visit_document(node)
-        pass
+        for svg_path, svg_content in node.document.get("include_svg_globals", []):
+            if svg_path not in self.svg_globals_seen:
+                self.svg_globals_seen.add(svg_path)
+                self.svg_globals.append(svg_content)
 
     def add_required_module(self, moduleName):
         if moduleName in self.settings.modules:
@@ -565,19 +573,27 @@ class LDTranslator(html5_polyglot.HTMLTranslator):
         title_slide_classes = node.document["classes"]
         title_slide_id = next(iter(node.ids))
 
+        # Collect all global SVG fragments: meta-tag defs/style first, then
+        # included global SVGs (deduplicated, in first-appearance order).
+        global_svg_fragments = []
         if self.svg_defs:
-            self.body_prefix.append(
+            global_svg_fragments.append(
                 '<svg xmlns="http://www.w3.org/2000/svg" class="svg-global-defs"><defs>'
             )
-            self.body_prefix.append(self.svg_defs)
-            self.body_prefix.append("</defs></svg>\n")
-
+            global_svg_fragments.append(self.svg_defs)
+            global_svg_fragments.append("</defs></svg>")
         if self.svg_style:
-            self.body_prefix.append(
+            global_svg_fragments.append(
                 '<svg xmlns="http://www.w3.org/2000/svg" class="svg-global-style"><style>'
             )
-            self.body_prefix.append(self.svg_style)
-            self.body_prefix.append("</style></svg>\n")
+            global_svg_fragments.append(self.svg_style)
+            global_svg_fragments.append("</style></svg>")
+        global_svg_fragments.extend(self.svg_globals)
+
+        if global_svg_fragments:
+            self.body_prefix.append("<ld-svg-globals>")
+            self.body_prefix.extend(global_svg_fragments)
+            self.body_prefix.append("</ld-svg-globals>\n")
 
         self.body_prefix.append(self.starttag({}, "template"))
         self.body_suffix.insert(0, "</template>\n")

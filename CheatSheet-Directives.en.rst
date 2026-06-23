@@ -232,6 +232,8 @@ LectureDoc2 Custom Directives Cheat Sheet
           - Reference name (emitted as ``id`` on the wrapping div)
         * - :rst:`:alt:`
           - Accessible description (emitted as ``aria-label`` on the wrapping div)
+        * - :option:`:global:`
+          - Flag; include the SVG once at the start of the body inside ``<ld-svg-globals>``. Cannot be combined with ``width``, ``height``, ``class``, ``name``, or ``alt``.
 
     .. code:: rst
         :class: copy-to-clipboard
@@ -242,6 +244,12 @@ LectureDoc2 Custom Directives Cheat Sheet
             :class: diagram
             :name: figure-1
             :alt: A diagram showing the system architecture
+
+    .. code:: rst
+        :class: copy-to-clipboard
+
+        .. include-svg:: my_global_symbols.svg
+            :global:
 
 
 .. container:: cheat-sheet-block
