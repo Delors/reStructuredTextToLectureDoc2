@@ -1,3 +1,7 @@
+# Archived
+
+Please use LectureDoc2Author which uses Markdown as its foundation. This project is no longer maintained.
+
 # Developer Documentation
 
 This document is intended for developers working on `rst2ld`.
